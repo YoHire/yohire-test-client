@@ -9,15 +9,12 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap, finalize } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ErrorHandlingService } from '../services/error-handling.service';
-import { URL } from '../constants/constants';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
-    private _spinner: NgxSpinnerService,
     private _errorHandlerService: ErrorHandlingService
   ) {}
 
@@ -25,12 +22,6 @@ export class ErrorInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const shouldSkipSpinner = this._shouldSkipSpinner(request.url);
-
-    if (!shouldSkipSpinner) {
-      this._spinner.show();
-    }
-
     return next.handle(request).pipe(
       catchError((err: HttpErrorResponse) => {
         if (err.status === 401) {
@@ -50,11 +41,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           return throwError(() => err);
         }
       }),
-      finalize(() => {
-        if (!shouldSkipSpinner) {
-          this._spinner.hide();
-        }
-      })
+      finalize(() => {})
     );
   }
 
@@ -68,10 +55,5 @@ export class ErrorInterceptor implements HttpInterceptor {
       });
     }
     return request;
-  }
-
-  private _shouldSkipSpinner(url: string): boolean {
-    const urlsToSkip = [`${URL.CATEGORY}`, `${URL.SKILL}`];
-    return urlsToSkip.some((skipUrl) => url.includes(skipUrl));
   }
 }
