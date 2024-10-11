@@ -1,0 +1,125 @@
+<nav class="navbar navbar-expand-md navbar-light d-none d-md-flex" id="topbar">
+  <div class="container-fluid">
+    <!-- Form -->
+    <form class="form-inline me-4 d-none d-md-flex">
+      <div
+        class="input-group input-group-flush input-group-merge input-group-reverse"
+        data-list='{"valueNames": ["name"]}'
+      >
+        <!-- Input -->
+        <input
+          type="search"
+          class="form-control dropdown-toggle list-search"
+          data-bs-toggle="dropdown"
+          placeholder="Search"
+          aria-label="Search"
+        />
+
+        <!-- Prepend -->
+        <div class="input-group-text">
+          <i class="fe fe-search"></i>
+        </div>
+
+        <!-- Menu -->
+      </div>
+    </form>
+
+    <!-- User -->
+    <div class="navbar-user">
+      <!-- Dropdown -->
+      <div class="dropdown me-4 d-none d-md-flex">
+        <!-- Toggle -->
+        <a
+          href="#"
+          class="navbar-user-link"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <span class="icon active">
+            <i class="fe fe-bell"></i>
+          </span>
+        </a>
+
+        <!-- Menu -->
+        <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
+          <div class="card-header">
+            <!-- Title -->
+            <h5 class="card-header-title">Notifications</h5>
+
+            <!-- Link -->
+            <a href="#!" class="small"> View all </a>
+          </div>
+          <!-- / .card-header -->
+          <div class="card-body">
+            <!-- List group -->
+            <div
+              class="list-group list-group-flush list-group-activity my-n3 d-none"
+            >
+              <a class="list-group-item text-reset" href="#!">
+                <div class="row">
+                  <div class="col-auto">
+                    <!-- Avatar -->
+                    <div class="avatar avatar-sm">
+                      <img
+                        src="./asset/img/asset/imgs/img/avatars/profiles/avatar-1.jpg"
+                        alt="..."
+                        class="avatar-img rounded-circle"
+                      />
+                    </div>
+                  </div>
+                  <div class="col ms-n2">
+                    <!-- Content -->
+                    <div class="small">
+                      <strong>Dianna Smiley</strong> shared your post with Ab
+                      Hadley, Adolfo Hess, and 3 others.
+                    </div>
+
+                    <!-- Time -->
+                    <small class="text-muted"> 2m ago </small>
+                  </div>
+                </div>
+                <!-- / .row -->
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- / .dropdown-menu -->
+      </div>
+
+      <!-- Dropdown -->
+      <div class="dropdown">
+        <!-- Toggle -->
+        <a
+          href="#"
+          class="avatar avatar-sm avatar-online dropdown-toggle"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <img
+            src="./assets/img/profile.jpg"
+            alt="..."
+            class="avatar-img rounded-circle"
+          />
+        </a>
+
+        <!-- Menu -->
+        <div class="dropdown-menu dropdown-menu-end">
+          <!-- <a routerLink="/settings/profile-admin" class="dropdown-item" *ngIf="role == 'ROLE_ADMIN' || role == 'ROLE_SUPPORT'">Profile</a> -->
+          <!-- <a routerLink="/settings/profile-recruiter" class="dropdown-item" *ngIf="role == 'ROLE_RECRUITER'">Recruiter Profile</a> -->
+          <a
+            routerLink="/settings/manage"
+            class="dropdown-item"
+            *ngIf="role == 'SUPER_ADMIN'"
+            >Settings</a
+          >
+          <hr class="dropdown-divider" />
+          <a (click)="logout()" class="dropdown-item">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

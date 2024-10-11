@@ -1,0 +1,231 @@
+<aside class="flex">
+  <div class="h-screen flex justify-center items-center">
+    <div class="ml-12 flex w-16 flex-col items-center py-6">
+      <div class="rounded-3xl bg-black">
+        <ul>
+          <li class="p-5">
+            <a
+              routerLink="/"
+              pTooltip="Yohire"
+              tooltipPosition="right"
+              showDelay="1000"
+              hideDelay="300"
+              class="flex items-center justify-center focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800"
+            >
+              <svg
+                class="h-7 w-auto"
+                viewBox="0 0 126 121"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M61.2827 19.666L59.8127 62.486C59.3266 76.777 53.2936 90.318 42.9927 100.236C39.351 103.718 34.4755 105.61 29.4385 105.498C24.4014 105.385 19.6153 103.277 16.1327 99.636L15.6327 99.106C4.65944 86.648 -0.918861 70.344 0.12374 53.7752C1.16634 37.2066 8.74444 21.7298 21.1927 10.746C25.0442 7.36482 29.292 4.46352 33.8427 2.10602C46.6127 -4.50398 61.7727 5.29602 61.2827 19.666Z"
+                  fill="white"
+                />
+                <path
+                  d="M125.163 59.696C124.617 75.663 118.003 90.821 106.669 102.081C95.3336 113.341 80.1326 119.855 64.1626 120.296H63.5726C62.0106 120.292 60.484 119.831 59.1809 118.97C57.8778 118.109 56.8554 116.885 56.2397 115.449C55.6241 114.014 55.4421 112.43 55.7163 110.892C55.9904 109.354 56.7087 107.93 57.7826 106.796L116.083 47.106C116.75 46.4339 117.592 45.9622 118.513 45.7448C119.435 45.5273 120.399 45.5727 121.296 45.8759C122.192 46.179 122.986 46.7277 123.587 47.4596C124.188 48.1915 124.571 49.0772 124.693 50.016C125.104 53.2253 125.261 56.462 125.163 59.696Z"
+                  fill="white"
+                />
+                <path
+                  d="M105.773 36.576L105.683 36.666L86.0826 57.606C85.2306 58.5238 84.1166 59.1575 82.8916 59.4211C81.6676 59.6848 80.3916 59.5658 79.2366 59.0801C78.0826 58.5945 77.1046 57.7657 76.4366 56.7061C75.7686 55.6465 75.4427 54.4072 75.5026 53.156L77.5026 9.67598C77.5676 8.14038 78.0156 6.64538 78.8056 5.32728C79.5966 4.00908 80.7046 2.90978 82.0286 2.12938C83.3526 1.34908 84.8506 0.912482 86.3866 0.859482C87.9226 0.806482 89.4476 1.13878 90.8226 1.82598C95.9036 4.38348 100.614 7.61978 104.823 11.446C108.28 14.6535 110.321 19.1022 110.499 23.8144C110.678 28.5265 108.978 33.1167 105.773 36.576Z"
+                  fill="white"
+                />
+              </svg>
+            </a>
+          </li>
+
+          <li class="p-5">
+            <a
+              routerLink="/home/dashboard"
+              pTooltip="Dashboard"
+              tooltipPosition="right"
+              showDelay="1000"
+              hideDelay="300"
+              routerLinkActive="text-blue-500 bg-blue-100"
+              [ngClass]="{ 'text-gray-500': !isActive('/home/dashboard') }"
+              class="flex items-center p-1.5 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100"
+            >
+            <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 3h7.5v7.5H3V3zm0 11.25h7.5V21H3v-6.75zm11.25 0H21V21h-6.75v-6.75zm0-11.25V3h6.75v7.5h-6.75z"
+            />
+          </svg>
+            </a>
+          </li>
+          <li class="p-5">
+            <a
+              routerLink="/jobs/recruiter/list"
+              routerLinkActive="text-blue-500 bg-blue-100"
+              pTooltip="Jobs"
+              tooltipPosition="right"
+              showDelay="1000"
+              hideDelay="300"
+              [ngClass]="{ 'text-gray-500': !isActive('/jobs/recruiter/list') }"
+              class="flex items-center p-1.5 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+                />
+              </svg>
+            </a>
+          </li>
+          <li class="p-5">
+            <a
+              routerLink="/circle"
+              pTooltip="Circle"
+              tooltipPosition="right"
+              showDelay="1000"
+              hideDelay="300"
+              routerLinkActive="text-blue-500 bg-blue-100"
+              [ngClass]="{
+                'text-gray-500': !isActive('/settings/profile-recruiter-view')
+              }"
+              class="flex items-center p-1.5 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100"
+            >
+              <img class="w-6" src="/assets/img/Circleicon.png" />
+            </a>
+          </li>
+          <li class="p-5">
+            <a
+              pTooltip="Invitations"
+              tooltipPosition="right"
+              showDelay="1000"
+              hideDelay="300"
+              routerLink="/invitations"
+              routerLinkActive="text-blue-500 bg-blue-100"
+              [ngClass]="{
+                'text-gray-500': !isActive('/invitations')
+              }"
+              class="flex items-center p-1.5 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100"
+            >
+            <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 6.75V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V6.75M3 6.75l9 6.75 9-6.75M3 6.75h18"
+            />
+          </svg>
+            </a>
+          </li>
+          <!-- <li class="p-5">
+            <a
+              pTooltip="Transactions"
+              tooltipPosition="right"
+              showDelay="1000"
+              hideDelay="300"
+              routerLink="/jobs/transactions/list"
+              routerLinkActive="text-blue-500 bg-blue-100"
+              [ngClass]="{
+                'text-gray-500': !isActive('/jobs/transactions/list')
+              }"
+              class="flex items-center p-1.5 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"
+                />
+              </svg>
+            </a>
+          </li> -->
+          <li class="p-5">
+            <a
+              routerLink="/settings/profile-recruiter-view"
+              routerLinkActive="text-blue-500 bg-blue-100"
+              [ngClass]="{
+                'text-gray-500': !isActive('/settings/profile-recruiter-view')
+              }"
+              pTooltip="Profile"
+              tooltipPosition="right"
+              showDelay="1000"
+              hideDelay="300"
+              class="flex items-center p-1.5 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100 mb-5"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </a>
+          </li>
+        </ul>
+        <div
+          class="flex items-center justify-center pb-5"
+          (click)="logout()"
+          pTooltip="Logout"
+          tooltipPosition="right"
+          showDelay="1000"
+          hideDelay="300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-6 w-6 cursor-pointer text-gray-500 hover:text-blue-600"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>

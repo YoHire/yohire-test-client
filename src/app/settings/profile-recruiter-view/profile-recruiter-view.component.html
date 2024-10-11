@@ -1,0 +1,342 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div
+          class="header my-3 xsticky-top rounded-full px-4"
+          style="background-color: white"
+        >
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col col-md-2 col-lg-1">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.back()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.forward()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a>Profile</a></li>
+                  </ol>
+                </nav>
+              </div>
+              <div class="col-auto">
+                <button
+                  type="button"
+                  class="items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-black hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded-lg shadow-md transition transform hover:-translate-y-1 hover:scale-105"
+                  routerLink="/settings/profile-recruiter"
+                >
+                  <span class="mt-2"> Update Profile &nbsp;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-white md:mx-auto rounded-lg shadow-2xl w-full overflow-hidden"
+        >
+          <div
+            class="relative h-48 bg-gradient-to-r"
+            [ngClass]="{
+              'from-green-200 to-green-400': value >= 80,
+              'from-orange-200 to-orange-400': value >= 60 && value < 80,
+              'from-yellow-200 to-yellow-400': value >= 40 && value < 60,
+              'from-red-300 to-red-500': value < 40
+            }"
+          >
+            <div
+              class="absolute left-1/2 transform -translate-x-1/2 translate-y-16"
+            >
+              <div
+                class="relative h-24 w-24 p-3 rounded-full border-4 border-white overflow-hidden z-10"
+              >
+                <img
+                  [src]="imageUrl ? imageUrl : '/assets/img/blank-profile.webp'"
+                  class="w-full h-full rounded-full object-cover"
+                  alt="Profile Image"
+                />
+              </div>
+            </div>
+
+            <div class="absolute inset-0 mt-4 flex justify-center items-center">
+              <p-knob
+                [pTooltip]="reliabilityScore"
+                tooltipPosition="bottom"
+                [(ngModel)]="value"
+                [readonly]="true"
+                [showValue]="false"
+                [valueColor]="valueColor"
+                class="z-0"
+              ></p-knob>
+            </div>
+
+            <div class="absolute top-4 right-10">
+              <div
+                class="bg-gray-800 text-white p-2 rounded-full focus:outline-none hover:bg-gray-700"
+                tooltipPosition="left" 
+                [pTooltip]="tooltipContent"
+              >
+              <ng-template #tooltipContent>
+                <div class="flex flex-col p-4 bg-gray-800 text-white text-sm rounded-lg shadow-lg space-y-2">
+                  <p class="font-semibold bg-transparent">The reliability score shows how trustworthy a company is, based on different factors. The score is indicated by colors:</p>
+                  
+                  <ul class="space-y-1">
+                    <li><span class="text-green-400 font-bold">• Green:</span> High trust (Score 80+)</li>
+                    <li><span class="text-orange-400 font-bold">• Orange:</span> Moderate trust (Score 60-79)</li>
+                    <li><span class="text-yellow-400 font-bold">• Yellow:</span> Average trust (Score 40-59)</li>
+                    <li><span class="text-red-400 font-bold">• Red:</span> Low trust (Score below 40)</li>
+                  </ul>
+              
+                  <p class="mt-2 bg-transparent">A higher score means the company is more reliable, with complete contact and social media details.</p>
+                </div>
+              </ng-template>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h1v4zm0-6h-1V7h1v3zM12 2a10 10 0 100 20 10 10 0 000-20z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="px-6 py-10 mt-20">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Company Info</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
+              <div class="space-y-3">
+                <div class="flex justify-between">
+                  <span class="font-semibold text-sm">Organization Name:</span>
+                  <span>{{ ra }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="font-semibold text-sm">Email:</span>
+                  <span>{{ email }}</span>
+                </div>
+                <div class="flex justify-between" *ngIf="mobile">
+                  <span class="font-semibold text-sm">Mobile:</span>
+                  <span>
+                    {{ countryCode ? countryCode : "" }} {{ mobile }}</span
+                  >
+                </div>
+                <div class="flex justify-between" *ngIf="bio">
+                  <span class="font-semibold text-sm">Bio:</span>
+                  <span>{{ bio }}</span>
+                </div>
+                <div class="flex justify-between" *ngIf="address">
+                  <span class="font-semibold text-sm">Address:</span>
+                  <span>{{ address }}</span>
+                </div>
+              </div>
+              <div class="space-y-3">
+                <div class="flex space-x-4 justify-end mt-5">
+                  <a
+                    *ngIf="xLink"
+                    [href]="xLink"
+                    class="flex items-center justify-center text-blue-500 hover:text-white bg-blue-100 hover:bg-blue-500 transition-all duration-300 ease-in-out rounded-full p-2"
+                    target="_blank"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0016 2a4.48 4.48 0 00-4.42 5.58A12.94 12.94 0 013 4s-4 9 5 13a12.85 12.85 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+                      />
+                    </svg>
+                  </a>
+                  <a
+                    *ngIf="linkedInLink"
+                    [href]="linkedInLink"
+                    class="flex items-center justify-center text-blue-700 hover:text-white bg-blue-100 hover:bg-blue-700 transition-all duration-300 ease-in-out rounded-full p-2"
+                    target="_blank"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-6 h-6"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm13.5 11.268h-3v-5.604c0-1.338-.025-3.063-1.867-3.063-1.869 0-2.156 1.46-2.156 2.965v5.702h-3v-10h2.881v1.367h.041c.401-.759 1.379-1.56 2.841-1.56 3.038 0 3.599 2.001 3.599 4.601v5.592z"
+                      />
+                    </svg>
+                  </a>
+                  <a
+                    *ngIf="facebookLink"
+                    [href]="facebookLink"
+                    class="flex items-center justify-center text-blue-600 hover:text-white bg-blue-100 hover:bg-blue-600 transition-all duration-300 ease-in-out rounded-full p-2"
+                    target="_blank"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18 2h-2a6 6 0 00-6 6v2H7v3h3v9h3v-9h3.28l.72-3H13V8a1 1 0 011-1h2z"
+                      />
+                    </svg>
+                  </a>
+
+                  <a
+                    *ngIf="githubLink"
+                    [href]="githubLink"
+                    class="flex items-center justify-center text-gray-900 hover:text-white bg-gray-200 hover:bg-gray-900 transition-all duration-300 ease-in-out rounded-full p-2"
+                    target="_blank"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.66-.21.66-.47 0-.23-.01-.82-.01-1.6-2.78.59-3.37-1.34-3.37-1.34-.46-1.16-1.13-1.47-1.13-1.47-.92-.63.07-.62.07-.62 1.01.07 1.54 1.04 1.54 1.04.91 1.54 2.39 1.09 2.97.83.09-.66.35-1.1.63-1.35-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.26.1-2.63 0 0 .84-.27 2.75 1.02a9.48 9.48 0 012.5-.34c.85 0 1.7.12 2.5.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.38.1 2.63.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85 0 1.33-.01 2.41-.01 2.73 0 .26.15.56.67.46A10.01 10.01 0 0022 12c0-5.52-4.48-10-10-10z"
+                      />
+                    </svg>
+                  </a>
+
+                  <!-- Instagram -->
+                  <a
+                    *ngIf="instagramLink"
+                    [href]="instagramLink"
+                    class="flex items-center justify-center text-pink-500 hover:text-white bg-pink-100 hover:bg-pink-500 transition-all duration-300 ease-in-out rounded-full p-2"
+                    target="_blank"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 2a6 6 0 00-6 6v8a6 6 0 006 6h8a6 6 0 006-6V8a6 6 0 00-6-6H8zm8 4a1 1 0 112 0 1 1 0 01-2 0zm-4 3a4 4 0 100 8 4 4 0 000-8z"
+                      />
+                    </svg>
+                  </a>
+
+                  <!-- Website -->
+                  <a
+                    *ngIf="websiteLink"
+                    [href]="websiteLink"
+                    class="flex items-center justify-center text-green-600 hover:text-white bg-green-100 hover:bg-green-600 transition-all duration-300 ease-in-out rounded-full p-2"
+                    target="_blank"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 2a10 10 0 100 20 10 10 0 000-20zM12 18a6 6 0 110-12 6 6 0 010 12z"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="px-6 py-6">
+            <h4 class="text-lg font-semibold text-black mb-6">
+              Company Images
+            </h4>
+            <div
+              *ngIf="uploadedImageUrls.length === 0"
+              class="text-gray-500 mb-4 text-center"
+            >
+              You haven't uploaded any images yet.
+            </div>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+            >
+              <div
+                *ngFor="let imageUrl of uploadedImageUrls"
+                class="bg-white rounded-lg overflow-hidden shadow-lg"
+              >
+                <img
+                  class="h-52 w-full object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+                  [src]="imageUrl.url"
+                  alt="Image 1"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

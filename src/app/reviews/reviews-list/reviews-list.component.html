@@ -1,0 +1,642 @@
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <!-- Header -->
+        <div class="header">
+          <div class="header-body">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Pretitle -->
+                <h6 class="header-pretitle">Overview</h6>
+
+                <!-- Title -->
+                <h1 class="header-title text-truncate">Manage Review</h1>
+              </div>
+              <!-- <div class="col-auto">
+
+                                <!-- Buttons --
+                                <a class="btn btn-primary ms-2 w-100" routerLink="/jobs/verify">
+                                    Create
+                                </a>
+
+
+                            </div> -->
+            </div>
+            <!-- / .row -->
+          </div>
+        </div>
+
+        <!-- <div class="right-tabs">
+          <ul class="nav nav-tabs justify-content-end" id="myTab" role="tablist" stysle="border: 1px solid red;">
+            <li class="nav-item" role="presentation" >
+              <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">New (<span style="color: blue;">3</span>)</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Verified</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Rejected</button>
+            </li>
+          </ul>
+        </div> -->
+        <!-- <!-- <div class="tab-content" id="myTabContent"> -->
+        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div> -->
+        <!-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div> -->
+        <!-- <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> -->
+        <!-- </div>  -->
+
+        <!-- Tab content -->
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            role="tabpanel"
+            aria-labelledby="contactsListTab"
+          >
+            <!-- Card -->
+            <div class="card" id="contactsList">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <form>
+                      <div
+                        class="input-group input-group-flush input-group-merge input-group-reverse"
+                      >
+                        <input
+                          class="form-control list-search"
+                          type="search"
+                          placeholder="Search"
+                        />
+                        <span class="input-group-text">
+                          <i class="fe fe-search"></i>
+                        </span>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="col-auto me-n3">
+                    <!-- Select -->
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 100px"
+                    >
+                      <option [value]="10">Country</option>
+                      <option [value]="5">Lorem</option>
+                      <option [value]="0">Lorem</option>
+                    </select>
+                  </div>
+                  <div class="col-auto me-n3">
+                    <!-- Select -->
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 100px"
+                    >
+                      <option [value]="10">Recruiter</option>
+                      <option [value]="5">Lorem</option>
+                      <option [value]="0">Lorem</option>
+                    </select>
+                  </div>
+                  <div class="col-auto me-n3">
+                    <!-- Select -->
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 120px"
+                    >
+                      <option [value]="10">20 per page</option>
+                      <option [value]="5">10 per page</option>
+                      <option [value]="0">All</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- / .row -->
+              </div>
+
+              <div class="table-responsive tab-pane fade show active" id="home">
+                <table
+                  class="table table-sm table-hover table-nowrap card-table"
+                >
+                  <thead>
+                    <tr>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          href="#"
+                          >Sl No.</a
+                        >
+                      </th>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          href="#"
+                          >Message
+                        </a>
+                      </th>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          href="#"
+                          >Recruiter Name</a
+                        >
+                      </th>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          href="#"
+                          >Job
+                        </a>
+                      </th>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-email"
+                          href="#"
+                          >Star</a
+                        >
+                      </th>
+
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody class="list fs-base">
+                    <tr>
+                      <td>
+                        <!-- Text -->
+                        <span class="item-title">1</span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">Lore Ipsum </span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">
+                          ash&#64;gmail.com</span
+                        >
+                      </td>
+
+                      <td>
+                        <!-- Phone -->
+                        <span class="item-title">KLF000010</span>
+                        <!-- <a class="item-phone text-reset" href="tel:1-123-456-4890">(988) 568-3568</a> -->
+                      </td>
+                      <td>
+                        <a class="item-phone text-reset">
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star"></span>
+                          <span class="fe fe-star"></span>
+                        </a>
+                      </td>
+
+                      <td>
+                        <div class="dropdown">
+                          <a
+                            href="#"
+                            class="dropdown-ellipses dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <!-- <div class="dropdown-menu dropdown-menu-end">
+                                                        <a href="#!" class="dropdown-item">
+                                                            Disable
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Edit
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Remove
+                                                        </a>
+
+                                                    </div> -->
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <!-- Text -->
+                        <span class="item-title">2</span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">Lore Ipsum </span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">
+                          ash&#64;gmail.com</span
+                        >
+                      </td>
+
+                      <td>
+                        <!-- Phone -->
+                        <span class="item-title">KLF000010</span>
+                        <!-- <a class="item-phone text-reset" href="tel:1-123-456-4890">(988) 568-3568</a> -->
+                      </td>
+                      <td>
+                        <a class="item-phone text-reset">
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star"></span>
+                          <span class="fe fe-star"></span>
+                        </a>
+                      </td>
+
+                      <td>
+                        <div class="dropdown">
+                          <a
+                            href="#"
+                            class="dropdown-ellipses dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <!-- <div class="dropdown-menu dropdown-menu-end">
+                                                        <a href="#!" class="dropdown-item">
+                                                            Disable
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Edit
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Remove
+                                                        </a>
+
+                                                    </div> -->
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <!-- Text -->
+                        <span class="item-title">3</span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">Lore Ipsum </span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">
+                          ash&#64;gmail.com</span
+                        >
+                      </td>
+
+                      <td>
+                        <!-- Phone -->
+                        <span class="item-title">KLF000010</span>
+                        <!-- <a class="item-phone text-reset" href="tel:1-123-456-4890">(988) 568-3568</a> -->
+                      </td>
+                      <td>
+                        <a class="item-phone text-reset">
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star"></span>
+                          <span class="fe fe-star"></span>
+                        </a>
+                      </td>
+
+                      <td>
+                        <div class="dropdown">
+                          <a
+                            href="#"
+                            class="dropdown-ellipses dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <!-- <div class="dropdown-menu dropdown-menu-end">
+                                                        <a href="#!" class="dropdown-item">
+                                                            Disable
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Edit
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Remove
+                                                        </a>
+
+                                                    </div> -->
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <!-- Text -->
+                        <span class="item-title">4</span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">Lore Ipsum </span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">
+                          ash&#64;gmail.com</span
+                        >
+                      </td>
+
+                      <td>
+                        <!-- Phone -->
+                        <span class="item-title">KLF000010</span>
+                        <!-- <a class="item-phone text-reset" href="tel:1-123-456-4890">(988) 568-3568</a> -->
+                      </td>
+                      <td>
+                        <a class="item-phone text-reset">
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star"></span>
+                          <span class="fe fe-star"></span>
+                        </a>
+                      </td>
+
+                      <td>
+                        <div class="dropdown">
+                          <a
+                            href="#"
+                            class="dropdown-ellipses dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <!-- <div class="dropdown-menu dropdown-menu-end">
+                                                        <a href="#!" class="dropdown-item">
+                                                            Disable
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Edit
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Remove
+                                                        </a>
+
+                                                    </div> -->
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <!-- Text -->
+                        <span class="item-title">5</span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">Lore Ipsum </span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">
+                          ash&#64;gmail.com</span
+                        >
+                      </td>
+
+                      <td>
+                        <!-- Phone -->
+                        <span class="item-title">KLF000010</span>
+                        <!-- <a class="item-phone text-reset" href="tel:1-123-456-4890">(988) 568-3568</a> -->
+                      </td>
+                      <td>
+                        <a class="item-phone text-reset">
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star"></span>
+                          <span class="fe fe-star"></span>
+                        </a>
+                      </td>
+
+                      <td>
+                        <div class="dropdown">
+                          <a
+                            href="#"
+                            class="dropdown-ellipses dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <!-- <div class="dropdown-menu dropdown-menu-end">
+                                                        <a href="#!" class="dropdown-item">
+                                                            Disable
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Edit
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Remove
+                                                        </a>
+
+                                                    </div> -->
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <!-- Text -->
+                        <span class="item-title">6</span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">Lore Ipsum </span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">
+                          ash&#64;gmail.com</span
+                        >
+                      </td>
+
+                      <td>
+                        <!-- Phone -->
+                        <span class="item-title">KLF000010</span>
+                        <!-- <a class="item-phone text-reset" href="tel:1-123-456-4890">(988) 568-3568</a> -->
+                      </td>
+                      <td>
+                        <a class="item-phone text-reset">
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star"></span>
+                          <span class="fe fe-star"></span>
+                        </a>
+                      </td>
+
+                      <td>
+                        <div class="dropdown">
+                          <a
+                            href="#"
+                            class="dropdown-ellipses dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <!-- <div class="dropdown-menu dropdown-menu-end">
+                                                        <a href="#!" class="dropdown-item">
+                                                            Disable
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Edit
+                                                        </a>
+                                                        <a href="#!" class="dropdown-item">
+                                                            Remove
+                                                        </a>
+
+                                                    </div> -->
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <!-- Text -->
+                        <span class="item-title">7</span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">Lore Ipsum </span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">
+                          ash&#64;gmail.com</span
+                        >
+                      </td>
+
+                      <td>
+                        <!-- Phone -->
+                        <span class="item-title">KLF000010</span>
+                        <!-- <a class="item-phone text-reset" href="tel:1-123-456-4890">(988) 568-3568</a> -->
+                      </td>
+                      <td>
+                        <a class="item-phone text-reset">
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star"></span>
+                          <span class="fe fe-star"></span>
+                        </a>
+                      </td>
+
+                      <td>
+                        <div class="dropdown">
+                          <a
+                            href="#"
+                            class="dropdown-ellipses dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a href="#!" class="dropdown-item"> Disable </a>
+                            <a href="#!" class="dropdown-item"> Edit </a>
+                            <a href="#!" class="dropdown-item"> Remove </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <!-- Text -->
+                        <span class="item-title">8</span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">Lore Ipsum </span>
+                      </td>
+                      <td>
+                        <span class="item-name text-reset">
+                          ash&#64;gmail.com</span
+                        >
+                      </td>
+
+                      <td>
+                        <!-- Phone -->
+                        <span class="item-title">KLF000010</span>
+                        <!-- <a class="item-phone text-reset" href="tel:1-123-456-4890">(988) 568-3568</a> -->
+                      </td>
+                      <td>
+                        <a class="item-phone text-reset">
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star checked"></span>
+                          <span class="fe fe-star"></span>
+                          <span class="fe fe-star"></span>
+                        </a>
+                      </td>
+
+                      <td>
+                        <div class="dropdown">
+                          <a
+                            href="#"
+                            class="dropdown-ellipses dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a href="#!" class="dropdown-item"> Disable </a>
+                            <a href="#!" class="dropdown-item"> Edit </a>
+                            <a href="#!" class="dropdown-item"> Remove </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="card-footer d-flex justify-content-between">
+                <!-- Pagination (prev) -->
+                <ul
+                  class="list-pagination-prev pagination pagination-tabs card-pagination"
+                >
+                  <li class="page-item">
+                    <a class="page-link ps-0 pe-4 border-end" href="#">
+                      <i class="fe fe-arrow-left me-1"></i> Prev
+                    </a>
+                  </li>
+                </ul>
+
+                <!-- Pagination -->
+                <ul
+                  class="list-pagination pagination pagination-tabs card-pagination"
+                ></ul>
+
+                <!-- Pagination (next) -->
+                <ul
+                  class="list-pagination-next pagination pagination-tabs card-pagination"
+                >
+                  <li class="page-item">
+                    <a class="page-link ps-4 pe-0 border-start" href="#">
+                      Next <i class="fe fe-arrow-right ms-1"></i>
+                    </a>
+                  </li>
+                </ul>
+
+                <!-- Alert -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / .row -->
+  </div>
+</div>
+<!-- / .main-content -->

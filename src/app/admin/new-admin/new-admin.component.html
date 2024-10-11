@@ -1,0 +1,351 @@
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-12 col-xl-12">
+        <!-- new header starts -->
+        <div class="header my-3">
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col col-md-2 col-lg-1">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button type="button" class="btn btn-white btn-sm pb-1">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button type="button" class="btn btn-white btn-sm pb-1">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                      <a routerLink="/admin/admin-list">Admins</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                      <a>
+                        <span *ngIf="!isEdit">Create</span>
+                        <span *ngIf="isEdit">Update</span>
+                        Admin
+                      </a>
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- new header ends -->
+        <!-- Header -->
+        <!-- <div class="header mt-md-5">
+                    <div class="header-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+
+                               
+                                <h6 class="header-pretitle">
+                                    Overview
+                                </h6>
+
+                                <h1 class="header-title">
+                                    <span *ngIf="!isEdit">Create</span>
+                                    <span *ngIf="isEdit">Update</span>
+                                    Admin
+                                </h1>
+
+                            </div>
+                        </div> 
+                    </div>
+                </div> -->
+
+        <div class="row card card-body">
+          <!-- Form -->
+          <form
+            class="mb-4"
+            [formGroup]="addForm"
+            (ngSubmit)="create(addForm.value)"
+            novalidate
+          >
+            <!-- Project name -->
+            <div class="row mt-2">
+              <div class="col-12 col-md-12">
+                <div class="form-group">
+                  <!-- Label  -->
+                  <label class="form-label required"> Full Name </label>
+
+                  <!-- Input -->
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="name"
+                    minlength="3"
+                    maxlength="30"
+                    [ngClass]="{ 'is-invalid': submitted && form.name.errors }"
+                  />
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.name.errors"
+                    >Name is required</small
+                  >
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.name.errors?.['minlength']"
+                    >Full Name is too short</small
+                  >
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.name.errors?.['maxlength']"
+                    >Full Name is too long</small
+                  >
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <!-- Label  -->
+                  <label class="form-label required"> Mobile Number </label>
+
+                  <!-- Input -->
+                  <input
+                    type="text"
+                    class="form-control"
+                    numbersOnly
+                    maxlength="10"
+                    minlength="10"
+                    formControlName="mobileNo"
+                    [ngClass]="{
+                      'is-invalid': submitted && form.mobileNo.errors
+                    }"
+                  />
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.mobileNo.errors"
+                    >Mobile is required</small
+                  >
+
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.mobileNo.errors?.['minlength']"
+                    >Invalid mobile Number</small
+                  >
+                </div>
+              </div>
+              <div class="col-12 col-md-6" *ngIf="!isEdit">
+                <div class="form-group">
+                  <!-- Label  -->
+                  <label class="form-label required"> Username </label>
+
+                  <!-- Input -->
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="username"
+                    minlength="3"
+                    maxlength="30"
+                    [ngClass]="{
+                      'is-invalid': submitted && form.username.errors
+                    }"
+                  />
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.username.errors"
+                    >Username is required</small
+                  >
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.username.errors?.['minlength']"
+                    >Username is too short</small
+                  >
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.username.errors?.['maxlength']"
+                    >Username is too long</small
+                  >
+                </div>
+              </div>
+              <div class="col-12 col-md-6" *ngIf="!isEdit">
+                <div class="form-group">
+                  <!-- Label  -->
+                  <label class="form-label required"> Password </label>
+
+                  <!-- Input -->
+                  <input
+                    type="password"
+                    class="form-control"
+                    formControlName="password"
+                    [ngClass]="{
+                      'is-invalid': submitted && form.password.errors
+                    }"
+                  />
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.password.errors"
+                    >Password is required</small
+                  >
+                </div>
+              </div>
+              <div class="col-12 col-md-6" *ngIf="!isEdit">
+                <div class="form-group">
+                  <!-- Label  -->
+                  <label class="form-label required"> Confirm Password </label>
+
+                  <!-- Input -->
+                  <input
+                    type="password"
+                    class="form-control"
+                    formControlName="cPassword"
+                    [ngClass]="{
+                      'is-invalid': submitted && form.cPassword.errors
+                    }"
+                  />
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.cPassword.errors"
+                    >Confirm your password</small
+                  >
+                </div>
+              </div>
+
+              <!-- <div class="col-12 col-md-6">
+                            <div class="form-group">
+
+                                <!-- Label  --
+                                <label class="form-label">
+                                    License Number
+                                </label>
+
+                                <!-- Input --
+                                <input type="text" class="form-control">
+
+                            </div>
+                        </div> -->
+              <!-- <div class="col-12 col-md-6">
+                            <div class="form-group">
+
+                                <!-- Label  --
+                                <label class="form-label">
+                                   DOB
+                                </label>
+
+                                <!-- Input --
+                                <input type="text" class="form-control">
+
+                            </div>
+                        </div> -->
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <!-- Label  -->
+                  <label class="form-label required"> Email ID </label>
+
+                  <!-- Input -->
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="email"
+                    [ngClass]="{ 'is-invalid': submitted && form.email.errors }"
+                  />
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.email.errors?.['required']"
+                    >Email is required</small
+                  >
+                  <small
+                    class="invalid-feedback"
+                    *ngIf="submitted && form.email.errors?.['email']"
+                    >Email is invalid</small
+                  >
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <div class="form-group">
+                  <!-- Label  -->
+                  <label class="form-label required"> Gender </label>
+
+                  <!-- Input -->
+                  <select class="form-select" formControlName="gender" required>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHERS">Others</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- <div class="col-12 col-md-6">
+                            <div class="form-group">
+
+                                <!-- Label  --
+                                <label class="form-label">
+                                    Address
+                                </label>
+
+                                <!-- Input --
+                               
+                                <input type="text" class="form-control">
+
+                            </div>
+                        </div> -->
+            </div>
+            <!-- <hr class="mt-2 mb-4"> -->
+
+            <!-- Buttons -->
+            <div class="row mt-4">
+              <div class="col-12 col-md-4">
+                <button
+                  type="button"
+                  class="btn w-100 btn-white btn-sm"
+                  (click)="back()"
+                >
+                  Cancel
+                </button>
+              </div>
+              <div class="col-12 col-md-4"></div>
+              <div class="col-12 col-md-4 d-grid">
+                <!-- <a href="#" class="btn w-100 btn-primary" >
+                                Submit
+                            </a> -->
+                <button type="submit" class="btn w-100 btn-primary btn-sm">
+                  <span *ngIf="!isEdit">Create</span>
+                  <span *ngIf="isEdit">Update</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- <a href="#" class="btn w-100 btn-link text-muted mt-2">
+                        Cancel this project
+                    </a> -->
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- / .row -->
+  </div>
+</div>
+<!-- / .main-content -->

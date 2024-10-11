@@ -1,0 +1,540 @@
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-12 col-xl-12">
+        <!-- new header starts -->
+        <div class="header my-3 xsticky-top" style="background-color: white">
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col col-md-2 col-lg-1">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.back()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.forward()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item" *ngIf="role == 'RECRUITER'">
+                      <a routerLink="/jobs/recruiter/list">Job List</a>
+                    </li>
+                    <li class="breadcrumb-item" *ngIf="role != 'RECRUITER'">
+                      <a routerLink="/jobs/admin/list">Job List</a>
+                    </li>
+
+                    <li
+                      class="breadcrumb-item active text-truncate"
+                      style="max-width: 200px"
+                      title="{{ job.title }}"
+                    >
+                      <a> {{ job?.title }}</a>
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+              <!-- <div class="col-auto">
+                <a
+                  class="btn btn-light ms-2 btn-sm"
+                  *ngIf="role != 'RECRUITER' && !job?.verified"
+                  (click)="verify(job?.id)"
+                >
+                  Verify Job
+                </a>
+              </div> -->
+              <div class="col-auto">
+                <button
+                  class="btn btn-outline-primary ms-2 btn-sm"
+                  *ngIf="
+                    role == 'RECRUITER' &&
+                    !job?.verified &&
+                    job.status === 'ACTIVE'
+                  "
+                  routerLink="/jobs/edit/{{ jobId }}"
+                >
+                  Edit Job
+                </button>
+
+                <button
+                  class="btn btn-primary ms-2 btn-sm"
+                  *ngIf="role != 'SUPER_ADMIN' && (job?.verified ?? false)"
+                  routerLink="/jobs/requests/{{ job?.id }}/list"
+                >
+                  Applications
+                </button>
+                <!-- *ngIf="job?.verified??false" -->
+                <!-- {{job?.id}} -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- new header ends -->
+        <!-- Header -->
+        <!-- <div class="header">
+                    <div class="header-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <a class="btn btn-success ms-2" *ngIf="role != 'ROLE_RECRUITER' && !job.verified"
+                                    (click)="verify(job?.id)">
+                                    Verify Job
+                                </a>
+                                <div class="btn-group" role="group" *ngIf="role == 'ROLE_RECRUITER'">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        More
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <li><a class="dropdown-item" *ngIf="role == 'ROLE_RECRUITER' && !job.verified"
+                                                routerLink="/jobs/edit/{{job?.id}}">Edit Job</a></li>
+                                        <li><a class="dropdown-item" *ngIf="role == 'ROLE_RECRUITER' && job.verified"
+                                                data-bs-toggle="modal" data-bs-target="#makepayment">Make Payment</a>
+                                        </li>
+                                        <li><a class="dropdown-item" *ngIf="job.verified"
+                                                routerLink="/jobs/requests/{{job?.id}}/list">Job Request</a></li>
+                                    </ul>
+                                </div>
+                                <a class="btn btn-outline-info" data-bs-toggle="modal"
+                                    data-bs-target="#makepayment"></a>&nbsp;
+                                <a class="btn btn-outline-primary" data-bs-toggle="modal"
+                                    data-bs-target="#makepayment">Make Payment</a>
+                            </div>
+                        </div> 
+                    </div>
+                </div> -->
+
+        <!-- <div class="row">
+                    <div class="col">
+                        
+                        <div class="avatar avatar-xl header-avatar-top flex-fill" style="height: auto;">
+                            <img [src]="job?.job?.image ? imageUrl + job?.job?.image : 'assets/img/job2.png'"
+                                [alt]=""
+                                class="avatar-img border border-5 border-body">
+                        </div>
+                    </div>
+                </div> -->
+        <!-- Form -->
+        <div class="mb-4 card card-body">
+          <div class="row">
+            <div class="col-12 col-md-12 mb-3">
+              <div
+                class="avatar avatar-xxl header-avatar-top flex-fill"
+                style="height: auto"
+              >
+                <img
+                  [src]="
+                    job?.image ? imageUrl + job?.image : 'assets/img/job2.png'
+                  "
+                  [alt]=""
+                  class="avatar-img border border-5 border-body"
+                />
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px">
+                  Title
+                </label>
+
+                <!-- Input -->
+                <!-- <input type="text" class="form-control" value="{{job?.title}}"> -->
+                <div style="font-size: 16px" title="{{ job.title }}">
+                  {{ nullCheck(job?.title) }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px">
+                  Job Role
+                </label>
+
+                <!-- Input -->
+
+                <div
+                  style="font-size: 16px"
+                  *ngFor="let categ of job.category; trackBy: trackByItemId"
+                >
+                  {{ categ.name }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px">
+                  Placement Location
+                </label>
+
+                <!-- Input -->
+                <div style="font-size: 16px">
+                  {{ nullCheck(job?.location) }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px">
+                  Company
+                </label>
+
+                <!-- Input -->
+                <!-- <input type="text" class="form-control" value="{{job?.title}}"> -->
+                <div style="font-size: 16px">{{ nullCheck(job?.company) }}</div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px">
+                  Salary
+                </label>
+
+                <!-- Input -->
+                <div style="font-size: 16px">
+                  <span *ngIf="job?.salaryNegotiable">Negotiable</span>
+                  <span *ngIf="job?.salaryBasedOnExperience"
+                    >Based On Experience</span
+                  >
+                  <span>{{
+                    nullCheck(job?.salary) + " " + nullCheck(job.currency)
+                  }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <label class="text-muted" style="font-size: 12px">
+                  Description
+                </label>
+
+                <div style="font-size: 16px">
+                  {{ nullCheck(job?.description) }}
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="col-12 col-md-4" >
+                            <div class="form-group">
+
+                                <label class="text-muted" style="font-size:12px">
+                                    Amount (Per Candidate)
+                                </label>
+
+                                <input *ngIf="role == 'ROLE_SUPER_ADMIN'" type="text" class="form-control form-control-sm" [(ngModel)]="amount" (keypress)="numberOnly($event)">
+                                <div *ngIf="role != 'ROLE_SUPER_ADMIN'" style="font-size: 16px; ">{{nullCheck(job?.amount)}}</div>
+                            </div>
+                        </div> -->
+
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px"> Age </label>
+
+                <!-- Input -->
+                <div style="font-size: 16px">
+                  {{ nullCheck(job?.minAge) }} - {{ nullCheck(job?.maxAge) }}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px">
+                  Weight (in kg)
+                </label>
+
+                <!-- Input -->
+                <div style="font-size: 16px">
+                  {{ nullCheckWeight(job?.minWeight) }} -
+                  {{ nullCheckWeight(job?.maxWeight) }}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <label class="text-muted" style="font-size: 12px">
+                  Height (in cm)
+                </label>
+                <div style="font-size: 16px">
+                  {{ nullCheckHeight(job?.minHeight) }} -
+                  {{ nullCheckHeight(job?.maxHeight) }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px">
+                  Expiry Date
+                </label>
+
+                <!-- Input -->
+                <div style="font-size: 16px">
+                  {{ nullCheck(job?.expiryDate) }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px">
+                  Interview Date
+                </label>
+
+                <!-- Input -->
+                <div style="font-size: 16px">
+                  {{ nullCheck(job?.interviewDate) }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px">
+                  Requirement Count
+                </label>
+
+                <!-- Input -->
+                <div style="font-size: 16px">
+                  {{ nullCheck(job?.requirementCount) }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="text-muted" style="font-size: 12px">
+                  Target Applicants (Location)
+                </label>
+
+                <!-- Input -->
+                <div style="font-size: 16px">
+                  {{ nullCheck(job?.targetLocation) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-body" *ngIf="job.highlightTags.length > 0">
+          <div class="row">
+            <div class="col-12 col-md-12">
+              <div class="form-group">
+                <label class="text-muted" style="font-size: 12px">
+                  Highlight Tags
+                </label>
+                <div style="font-size: 16px">
+                  <span
+                    *ngFor="
+                      let tag of job.highlightTags;
+                      let bi = index;
+                      trackBy: trackByItemId
+                    "
+                  >
+                    <span *ngIf="bi > 0">, &nbsp;&nbsp;</span>
+                    {{ tag }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-body" *ngIf="job.languagesReadWrite.length > 0">
+          <div class="row">
+            <div class="col-12 col-md-12">
+              <div class="form-group">
+                <label class="text-muted" style="font-size: 12px">
+                  Languages Read & Write
+                </label>
+                <div style="font-size: 16px">
+                  <span
+                    *ngFor="
+                      let lang of job.languagesReadWrite;
+                      let bi = index;
+                      trackBy: trackByItemId
+                    "
+                  >
+                    <span *ngIf="bi > 0">, &nbsp;&nbsp;</span>
+                    {{ lang }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-body" *ngIf="job.languagesSpeak.length > 0">
+          <div class="row">
+            <div class="col-12 col-md-12">
+              <div class="form-group">
+                <label class="text-muted" style="font-size: 12px">
+                  Languages Speak
+                </label>
+                <div style="font-size: 16px">
+                  <span
+                    *ngFor="
+                      let lang of job.languagesSpeak;
+                      let bi = index;
+                      trackBy: trackByItemId
+                    "
+                  >
+                    <span *ngIf="bi > 0">, &nbsp;&nbsp;</span>
+                    {{ lang }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-body" *ngIf="job.qualification.length > 0">
+          <div class="row">
+            <div class="col-12 col-md-12">
+              <div class="form-group">
+                <label class="text-muted" style="font-size: 12px">
+                  Qualifications
+                </label>
+                <div style="font-size: 16px">
+                  <span
+                    *ngFor="
+                      let qual of job.qualification;
+                      let bi = index;
+                      trackBy: trackByItemId
+                    "
+                  >
+                  <span *ngIf="bi > 0">, &nbsp;&nbsp;</span>
+                  {{ formatQualification(qual) }}
+                </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-body" *ngIf="this.selectedSkills.length > 0">
+          <div class="row">
+            <div class="col-12 col-md-12">
+              <div class="form-group">
+                <label class="text-muted" style="font-size: 12px">
+                  Skills
+                </label>
+                <div style="font-size: 16px">
+                  <span
+                    *ngFor="
+                      let item of selectedSkills;
+                      let bi = index;
+                      trackBy: trackByItemId
+                    "
+                  >
+                    <span *ngIf="bi > 0">, &nbsp;&nbsp;</span>
+                    {{ item.name }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="modal fade"
+          id="makepayment"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          tabindex="-1"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                  Make Payment and Proceed
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="mb-3">
+                    <label for="message-text" class="col-form-label"
+                      >Requirement Count
+                    </label>
+                    <input type="text" class="form-control" />
+                    <!-- <textarea class="form-control" id="message-text"></textarea> -->
+                  </div>
+                  <div class="mb-3">
+                    <label for="message-text" class="col-form-label"
+                      >Amount Need to Paid
+                    </label>
+                    <input type="text" class="form-control" />
+                    <!-- <textarea class="form-control" id="message-text"></textarea> -->
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-white"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button type="button" class="btn btn-primary">
+                  Make Payment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / .row -->
+  </div>
+</div>
+<!-- / .main-content -->

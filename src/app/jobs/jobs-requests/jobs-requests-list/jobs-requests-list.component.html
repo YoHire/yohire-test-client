@@ -1,0 +1,1352 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="header my-3 xsticky-top">
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col col-md-2 col-lg-1">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.back()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.forward()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item" *ngIf="role == 'RECRUITER'">
+                      <a routerLink="/jobs/recruiter/list">Job List</a>
+                    </li>
+                    <li class="breadcrumb-item" *ngIf="role != 'RECRUITER'">
+                      <a routerLink="/jobs/admin/list">Jobs List</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a>Applications</a></li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="applications-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#applications"
+              type="button"
+              role="tab"
+              aria-controls="applications"
+              aria-selected="true"
+            >
+              Applications
+              <p-badge [value]="itemsFiltered.length" severity="danger" />
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="downloaded-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#downloaded"
+              type="button"
+              role="tab"
+              aria-controls="downloaded"
+              aria-selected="false"
+            >
+              Downloaded Resumes
+              <p-badge
+                [value]="downloadedItemsFiltered.length"
+                severity="success"
+              />
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            id="applications"
+            role="tabpanel"
+            aria-labelledby="applications-tab"
+          >
+            <div class="card" id="contactsList">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <form>
+                      <div
+                        class="input-group input-group-flush input-group-merge input-group-reverse"
+                      >
+                        <input
+                          class="form-control list-search"
+                          type="search"
+                          placeholder="Search"
+                          (keyup)="customFilter($event)"
+                        />
+                        <span class="input-group-text">
+                          <i class="fe fe-search"></i>
+                        </span>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="col-auto me-n3">
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 120px"
+                      [(ngModel)]="size"
+                      (change)="paginateItems()"
+                    >
+                      <option [value]="20">20 per page</option>
+                      <option [value]="10">10 per page</option>
+                      <option [value]="0">All</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive tab-pane fade show active" id="home">
+                <table
+                  class="table table-sm table-hover table-nowrap card-table"
+                >
+                  <thead>
+                    <tr>
+                      <th>
+                        <input
+                          type="checkbox"
+                          class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                          [(ngModel)]="selectAllApplications"
+                          (change)="
+                            selectAll = !selectAll;
+                            changeDownloadSelect('applications')
+                          "
+                        />
+                        <span class="ml-2 text-gray-700">Select All</span>
+                      </th>
+
+                      <th>Sl No.</th>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          (click)="sortByField('candidate.name')"
+                          >Name</a
+                        >
+                      </th>
+                      <th>Job Role</th>
+                      <th>Skills</th>
+                      <th>Age</th>
+                      <th>Height</th>
+                      <th>Weight</th>
+                      <th>Location</th>
+                      <th>Languages Read & Write</th>
+                      <th>Languages Speak</th>
+                    </tr>
+                  </thead>
+                  <tbody class="list fs-base">
+                    <tr
+                      *ngFor="
+                        let item of itemsFiltered
+                          | sort : sortedColumn : sortedDirection
+                          | slice : pageStartIndex : pageEndIndex;
+                        let i = index;
+                        trackBy: trackByItemId
+                      "
+                    >
+                      <td>
+                        <div class="avatar avatar-xs align-middle me-1">
+                          <input
+                            type="checkbox"
+                            class="form-check"
+                            [(ngModel)]="item.downloadCheck"
+                            (change)="checkDownLoad('applications')"
+                          />
+                        </div>
+                        <div class="avatar avatar-xs align-middle me-1">
+                          <img
+                            class="avatar-img rounded-circle"
+                            src="{{
+                              item?.candidate?.image
+                                ? imageUrl + item?.candidate?.image
+                                : 'assets/img/avatars/profiles/prof.png'
+                            }}"
+                          />
+                        </div>
+                        <div class="avatar avatar-xs align-middle me-2">
+                          <img
+                            class="avatar-img rounded-circle pointer"
+                            [src]="
+                              item.resumeDownloaded
+                                ? 'assets/img/avatars/profiles/download-green.ico'
+                                : 'assets/img/avatars/profiles/download.ico'
+                            "
+                            (click)="downloadPDF(item, 'download')"
+                          />
+                        </div>
+                        <br />
+                        <span
+                          class="badge badge-sm bg-danger"
+                          *ngIf="!item.resumeDownloaded"
+                          >Download to view</span
+                        >
+                      </td>
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                        {{ item.username }}
+                      </td>
+
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="categoryTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [color]="
+                            getColor(
+                              checkCatgoryMatches(item.category, job.category)
+                            )
+                          "
+                          [showValue]="false"
+                          [value]="
+                            checkCatgoryMatches(item.category, job.category)
+                          "
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="skillTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [color]="
+                            getColor(checkMatches(item.skill, job.skills))
+                          "
+                          [showValue]="false"
+                          [value]="checkMatches(item.skill, job.skills)"
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="ageTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [showValue]="false"
+                          [color]="getColor(checkMatchAge(item.dateOfBirth))"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="checkMatchAge(item.dateOfBirth)"
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="heightTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [showValue]="false"
+                          [color]="getColor(checkHeightMatch(item.height))"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="checkHeightMatch(item.height)"
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="weightTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [showValue]="false"
+                          [color]="getColor(checkWeightMatch(item.weight))"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="checkWeightMatch(item.weight)"
+                        />
+                        <ng-template #categoryTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Job Roles</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job.category && job.category.length > 0;
+                                    else noCategories
+                                  "
+                                >
+                                  <li
+                                    *ngFor="
+                                      let categ of job.category;
+                                      trackBy: trackByItemId
+                                    "
+                                    [ngClass]="{
+                                      'text-green-500': checkCategoryMatches(
+                                        categ,
+                                        item.category
+                                      ),
+                                      'text-gray-700': !checkCategoryMatches(
+                                        categ,
+                                        item.category
+                                      )
+                                    }"
+                                  >
+                                    {{ categ.name }}
+                                  </li>
+                                </ng-container>
+
+                                <ng-template #noCategories>
+                                  <li class="text-gray-700">
+                                    Categories were not selected
+                                  </li>
+                                </ng-template>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #ageTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Age</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <li
+                                  [ngClass]="{
+                                    'text-green-500':
+                                      checkMatchAge(item.dateOfBirth) === 100,
+                                    'text-gray-700':
+                                      checkMatchAge(item.dateOfBirth) === 0
+                                  }"
+                                >
+                                  {{ job.minAge }} - {{ job.maxAge }}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #heightTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Height</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <li
+                                  [ngClass]="{
+                                    'text-green-500':
+                                      checkHeightMatch(item.height) === 100,
+                                    'text-gray-700':
+                                      checkHeightMatch(item.height) === 0
+                                  }"
+                                >
+                                  {{ job.minHeight }} - {{ job.maxHeight }}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #weightTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Weight</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <li
+                                  [ngClass]="{
+                                    'text-green-500':
+                                      checkWeightMatch(item.weight) === 100,
+                                    'text-gray-700':
+                                      checkWeightMatch(item.weight) === 0
+                                  }"
+                                >
+                                  {{ job.minWeight }} - {{ job.maxWeight }}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #skillTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Skills</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job.skills && job.skills.length > 0;
+                                    else noSkills
+                                  "
+                                >
+                                  <li
+                                    *ngFor="
+                                      let skill of job.skills;
+                                      trackBy: trackByItemId
+                                    "
+                                    [ngClass]="{
+                                      'text-green-500': isSkillMatching(
+                                        skill,
+                                        item.skill
+                                      ),
+                                      'text-gray-700': !isSkillMatching(
+                                        skill,
+                                        item.skill
+                                      )
+                                    }"
+                                  >
+                                    {{ skill.name }}
+                                  </li>
+                                </ng-container>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #noSkills>
+                          <p
+                            class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                          >
+                            Oops, job has no skills selected
+                          </p>
+                        </ng-template>
+                        <ng-template #langReadWriteTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Languages Read And Write</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job.languagesReadWrite &&
+                                      job.languagesReadWrite.length > 0;
+                                    else noLanguagesWrite
+                                  "
+                                >
+                                </ng-container>
+                                <li
+                                  *ngFor="
+                                    let lang of job.languagesReadWrite;
+                                    trackBy: trackByItemId
+                                  "
+                                  [ngClass]="{
+                                    'text-green-500': isLanguageMatching(
+                                      lang,
+                                      item.languagesWrite
+                                    ),
+                                    'text-gray-700': !isLanguageMatching(
+                                      lang,
+                                      item.languagesWrite
+                                    )
+                                  }"
+                                >
+                                  {{ lang }}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #noLanguagesWrite>
+                          <p
+                            class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                          >
+                            Oops, job has no languages read and write selected
+                          </p>
+                        </ng-template>
+                        <ng-template #addrMatchTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Location</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job.targetLocation;
+                                    else noTargetLocation
+                                  "
+                                >
+                                  <li
+                                    [ngClass]="{
+                                      'text-green-500':
+                                        isAddressMatch(item.address) === 100,
+                                      'text-gray-700':
+                                        isAddressMatch(item.address) === 0
+                                    }"
+                                  >
+                                    {{ job.targetLocation }}
+                                  </li>
+                                </ng-container>
+                                <ng-template #noTargetLocation>
+                                  <p
+                                    class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                                  >
+                                    Oops, job doesn't have any target location
+                                  </p>
+                                </ng-template>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #noTargetLocation>
+                          <p
+                            class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                          >
+                            Oops, job doesn't have any target location
+                          </p>
+                        </ng-template>
+                        <ng-template #langSpeakTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Languages Speak</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job.languagesSpeak &&
+                                      job.languagesSpeak.length > 0;
+                                    else noLanguagesSpeak
+                                  "
+                                >
+                                  <li
+                                    *ngFor="
+                                      let lang of job.languagesSpeak;
+                                      trackBy: trackByItemId
+                                    "
+                                    [ngClass]="{
+                                      'text-green-500': isLanguageMatching(
+                                        lang,
+                                        item.languagesRead
+                                      ),
+                                      'text-gray-700': !isLanguageMatching(
+                                        lang,
+                                        item.languagesRead
+                                      )
+                                    }"
+                                  >
+                                    {{ lang }}
+                                  </li>
+                                </ng-container>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #noLanguagesSpeak>
+                          <p
+                            class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                          >
+                            Oops, job has no languages speak selected
+                          </p>
+                        </ng-template>
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="addrMatchTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [showValue]="false"
+                          [color]="getColor(isAddressMatch(item.address))"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="isAddressMatch(item.address)"
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [showValue]="false"
+                          [pTooltip]="langReadWriteTooltipContent"
+                          [color]="
+                            getColor(
+                              languagesReadAndWriteMatch(item.languagesWrite)
+                            )
+                          "
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="
+                            languagesReadAndWriteMatch(item.languagesWrite)
+                          "
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [showValue]="false"
+                          [pTooltip]="langSpeakTooltipContent"
+                          [color]="getColor(languagesSpeak(item.languagesRead))"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="languagesSpeak(item.languagesRead)"
+                        ></p-progressBar>
+                      </td>
+                    </tr>
+
+                    <tr *ngIf="itemsFiltered && itemsFiltered.length < 1">
+                      <td colspan="7" class="text-center">
+                        No Applications to list
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                class="card-footer d-flex justify-content-between"
+                *ngIf="pageCount > 0"
+              >
+                <ul
+                  class="list-pagination-prev pagination pagination-tabs card-pagination"
+                  *ngIf="pageCount > 0"
+                >
+                  <li class="page-item" [ngClass]="{ disabled: page < 1 }">
+                    <button
+                      class="page-link ps-0 pe-4 border-end"
+                      (click)="page = page - 1; paginateItems()"
+                      [disabled]="page < 1"
+                    >
+                      <i class="fe fe-arrow-left me-1"></i> Prev
+                    </button>
+                  </li>
+                </ul>
+                <ul
+                  class="list-pagination pagination pagination-tabs card-pagination"
+                >
+                  <li
+                    *ngFor="
+                      let item of [].constructor(pageCount);
+                      let i = index;
+                    "
+                    [ngClass]="{ active: page == i }"
+                  >
+                    <button class="page" (click)="page = i; paginateItems()">
+                      {{ i + 1 }}
+                    </button>
+                  </li>
+                </ul>
+                <ul
+                  class="list-pagination-next pagination pagination-tabs card-pagination"
+                >
+                  <li
+                    class="page-item"
+                    [ngClass]="{ disabled: page >= pageCount - 1 }"
+                  >
+                    <button
+                      class="page-link ps-4 pe-0 border-start"
+                      (click)="page = page + 1; paginateItems()"
+                      [disabled]="page >= pageCount - 1"
+                    >
+                      Next <i class="fe fe-arrow-right ms-1"></i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-auto">
+                <button
+                  class="btn btn-primary text-white ms-2 btn-sm"
+                  (click)="downloadSelectedItems()"
+                  *ngIf="isApplicationsDownload"
+                >
+                  Download PDF
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="downloaded"
+            role="tabpanel"
+            aria-labelledby="downloaded-tab"
+          >
+            <div class="card" id="downloadedList">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <form>
+                      <div
+                        class="input-group input-group-flush input-group-merge input-group-reverse"
+                      >
+                        <input
+                          class="form-control list-search"
+                          type="search"
+                          placeholder="Search"
+                          (keyup)="customFilter($event)"
+                        />
+                        <span class="input-group-text">
+                          <i class="fe fe-search"></i>
+                        </span>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="col-auto me-n3">
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 120px"
+                      [(ngModel)]="size"
+                      (change)="paginateItems()"
+                    >
+                      <option [value]="20">20 per page</option>
+                      <option [value]="10">10 per page</option>
+                      <option [value]="0">All</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive tab-pane fade show active" id="home">
+                <table
+                  class="table table-sm table-hover table-nowrap card-table text-center"
+                >
+                  <thead>
+                    <tr>
+                      <th>
+                        <input
+                          type="checkbox"
+                          class="primary-checkbox"
+                          [(ngModel)]="selectAllDownloaded"
+                          (change)="
+                            selectAll = !selectAll;
+                            changeDownloadSelect('downloaded')
+                          "
+                        />
+                        <span class="ml-2 text-gray-700">Select All</span>
+                      </th>
+                      <th>Sl No.</th>
+                      <th>Name</th>
+                      <th>Phone</th>
+                      <th>Email</th>
+                      <th>Job Role</th>
+                      <th>Skills</th>
+                      <th>Age</th>
+                      <th>Height</th>
+                      <th>Weight</th>
+                      <th>Location</th>
+                      <th>Languages Read & Write</th>
+                      <th>Languages Speak</th>
+                      <!-- <th>Resume</th> -->
+                    </tr>
+                  </thead>
+                  <tbody class="list fs-base">
+                    <tr
+                      *ngFor="
+                        let item of downloadedItemsFiltered
+                          | sort : sortedColumn : sortedDirection;
+                        let i = index;
+                        trackBy: trackByItemId
+                      "
+                    >
+                      <td>
+                        <div class="avatar avatar-xs align-middle me-1">
+                          <input
+                            type="checkbox"
+                            class="form-check"
+                            [(ngModel)]="item.downloadCheck"
+                            (change)="checkDownLoad('downloaded')"
+                          />
+                        </div>
+                        <div class="avatar avatar-xs align-middle me-1">
+                          <img
+                            class="avatar-img rounded-circle"
+                            src="{{
+                              item?.candidate?.image
+                                ? imageUrl + item?.candidate?.image
+                                : 'assets/img/avatars/profiles/prof.png'
+                            }}"
+                          />
+                        </div>
+                        <div class="avatar avatar-xs align-middle me-2">
+                          <img
+                            class="avatar-img rounded-circle pointer"
+                            [src]="
+                              'assets/img/avatars/profiles/download-green.ico'
+                            "
+                            (click)="downloadPDF(item, 'download')"
+                          />
+                        </div>
+                      </td>
+
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ item?.username }}</td>
+                      <td>{{ item?.mobile }}</td>
+                      <td>{{ item.email }}</td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="categoryTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [color]="
+                            getColor(
+                              checkCatgoryMatches(item.category, job.category)
+                            )
+                          "
+                          [showValue]="false"
+                          [value]="
+                            checkCatgoryMatches(item.category, job.category)
+                          "
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="skillTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [color]="
+                            getColor(checkMatches(item.skill, job.skills))
+                          "
+                          [showValue]="false"
+                          [value]="checkMatches(item.skill, job.skills)"
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="ageTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [showValue]="false"
+                          [color]="getColor(checkMatchAge(item.dateOfBirth))"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="checkMatchAge(item.dateOfBirth)"
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="heightTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [showValue]="false"
+                          [color]="getColor(checkHeightMatch(item.height))"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="checkHeightMatch(item.height)"
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="weightTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [showValue]="false"
+                          [color]="getColor(checkWeightMatch(item.weight))"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="checkWeightMatch(item.weight)"
+                        />
+                        <ng-template #categoryTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Job Roles</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job.category && job.category.length > 0;
+                                    else noCategories
+                                  "
+                                >
+                                  <li
+                                    *ngFor="
+                                      let categ of job.category;
+                                      trackBy: trackByItemId
+                                    "
+                                    [ngClass]="{
+                                      'text-green-500': checkCategoryMatches(
+                                        categ,
+                                        item.category
+                                      ),
+                                      'text-gray-700': !checkCategoryMatches(
+                                        categ,
+                                        item.category
+                                      )
+                                    }"
+                                  >
+                                    {{ categ.name }}
+                                  </li>
+                                </ng-container>
+
+                                <ng-template #noCategories>
+                                  <p
+                                    class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                                  >
+                                    Oops, job has no categories selected
+                                  </p>
+                                </ng-template>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #ageTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Age</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <li
+                                  [ngClass]="{
+                                    'text-green-500':
+                                      checkMatchAge(item.dateOfBirth) === 100,
+                                    'text-gray-700':
+                                      checkMatchAge(item.dateOfBirth) === 0
+                                  }"
+                                >
+                                  {{ job.minAge }} - {{ job.maxAge }}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #heightTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Height</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <li
+                                  [ngClass]="{
+                                    'text-green-500':
+                                      checkHeightMatch(item.height) === 100,
+                                    'text-gray-700':
+                                      checkHeightMatch(item.height) === 0
+                                  }"
+                                >
+                                  {{ job.minHeight }} - {{ job.maxHeight }}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #weightTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Weight</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <li
+                                  [ngClass]="{
+                                    'text-green-500':
+                                      checkWeightMatch(item.weight) === 100,
+                                    'text-gray-700':
+                                      checkWeightMatch(item.weight) === 0
+                                  }"
+                                >
+                                  {{ job.minWeight }} - {{ job.maxWeight }}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #skillTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Skills</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job.skills && job.skills.length > 0;
+                                    else noSkills
+                                  "
+                                >
+                                  <li
+                                    *ngFor="
+                                      let skill of job.skills;
+                                      trackBy: trackByItemId
+                                    "
+                                    [ngClass]="{
+                                      'text-green-500': isSkillMatching(
+                                        skill,
+                                        item.skill
+                                      ),
+                                      'text-gray-700': !isSkillMatching(
+                                        skill,
+                                        item.skill
+                                      )
+                                    }"
+                                  >
+                                    {{ skill.name }}
+                                  </li>
+                                </ng-container>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #noSkills>
+                          <p
+                            class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                          >
+                            Oops, job has no skills selected
+                          </p>
+                        </ng-template>
+                        <ng-template #langReadWriteTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Languages Read And Write</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job.languagesReadWrite &&
+                                      job.languagesReadWrite.length > 0;
+                                    else noLanguagesWrite
+                                  "
+                                >
+                                </ng-container>
+                                <li
+                                  *ngFor="
+                                    let lang of job.languagesReadWrite;
+                                    trackBy: trackByItemId
+                                  "
+                                  [ngClass]="{
+                                    'text-green-500': isLanguageMatching(
+                                      lang,
+                                      item.languagesWrite
+                                    ),
+                                    'text-gray-700': !isLanguageMatching(
+                                      lang,
+                                      item.languagesWrite
+                                    )
+                                  }"
+                                >
+                                  {{ lang }}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #noLanguagesWrite>
+                          <p
+                            class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                          >
+                            Oops, job has no languages read and write selected
+                          </p>
+                        </ng-template>
+                        <ng-template #addrMatchTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Location</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job.targetLocation;
+                                    else noTargetLocation
+                                  "
+                                >
+                                  <li
+                                    [ngClass]="{
+                                      'text-green-500':
+                                        isAddressMatch(item.address) === 100,
+                                      'text-gray-700':
+                                        isAddressMatch(item.address) === 0
+                                    }"
+                                  >
+                                    {{ job.targetLocation }}
+                                  </li>
+                                </ng-container>
+                                <ng-template #noTargetLocation>
+                                  <p
+                                    class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                                  >
+                                    Oops, job doesn't have any target location
+                                  </p>
+                                </ng-template>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #langSpeakTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Languages Speak</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job.languagesSpeak &&
+                                      job.languagesSpeak.length > 0;
+                                    else noLanguagesSpeak
+                                  "
+                                >
+                                  <li
+                                    *ngFor="
+                                      let lang of job.languagesSpeak;
+                                      trackBy: trackByItemId
+                                    "
+                                    [ngClass]="{
+                                      'text-green-500': isLanguageMatching(
+                                        lang,
+                                        item.languagesRead
+                                      ),
+                                      'text-gray-700': !isLanguageMatching(
+                                        lang,
+                                        item.languagesRead
+                                      )
+                                    }"
+                                  >
+                                    {{ lang }}
+                                  </li>
+                                </ng-container>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #noLanguagesSpeak>
+                          <p
+                            class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                          >
+                            Oops, job has no languages speak selected
+                          </p>
+                        </ng-template>
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="addrMatchTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [showValue]="false"
+                          [color]="getColor(isAddressMatch(item.address))"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="isAddressMatch(item.address)"
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [showValue]="false"
+                          [pTooltip]="langReadWriteTooltipContent"
+                          [color]="
+                            getColor(
+                              languagesReadAndWriteMatch(item.languagesWrite)
+                            )
+                          "
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="
+                            languagesReadAndWriteMatch(item.languagesWrite)
+                          "
+                        />
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [showValue]="false"
+                          [pTooltip]="langSpeakTooltipContent"
+                          [color]="getColor(languagesSpeak(item.languagesRead))"
+                          [style]="{ height: '10px', width: '70px' }"
+                          [value]="languagesSpeak(item.languagesRead)"
+                        ></p-progressBar>
+                      </td>
+                      <!-- <td class="text-center">
+                        <a
+                          (click)="downloadPDF(item, 'view')"
+                          class="inline-block px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-in-out"
+                        >
+                          View
+                        </a>
+                      </td> -->
+                    </tr>
+
+                    <tr
+                      *ngIf="
+                        downloadedItemsFiltered &&
+                        downloadedItemsFiltered.length < 1
+                      "
+                    >
+                      <td colspan="7" class="text-center">
+                        No Downloaded Resumes to list
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                class="card-footer d-flex justify-content-between"
+                *ngIf="pageCount > 0"
+              >
+                <ul
+                  class="list-pagination-prev pagination pagination-tabs card-pagination"
+                  *ngIf="pageCount > 0"
+                >
+                  <li class="page-item" [ngClass]="{ disabled: page < 1 }">
+                    <button
+                      class="page-link ps-0 pe-4 border-end"
+                      (click)="page = page - 1; paginateItems()"
+                      [disabled]="page < 1"
+                    >
+                      <i class="fe fe-arrow-left me-1"></i> Prev
+                    </button>
+                  </li>
+                </ul>
+                <ul
+                  class="list-pagination pagination pagination-tabs card-pagination"
+                >
+                  <li
+                    *ngFor="
+                      let item of [].constructor(pageCount);
+                      let i = index;
+                    "
+                    [ngClass]="{ active: page == i }"
+                  >
+                    <button class="page" (click)="page = i; paginateItems()">
+                      {{ i + 1 }}
+                    </button>
+                  </li>
+                </ul>
+                <ul
+                  class="list-pagination-next pagination pagination-tabs card-pagination"
+                >
+                  <li
+                    class="page-item"
+                    [ngClass]="{ disabled: page >= pageCount - 1 }"
+                  >
+                    <button
+                      class="page-link ps-4 pe-0 border-start"
+                      (click)="page = page + 1; paginateItems()"
+                      [disabled]="page >= pageCount - 1"
+                    >
+                      Next <i class="fe fe-arrow-right ms-1"></i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-auto">
+                <button
+                  class="btn btn-primary text-white ms-2 btn-sm"
+                  (click)="downloadSelectedItems()"
+                  *ngIf="isDownloadedDownload"
+                >
+                  Download PDF
+                </button>
+                <button
+                  class="btn btn-primary text-white ms-2 btn-sm"
+                  (click)="exportToExcel(downloadedItemsFiltered)"
+                  *ngIf="isDownloadedDownload"
+                >
+                  Export to Excel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #callAPIDialog>
+          <h2 class="text-xl font-semibold text-center text-gray-800 mb-4 mt-4">
+            Insufficient Coin Balance
+          </h2>
+          <div class="modal-body">
+            <div class="flex justify-center">
+              <div class="max-w-lg w-full border border-primary rounded-lg p-6">
+                <div class="text-center mb-4">
+                  <img
+                    src="assets/img/coin[1].gif"
+                    alt="Coin Image"
+                    class="mx-auto h-20"
+                  />
+                </div>
+                <form [formGroup]="coinForm" class="mb-4">
+                  <input
+                    type="number"
+                    min="1"
+                    max="10000"
+                    class="form-input block w-full px-4 py-2 border border-gray-300 rounded-md"
+                    [(ngModel)]="coinAmount"
+                    placeholder="Buy Coins"
+                    formControlName="coinAmount"
+                  />
+                  <button
+                    class="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-md w-full mt-3"
+                    [disabled]="coinForm.invalid"
+                    (click)="generateOrder()"
+                  >
+                    Pay
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-center mt-4 mb-4">
+            <button
+              class="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-md"
+              mat-dialog-close
+            >
+              Close
+            </button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

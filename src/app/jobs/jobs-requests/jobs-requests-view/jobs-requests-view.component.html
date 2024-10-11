@@ -1,0 +1,624 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-12 col-xl-12">
+        <div class="header my-3">
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col col-md-2 col-lg-1">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.back()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.forward()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item" *ngIf="role == 'RECRUITER'">
+                      <a routerLink="/jobs/recruiter/list">Job List</a>
+                    </li>
+                    <li class="breadcrumb-item" *ngIf="role != 'RECRUITER'">
+                      <a routerLink="/jobs/admin/list">Jobs List</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                      <a routerLink="/jobs/view/{{ jobId }}"
+                        >Job #{{ nullCheck(jobId) }}</a
+                      >
+                    </li>
+                    <li class="breadcrumb-item">
+                      <a routerLink="/jobs/requests/{{ jobId }}/list"
+                        >Candidate Requests</a
+                      >
+                    </li>
+                    <li class="breadcrumb-item">
+                      <a>Requests #{{ nullCheck(data?.id) }}</a>
+                    </li>
+
+                    <!-- <li class="breadcrumb-item"><a routerLink="/home/dashboard{{loginUser}}">Home</a></li>
+                                        <li class="breadcrumb-item "><a routerLink="/jobs/view/{{data?.job?.id}}">Job</a></li>
+                                        <li class="breadcrumb-item "><a routerLink="/jobs/requests/{{data?.job?.id}}/list">Requests</a></li>
+                                        <li class="breadcrumb-item active"><a>Job Request Details</a></li> -->
+                  </ol>
+                </nav>
+              </div>
+              <div class="col-auto">
+                <!-- (click)="updateStatus(false)" -->
+                <button
+                  class="btn btn-outline-danger ms-2 btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-toggle="modal"
+                  data-bs-target="#makepayment"
+                  *ngIf="
+                    role == 'RECRUITER' &&
+                    job.verified &&
+                    data?.visible &&
+                    data?.request == 'PENDING'
+                  "
+                  data-bs-target="#primaryModal"
+                >
+                  Reject Request
+                </button>
+                <button
+                  class="btn btn-primary ms-2 btn-sm"
+                  data-bs-toggle="modal"
+                  (click)="updateStatus(true)"
+                  *ngIf="
+                    role == 'RECRUITER' &&
+                    job.verified &&
+                    data?.visible &&
+                    data?.request == 'PENDING'
+                  "
+                  data-bs-target="#primaryModal"
+                >
+                  Accept Request
+                </button>
+                <button
+                  class="btn btn-success ms-2 btn-sm"
+                  data-bs-toggle="modal"
+                  *ngIf="
+                    role == 'RECRUITER' &&
+                    job.verified &&
+                    data?.visible &&
+                    data?.request == 'ACCEPTED'
+                  "
+                  data-bs-target="#primaryModal"
+                >
+                  {{ data!.request }}
+                </button>
+                <button
+                  class="btn btn-danger ms-2 btn-sm"
+                  data-bs-toggle="modal"
+                  *ngIf="
+                    role == 'RECRUITER' &&
+                    job.verified &&
+                    data?.visible &&
+                    data?.request == 'REJECTED'
+                  "
+                  data-bs-target="#primaryModal"
+                >
+                  {{ data!.request }}
+                </button>
+              </div>
+              <!-- <div class="col-auto ">
+
+                                <button type="button" class="btn btn-primary btn-sm" routerLink="/jobs/add">
+                                    <svg viewBox="0 0 24 28" width="20" height="20" stroke="currentColor"
+                                        stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                        class="css-i6dzq1">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    <span class="mt-2"> Create Job &nbsp;</span>
+                                </button>
+                            </div> -->
+            </div>
+          </div>
+        </div>
+        <!-- new header ends -->
+        <!-- Header -->
+        <!--   <div class="header mt-md-5">
+                    <div class="header-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+
+                              
+                                <h6 class="header-pretitle">
+                                    Detailed
+                                </h6>
+
+                               
+                                <h1 class="header-title">
+                                   Job Request 
+                                </h1>
+
+                            </div>
+                            <div class="col-auto">
+                                <a class="btn btn-primary">Edit Job</a>
+                            </div>
+                        </div> 
+                    </div>
+                </div>-->
+
+        <!-- Form -->
+        <form class="mb-4 card card-body">
+          <div>
+            <h3>Personal Details</h3>
+            <hr />
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label" style="color: grey">
+                  Full Name (Candidate)
+                </label>
+                <div style="font-size: 18px">
+                  {{ nullCheck(data?.user.username) }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="form-label" style="color: grey">
+                  Phone Number
+                </label>
+                <div style="font-size: 18px">
+                  {{ nullCheck(data?.user.mobile) }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="form-label" style="color: grey">
+                  Email Address
+                </label>
+                <div style="font-size: 18px">
+                  {{ nullCheck(data?.user.email) }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="form-label" style="color: grey"> Job Role </label>
+                <div style="font-size: 18px">
+                  {{ nullCheck(data?.job?.category?.name) }}
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="form-label" style="color: grey">
+                  Date of Birth
+                </label>
+                <div style="font-size: 18px">
+                  {{ nullCheck(data?.user.dateOfBirth) | date }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="form-label" style="color: grey"> Gender </label>
+                <div style="font-size: 18px">
+                  {{ nullCheck(data?.user?.gender) }}
+                </div>
+              </div>
+            </div>
+            <br />
+     
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <!-- Label  -->
+                <label class="form-label" style="color: grey"> Location </label>
+                <div style="font-size: 18px; width: 250px">
+                  {{ nullCheck(data?.user.address) }}
+                </div>
+              </div>
+              <br />
+            </div>
+            <br />
+
+       
+          </div>
+        </form>
+        <!-- <form class="mb-4 card card-body">
+          <div>
+            <h2>Job Details</h2>
+            <hr />
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label" style="color: grey"> Job Code </label>
+                <div style="font-size: 18px">{{ data?.job?.serialNo }}</div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label" style="color: grey">
+                  Job Title
+                </label>
+                <div style="font-size: 18px">{{ data?.job?.title }}</div>
+              </div>
+            </div>
+            <br />
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label" style="color: grey">
+                  Recruiting Agency
+                </label>
+                <div style="font-size: 18px">
+                  {{ data?.job?.recruiter?.name }}
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label" style="color: grey">
+                  Job Description
+                </label>
+                <div style="font-size: 18px">{{ data?.job?.description }}</div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label" style="color: grey"> Tags </label>
+
+              </div>
+            </div>
+          </div>
+        </form> -->
+
+        <!-- <form
+          class="mb-4 card card-body"
+          novalidate
+          *ngIf="questions.length > 0"
+        >
+          <div>
+            <h2>Question and Answers</h2>
+            <hr />
+          </div>
+
+    
+            <div class="col-12 col-md-12">
+              <div class="form-group">
+                <ul class="list-group">
+                  <li
+                    class="list-group-item d-flex justify-content-between align-items-center"
+                  >
+                    {{ item.answer }}
+                  </li>
+                </ul>
+
+              </div>
+            </div>
+            <br />
+          </div>
+        </form> -->
+
+        <!-- <form class="mb-4 card card-body">
+          <div class="row" *ngIf="false">
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Full Name </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  value="{{ data?.candidate?.name }}"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Phone </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  value="{{ data?.candidate?.mobile }}"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Email </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  value="{{ data?.candidate?.email }}"
+                  disabled
+                />
+         
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Category </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  value="{{ data?.job?.category?.name }}"
+                  disabled
+                />
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Subcategory </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  value="{{ data?.job?.subCategory?.name }}"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Pincode </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  value="{{ data?.candidate?.pin }}"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Job Name </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  value="{{ data?.job?.title }}"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Recruiting Agency </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  value="{{ data?.job?.recruiter?.name }}"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Country </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  value="{{ data?.candidate?.country }}"
+                  disabled
+                />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Company </label>
+
+                <input type="text" class="form-control" value="" disabled />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Interview Date </label>
+
+        
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="form-label"> Interview Time </label>
+
+         
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-4" *ngIf="data?.cv">
+            <div class="h4">Attachments Need to Submit</div>
+            <div>
+              1. {{ data?.cv }} (File) -
+              <a (click)="download(data!.cv)">Download</a>
+            </div>
+          </div>
+
+          <hr *ngIf="data?.cv" class="mt-2 mb-4" />
+          <div class="row" *ngIf="isEdit">
+            <div class="col-12 col-md-4">
+              <a
+                href="#"
+                class="btn w-100 btn-white"
+                data-bs-toggle="modal"
+                data-bs-target="#rejectcanjob"
+              >
+                Reject
+              </a>
+            </div>
+            <div class="col-12 col-md-4"></div>
+            <div class="col-12 col-md-4 d-grid">
+              <a
+                (click)="verify(true)"
+                class="btn w-100 btn-primary"
+                *ngIf="!data?.verified"
+              >
+                Accept
+              </a>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="!isEdit">
+            <div class="col-12 col-md-10"></div>
+          
+          </div>
+
+        </form> -->
+        <div
+          class="modal fade"
+          id="rejectcanjob"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          tabindex="-1"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                  Show Your Comments Here
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="mb-3">
+                    <label for="message-text" class="col-form-label"
+                      >Comment Here:</label
+                    >
+                    <textarea
+                      class="form-control"
+                      [(ngModel)]="remark"
+                      [ngModelOptions]="{ standalone: true }"
+                      id="message-text"
+                    ></textarea>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-white"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="updateStatus(false)"
+                  data-bs-dismiss="modal"
+                >
+                  Comment & Reject
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / .row -->
+  </div>
+</div>
+<!-- / .main-content -->
+
+<div
+  class="modal fade"
+  id="primaryModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="staticBackdropLabel">Reject Request</h2>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Remark </label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="remark"
+              name="remark"
+            />
+            <!-- <textarea class="form-control" id="message-text"></textarea> -->
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="updateStatus(false)"
+          data-bs-dismiss="modal"
+        >
+          Confirm Rejection
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

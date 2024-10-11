@@ -1,0 +1,327 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div
+          class="header my-3 xsticky-top rounded-full px-4"
+          style="background-color: white"
+        >
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col col-md-2 col-lg-1">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.back()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.forward()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a>Transactions</a></li>
+                  </ol>
+                </nav>
+              </div>
+      
+              <div class="col-auto" *ngIf="role != 'RECRUITER'">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#TransactionFormModal"
+                >
+                  <svg
+                    viewBox="0 0 24 28"
+                    width="20"
+                    height="20"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="css-i6dzq1"
+                  >
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span class="mt-2"> Create &nbsp;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- new header ends -->
+        <!-- Header -->
+
+        <!-- Tab navigation -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              [class.active]="activeTab === 'coins'"
+              id="coinsListTab"
+              data-bs-toggle="tab"
+              data-bs-target="#coinsList"
+              type="button"
+              role="tab"
+              aria-controls="coinsList"
+              aria-selected="true"
+              (click)="filterTransactions('coins')"
+            >
+              Coin Transactions
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              [class.active]="activeTab === 'cash'"
+              id="contactsListTab"
+              data-bs-toggle="tab"
+              data-bs-target="#contactsList"
+              type="button"
+              role="tab"
+              aria-controls="contactsList"
+              aria-selected="false"
+              (click)="filterTransactions('cash')"
+            >
+              Cash Transactions
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="monthlyTransactionsTab"
+              data-bs-toggle="tab"
+              data-bs-target="#monthlyTransactions"
+              type="button"
+              role="tab"
+              aria-controls="monthlyTransactions"
+              aria-selected="false"
+            >
+              Download Monthly Invoice
+            </button>
+          </li>
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content" id="myTabContent">
+          <!-- Coin Transactions tab content -->
+          <div class="tab-content" id="myTabContent">
+            <div
+              class="tab-pane fade active"
+              [class.show.active]="activeTab === 'coins'"
+              id="coinsList"
+              role="tabpanel"
+              aria-labelledby="coinsListTab"
+            >
+              <div class="table-responsive">
+                <table
+                  class="table table-sm text-center table-hover table-nowrap card-table"
+                >
+                  <thead>
+                    <tr>
+                      <th class="text-muted col-2">Date</th>
+                      <th class="text-muted col-2">Time</th>
+                      <th class="text-muted col-2">Transaction Number</th>
+                      <th class="text-muted col-2">Description</th>
+                      <th class="text-muted col-2">Credit</th>
+                      <th class="text-muted col-2">Debit</th>
+                      <th class="text-muted col-2">Balance</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="list fs-base">
+                    <tr *ngFor="let item of transactions; index as i;trackBy: trackByItemId">
+                      <td>{{ item.createdAt | date : "dd/MM/yyyy" }}</td>
+                      <td>{{ item.createdAt | date : "hh:mm a" }}</td>
+                      <td>{{ item.transactionNo }}</td>
+                      <td class="px-4 py-2 text-sm text-gray-700">
+                        {{ item.description }}
+                      </td>
+                      <td>
+                        <ng-container *ngIf="item.credit; else blankCell">
+                          {{ item.credit }}
+                        </ng-container>
+                        <ng-template #blankCell></ng-template>
+                      </td>
+                      <td>
+                        <ng-container *ngIf="item.debit; else blankCell">
+                          {{ item.debit }}
+                        </ng-container>
+                        <ng-template #blankCell></ng-template>
+                      </td>
+                      <td>{{ item.balance }}</td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Success</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div
+                  *ngIf="(transactions ?? '').length < 1"
+                  class="text-center p-5"
+                >
+                  No Transactions to list
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Transactions tab content -->
+            <div
+              class="tab-pane fade"
+              [class.show.active]="activeTab === 'cash'"
+              id="contactsList"
+              role="tabpanel"
+              aria-labelledby="contactsListTab"
+            >
+              <div class="table-responsive">
+                <table
+                  class="table table-sm table-hover table-nowrap card-table"
+                >
+                  <thead>
+                    <tr>
+                      <th class="text-muted col-2">Date</th>
+                      <th class="text-muted col-2">Time</th>
+                      <th class="text-muted col-2">Transaction Number</th>
+                      <th class="text-muted col-2">
+                        Coins
+                        <span>
+                          <img
+                            src="assets/img/coin[1].gif"
+                            style="max-width: 80%; height: 30px"
+                          />
+                        </span>
+                      </th>
+                      <th class="text-muted col-2">Amount</th>
+                      <th class="text-muted col-2">GST (18%)</th>
+                      <th class="text-muted col-2">Total</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="list fs-base">
+                    <tr *ngFor="let item of transactions; index as i;trackBy: trackByItemId">
+                      <td>{{ item.createdAt | date : "dd/MM/yyyy" }}</td>
+                      <td>{{ item.createdAt | date : "hh:mm a" }}</td>
+                      <td>{{ item.transactionNo }}</td>
+                      <td>{{ item.coin }}</td>
+                      <td>
+                        {{ item.amount / (1 + 18 / 100) | currency : "₹ " }}
+                      </td>
+                      <td>{{ item.gst }}</td>
+                      <td>{{ item.amount | currency : "₹ " }}</td>
+
+                      <td>
+                        <button class="btn btn-success btn-sm">Success</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div
+                  *ngIf="(transactions ?? '').length < 1"
+                  class="text-center p-5"
+                >
+                  No Transactions to list
+                </div>
+              </div>
+            </div>
+
+            <!-- Monthly Transactions tab content -->
+            <div
+              class="tab-pane fade"
+              id="monthlyTransactions"
+              role="tabpanel"
+              aria-labelledby="monthlyTransactionsTab"
+            >
+              <div class="table-responsive">
+                <table
+                  class="table table-sm table-hover table-nowrap card-table"
+                >
+                  <thead>
+                    <tr>
+                      <th class="col-2">Month</th>
+                      <th class="col-2">
+                        GST IN
+                        <input type="checkbox" [(ngModel)]="gstinChecked" />
+                      </th>
+                      <th class="col-2">
+                        Your next invoice will be generated on
+                        <span class="text-danger font-weight-bold">
+                          {{ getNextInvoiceDate() }}
+                        </span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="list fs-base">
+                    <tr
+                      *ngFor="
+                        let month of getMonthlyTransactionKeys();
+                        trackBy: trackByItemId
+                      "
+                    >
+                      <td>{{ month }}</td>
+                      <td>
+                        <div
+                          class="avatar avatar-xs align-middle me-2"
+                          (click)="downloadPDF(month)"
+                        >
+                          <img
+                            class="avatar-img rounded-circle pointer"
+                            src="assets/img/avatars/profiles/download.ico"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div
+                  *ngIf="(transactions ?? '').length < 1"
+                  class="text-center p-5"
+                >
+                  No Transactions To List
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

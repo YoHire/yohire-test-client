@@ -1,0 +1,8 @@
+<div class="flex h-screen bg-white">
+  <app-sidebar-recruiter
+    *ngIf="this.authService.isLoggedIn()"
+  ></app-sidebar-recruiter>
+  <main class="flex-1 p-4 overflow-y-auto">
+    <router-outlet></router-outlet>
+  </main>
+</div>

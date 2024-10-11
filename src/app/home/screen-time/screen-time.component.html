@@ -1,0 +1,85 @@
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <!-- new header starts -->
+        <div class="header my-3 xsticky-top">
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a routerLink="">Home</a></li>
+                    <li class="breadcrumb-item active"><a>Screen Time</a></li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- new header ends -->
+        <!-- Header -->
+        <div class="row">
+          <div class="col"></div>
+        </div>
+
+        <!-- Tab content -->
+        <div class="tab-content">
+          <div
+            class="tab-pane fade show active"
+            role="tabpanel"
+            aria-labelledby="contactsListTab"
+          >
+            <!-- Card -->
+            <div class="card">
+              <div class="table-responsive tab-pane fade show active" id="home">
+                <table
+                  class="table table-bordered table-sm table-hover table-nowrap card-table"
+                >
+                  <thead>
+                    <tr>
+                      <th style="width: 10%">Sl No.</th>
+
+                      <th>
+                        <a class="list-sort text-muted" data-sort="item-name">
+                          Name</a
+                        >
+                      </th>
+                      <th>
+                        <a class="list-sort text-muted" data-sort="item-name">
+                          Total hrs</a
+                        >
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="list fs-base">
+                    <tr class="cursor" *ngFor="let item of logs; index as i; trackBy: trackByItemId">
+                      <td>
+                        {{ i + 1 }}
+                      </td>
+
+                      <td>
+                        <span class="item-title text-wrap"
+                          >{{ item[0].name }}
+                        </span>
+                      </td>
+                      <td>
+                        <span class="item-title text-wrap">{{
+                          minutesToHours(item[1])
+                        }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / .row -->
+  </div>
+</div>
+<!-- / .main-content -->
+<!-- <app-category-form #categoryForm (outputEvent)="list()"></app-category-form> -->

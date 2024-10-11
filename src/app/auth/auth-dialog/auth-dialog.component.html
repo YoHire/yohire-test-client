@@ -1,0 +1,407 @@
+<p-dialog
+  *ngIf="visible"
+  [modal]="true"
+  [(visible)]="visible"
+  [draggable]="false"
+>
+  <ng-template pTemplate="headless">
+    <div class="bg-white rounded-3xl flex overflow-hidden flex-col sm:flex-row">
+      <div
+        class="p-6 sm:p-12 flex-1 transform transition-transform duration-1000 ease-in-out"
+      >
+        <button
+          type="button"
+          (click)="closeDialog()"
+          class="absolute top-2 right-2 p-2 text-gray-500 hover:text-gray-900"
+          aria-label="Close"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+        <div class="space-y-6">
+          <img
+            src="/assets/img/yohire-logo.png"
+            loading="lazy"
+            class="w-56 mx-auto animate-fade-in"
+            alt="Logo"
+          />
+          <!-- <h2 class="text-2xl text-center text-cyan-900 font-bold">
+             {{ isRegisterMode ? "REGISTERATION" : "LOGIN" }}
+          </h2> -->
+        </div>
+
+        <form
+          *ngIf="!isRegisterMode"
+          [formGroup]="loginForm"
+          (ngSubmit)="login()"
+        >
+          <div class="mt-10 space-y-4">
+            <div>
+              <input
+                required
+                formControlName="email"
+                autocomplete="username"
+                appTrim
+                placeholder="Email"
+                type="email"
+                class="border border-gray-300 rounded-lg px-4 py-2 mt-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+              <div *ngIf="submitted && loginForm.get('email')?.errors">
+                <small
+                  *ngIf="loginForm.get('email')?.errors?.required"
+                  class="text-red-500"
+                >
+                  Email is required
+                </small>
+                <small
+                  *ngIf="loginForm.get('email')?.errors?.email"
+                  class="text-red-500"
+                >
+                  Invalid email format
+                </small>
+              </div>
+            </div>
+
+            <div>
+              <input
+                formControlName="password"
+                placeholder="Password"
+                autocomplete="new-password"
+                type="password"
+                appTrim
+                required
+                class="border border-gray-300 rounded-lg px-4 py-2 mt-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+              <div class="grid grid-cols-3 gap-3 mt-3">
+                <div class="col-span-3 flex justify-center items-center">
+                  <asl-google-signin-button
+                    type="standard"
+                    size="large"
+                    [width]="238"
+                    (click)="signInWithGoogle()"
+                  >
+                  </asl-google-signin-button>
+                </div>
+              </div>
+              <div
+                class="flex justify-between items-center mt-3 w-full text-white rounded-lg font-semibold"
+              >
+                <a
+                  routerLink="/auth/forgot-password"
+                  class="text-sm text-blue-900 hover:text-blue-600"
+                  >Forgot Password?</a
+                >
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full py-3 bg-black text-white rounded-lg font-semibold text-sm flex items-center justify-center"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+
+        <form
+          *ngIf="isRegisterMode"
+          [formGroup]="addForm"
+          (ngSubmit)="create()"
+        >
+          <div class="mt-3 space-y-2">
+            <div class="space-y-6">
+              <div class="flex justify-center">
+                <asl-google-signin-button
+                  type="standard"
+                  size="medium"
+                  (click)="signInWithGoogle()"
+                  text="signin_with"
+                  class="w-full max-w-xs ml-24"
+                >
+                </asl-google-signin-button>
+              </div>
+              <div class="flex items-center justify-center space-x-4">
+                <div class="h-px w-full bg-gray-300"></div>
+                <span class="text-sm text-gray-500 font-medium">or</span>
+                <div class="h-px w-full bg-gray-300"></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-2 md:gap-6">
+              <div>
+                <input
+                  placeholder="Organization Name*"
+                  required
+                  maxlength="50"
+                  type="text"
+                  formControlName="ra"
+                  appTrim
+                  class="border border-gray-300 rounded-lg px-4 py-2 mt-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <div
+                  *ngIf="
+                    addForm.get('ra')?.invalid &&
+                    (addForm.get('ra')?.dirty || addForm.get('ra')?.touched) &&
+                    addForm.get('ra')?.value
+                  "
+                >
+                  <small
+                    class="text-red-500"
+                    *ngIf="addForm.get('ra')?.errors?.required"
+                  >
+                    Organization name is required
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6">
+              <div>
+                <input
+                  required
+                  formControlName="email"
+                  autocomplete="username"
+                  placeholder="Email*"
+                  type="email"
+                  class="border border-gray-300 rounded-lg px-4 py-2 mt-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <div
+                  *ngIf="
+                    addForm.get('email')?.invalid &&
+                    (addForm.get('email')?.dirty ||
+                      addForm.get('email')?.touched) &&
+                    addForm.get('email')?.value
+                  "
+                >
+                  <small
+                    class="text-red-500"
+                    *ngIf="addForm.get('email')?.errors?.required"
+                  >
+                    Email is required
+                  </small>
+                  <small
+                    class="text-red-500"
+                    *ngIf="addForm.get('email')?.errors?.email"
+                  >
+                    Invalid email format
+                  </small>
+                </div>
+              </div>
+
+              <div class="flex space-x-2">
+                <p-dropdown
+                  required
+                  formControlName="countryCode"
+                  [options]="countryCodes"
+                  optionValue="code"
+                  optionLabel="code"
+                  class="border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  placeholder="Country Code"
+                ></p-dropdown>
+
+                <input
+                  placeholder="Mobile No.*"
+                  required
+                  type="text"
+                  formControlName="mobile"
+                  maxlength="15"
+                  (keypress)="validateNumber($event)"
+                  appTrim
+                  class="border border-gray-300 rounded-lg px-4 py-2 mt-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              </div>
+
+              <div
+                *ngIf="
+                  addForm.get('mobile')?.invalid &&
+                  addForm.get('mobile')?.value &&
+                  (addForm.get('mobile')?.dirty ||
+                    addForm.get('mobile')?.touched)
+                "
+              >
+                <small
+                  class="text-red-500"
+                  *ngIf="addForm.get('mobile')?.errors?.required"
+                >
+                  Mobile number is required
+                </small>
+                <small
+                  class="text-red-500"
+                  *ngIf="addForm.get('mobile')?.errors?.invalidLength"
+                >
+                  Mobile number must be 10 digits
+                </small>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6">
+              <div>
+                <input
+                  placeholder="Password*"
+                  required
+                  [type]="show ? 'text' : 'password'"
+                  formControlName="password"
+                  matInput
+                  autocomplete="new-password"
+                  appTrim
+                  class="border border-gray-300 rounded-lg px-4 py-2 mt-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+
+                <div
+                  *ngIf="
+                    addForm.get('password')?.invalid &&
+                    (addForm.get('password')?.dirty ||
+                      addForm.get('password')?.touched)
+                  "
+                >
+                  <div
+                    class="text-red-500 text-sm p-2 border rounded mt-2"
+                    style="border-color: #dc3545; background-color: white"
+                  >
+                    <small
+                      class="block"
+                      [ngClass]="{
+                        'text-green-500': addForm
+                          .get('password')
+                          ?.value?.match('^(?=.*[A-Z])'),
+                        'text-red-500': !addForm
+                          .get('password')
+                          ?.value?.match('^(?=.*[A-Z])')
+                      }"
+                    >
+                      At least one uppercase letter.
+                    </small>
+                    <small
+                      class="block mt-1"
+                      [ngClass]="{
+                        'text-green-500': addForm
+                          .get('password')
+                          ?.value?.match('(?=.*[a-z])'),
+                        'text-red-500': !addForm
+                          .get('password')
+                          ?.value?.match('(?=.*[a-z])')
+                      }"
+                    >
+                      At least one lowercase letter.
+                    </small>
+                    <small
+                      class="block mt-1"
+                      [ngClass]="{
+                        'text-green-500': addForm
+                          .get('password')
+                          ?.value?.match('(.*[0-9].*)'),
+                        'text-red-500': !addForm
+                          .get('password')
+                          ?.value?.match('(.*[0-9].*)')
+                      }"
+                    >
+                      At least one digit.
+                    </small>
+                    <small
+                      class="block mt-1"
+                      [ngClass]="{
+                        'text-green-500': addForm
+                          .get('password')
+                          ?.value?.match('(?=.*[!@#$%^&*])'),
+                        'text-red-500': !addForm
+                          .get('password')
+                          ?.value?.match('(?=.*[!@#$%^&*])')
+                      }"
+                    >
+                      At least one special character.
+                    </small>
+                    <small
+                      class="block mt-1"
+                      [ngClass]="{
+                        'text-green-500': addForm
+                          .get('password')
+                          ?.value?.match('.{8,}'),
+                        'text-red-500': !addForm
+                          .get('password')
+                          ?.value?.match('.{8,}')
+                      }"
+                    >
+                      At least 8 characters long.
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <input
+                  required
+                  formControlName="cPassword"
+                  placeholder="Confirm Password*"
+                  type="password"
+                  class="border border-gray-300 rounded-lg px-4 py-2 mt-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <small
+                  *ngIf="
+                    addForm.hasError('passwordMismatch') &&
+                    (addForm.get('password')?.dirty ||
+                      addForm.get('cPassword')?.dirty) &&
+                    addForm.get('cPassword')?.value
+                  "
+                  class="text-red-500 block mt-1"
+                >
+                  Passwords do not match.
+                </small>
+              </div>
+            </div>
+            <input
+              type="checkbox"
+              class="rounded-checkbox"
+              [(ngModel)]="tnc"
+              [ngModelOptions]="{ standalone: true }"
+              (click)="tncChecked()"
+              [checked]="tnc"
+            />
+            <a
+              routerLink="/termsandconditions"
+              class="small ml-2 hover:text-blue-500"
+              >I Accept The Terms & Conditions*</a
+            >
+            <button
+              [disabled]="!tnc"
+              type="submit"
+              class="w-full py-3 bg-black text-white rounded-lg font-semibold text-sm flex items-center justify-center hover:bg-gray-800 disabled:bg-gray-400"
+            >
+              Register
+            </button>
+          </div>
+        </form>
+
+        <button
+          type="button"
+          class="w-full py-3 mt-4 bg-gray-100 text-gray-700 rounded-lg font-semibold text-sm flex items-center justify-center"
+          (click)="toggleMode()"
+        >
+          {{ isRegisterMode ? "Login" : "Register" }}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="w-5 h-5 ml-2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

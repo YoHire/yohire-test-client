@@ -1,0 +1,332 @@
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <!-- new header starts -->
+        <div class="header my-3 xsticky-top">
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col col-md-2 col-lg-1">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.back()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.forward()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                      <a>Manage Candidates</a>
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- new header ends -->
+        <!-- Header -->
+
+        <!-- Tab content -->
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            role="tabpanel"
+            aria-labelledby="contactsListTab"
+          >
+            <!-- Card -->
+            <div class="card" id="contactsList">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <form>
+                      <div
+                        class="input-group input-group-flush input-group-merge input-group-reverse"
+                      >
+                        <input
+                          class="form-control list-search"
+                          type="search"
+                          placeholder="Search"
+                          (keyup)="customFilter($event)"
+                        />
+                        <span class="input-group-text">
+                          <i class="fe fe-search"></i>
+                        </span>
+                      </div>
+                    </form>
+                  </div>
+
+                  <!-- <div class="col-auto me-n3">
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 100px"
+                      [(ngModel)]="status"
+                      (change)="list()"
+                    >
+                      <option [value]="2">All</option>
+                      <option [value]="1">Enabled</option>
+                      <option [value]="0">Disabled</option>
+                    </select>
+                  </div> -->
+                  <!-- <div class="col-auto me-n3">
+                
+                  </div> -->
+                  <div class="col-auto me-n3">
+                    <!-- Select -->
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 120px"
+                      [(ngModel)]="size"
+                      (change)="paginateItems()"
+                    >
+                      <option [value]="20">20 per page</option>
+                      <option [value]="10">10 per page</option>
+                      <option [value]="0">All</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- / .row -->
+              </div>
+
+              <div class="table-responsive tab-pane fade show active" id="home">
+                <table
+                  class="table table-sm table-hover table-nowrap card-table"
+                >
+                  <thead>
+                    <tr>
+                      <th>Sl No.</th>
+                      <!-- <th></th> -->
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          (click)="sortByField('name')"
+                          >Full Name</a
+                        >
+                      </th>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          (click)="sortByField('mobile')"
+                          >Contact No.
+                        </a>
+                      </th>
+
+                      <!-- <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          (click)="sortByField('category.name')"
+                        >
+                          Category
+                        </a>
+                      </th> -->
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          (click)="sortByField('email')"
+                        >
+                          Email Address</a
+                        >
+                      </th>
+                      <!-- <th>
+                                                <a class="list-sort text-muted" data-sort="item-name"
+                                                    (click)="sortByField('pin')">
+                                                    Place</a>
+                                            </th> -->
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody class="list fs-base">
+                    <tr
+                      class="cursor"
+                      *ngFor="
+                        let item of itemsFiltered
+                          | sort : sortedColumn : sortedDirection
+                          | slice : pageStartIndex : pageEndIndex;
+                        let i = index;
+                        trackBy: trackByItemId
+                      "
+                    >
+                      <td>{{ page * size + (i + 1) }}</td>
+                      <!-- <td> -->
+                      <!-- <div class="avatar avatar-xs align-middle me-2">
+                                                    <img class="avatar-img rounded-circle"
+                                                        src="{{item?.image? apiUrl + '/api/v1/users/show/image/' + item?.image : 'assets/img/avatars/profiles/avatar-3.jpg' }}" />
+                                                </div> -->
+                      <!-- </td> -->
+
+                      <td style="width: 450px">
+                        <span class="item-title">
+                          {{
+                            item.username +
+                              " " +
+                              (item.surname ? item.surname : "")
+                          }}</span
+                        >
+                      </td>
+                      <td style="width: 450px">
+                        <span class="item-title"> {{ item.mobile }}</span>
+                      </td>
+                      <!-- <td>
+                        <span class="item-name text-reset">
+                          {{ item.category?.name }}
+                        </span>
+                      </td> -->
+
+                      <td style="width: 250px">
+                        <span class="item-name text-reset">{{
+                          item.email
+                        }}</span>
+                      </td>
+
+                      <!-- <td>
+                                                <span class="item-name text-reset">{{item.city}}{{item.city != '' ? ',' : '' }} {{item.state}}</span>
+                                            </td> -->
+                      <!-- 
+                      <td>
+                        <div class="dropdown">
+                          <a
+                            href="#"
+                            class="dropdown-ellipses dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <i class="fe fe-more-vertical"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item cursor-pointer" *ngIf="!item.locked"
+                                                            (click)="statusUpdate(item.id,'deactivate')">
+                                                            Disbale
+                                                        </a>
+                                                        <a class="dropdown-item cursor-pointer" *ngIf="item.locked"
+                                                            (click)="statusUpdate(item.id,'activate')">
+                                                            Enable
+                                                        </a>
+                            <a
+                              class="dropdown-item"
+                              routerLink="/candidates/detailed/{{ item.id }}"
+                            >
+                              View
+                            </a>
+                            <a
+                              class="dropdown-item cursor-pointer"
+                              (click)="delete(item.id)"
+                            >
+                              Remove
+                            </a>
+                          </div>
+                        </div>
+                      </td> -->
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                class="card-footer flex justify-between"
+                *ngIf="pageCount > 0"
+              >
+                <ul class="pagination-prev flex" *ngIf="pageCount > 0">
+                  <li class="page-item" [ngClass]="{ disabled: page < 1 }">
+                    <button
+                      class="page-link p-2 border-r border-gray-300"
+                      (click)="page = page - 1; paginateItems()"
+                      [disabled]="page < 1"
+                    >
+                      <i class="fe fe-arrow-left mr-1"></i> Prev
+                    </button>
+                  </li>
+                </ul>
+
+                <div
+                  class="pagination-wrapper flex overflow-x-auto space-x-2 mx-4"
+                >
+                  <ul class="pagination flex">
+                    <li
+                      *ngFor="
+                        let item of [].constructor(pageCount);
+                        let i = index
+                      "
+                      [ngClass]="{ active: page == i }"
+                    >
+                      <button
+                        class="page p-2 border border-gray-300"
+                        [class.bg-blue-500]="page == i"
+                        [class.text-white]="page == i"
+                        (click)="page = i; paginateItems()"
+                      >
+                        {{ i + 1 }}
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+
+                <ul class="pagination-next flex">
+                  <li
+                    class="page-item"
+                    [ngClass]="{ disabled: page >= pageCount - 1 }"
+                  >
+                    <button
+                      class="page-link p-2 border-l border-gray-300"
+                      (click)="page = page + 1; paginateItems()"
+                      [disabled]="page >= pageCount - 1"
+                    >
+                      Next <i class="fe fe-arrow-right ml-1"></i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / .row -->
+  </div>
+</div>
+<!-- / .main-content -->

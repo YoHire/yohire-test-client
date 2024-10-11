@@ -1,0 +1,365 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div
+          class="header my-3 xsticky-top px-4 rounded-full"
+          style="background-color: white"
+        >
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col col-md-2 col-lg-1">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.back()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.forward()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a>Jobs</a></li>
+                  </ol>
+                </nav>
+              </div>
+              <div class="col-auto">
+                &nbsp;
+                <button
+                routerLink="/jobs/add"
+                  class="flex -mt-4 items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded-lg shadow-md transition transform hover:-translate-y-1 hover:scale-105"
+                >
+                  <svg
+                    viewBox="0 0 24 28"
+                    width="20"
+                    height="20"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="css-i6dzq1"
+                  >
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  Post a Job
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-tabs">
+          <ul
+            class="nav nav-tabs"
+            id="myTab"
+            role="tablist"
+            stysle="border: 1px solid red;"
+          >
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                [ngClass]="{ active: selectedTab == 'running' }"
+                id="running-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#running"
+                type="button"
+                role="tab"
+                aria-controls="running"
+                aria-selected="true"
+                (click)="setSelectedTab('running')"
+              >
+                Running
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                [ngClass]="{ active: selectedTab == 'expired' }"
+                id="expired-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#expired"
+                type="button"
+                role="tab"
+                aria-controls="expired"
+                aria-selected="false"
+                (click)="setSelectedTab('expired')"
+              >
+                Expired
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade mt-3"
+            [ngClass]="{ 'show active': selectedTab == 'running' }"
+            id="running"
+            role="tabpanel"
+            aria-labelledby="running-tab"
+          >
+            <app-jobs-tab-list
+              [tab]="selectedTab"
+            ></app-jobs-tab-list>
+          </div>
+          <div
+            class="tab-pane fade mt-3"
+            [ngClass]="{ 'show active': selectedTab == 'expired' }"
+            id="expired"
+            role="tabpanel"
+            aria-labelledby="expired-tab"
+          >
+            <app-jobs-tab-list
+              [tab]="selectedTab"
+            ></app-jobs-tab-list>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #callAPIVerification>
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Verification Status</h5>
+        <button
+          mat-dialog-close
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div
+            class="alert text-black font-weight-bold text-center"
+            role="alert"
+            style="background-color: #87ceeb"
+          >
+            Verification will be processed within 1-2 business days.
+            <br />
+          </div>
+          <small class="d-block mt-2">
+            Note: If it takes more than two business days, please ensure that
+            the provided contact details are valid.
+            <br />
+            Contact Us:
+            <a href="mailto:ap.pazhoor@yohire.in">
+              <i class="fas fa-envelope"></i> Mail
+            </a>
+            |
+            <a href="https://wa.me/+918129583434">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #callAPIDialog>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Complete KYC</h5>
+        <button
+          mat-dialog-close
+          type="button"
+          class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          aria-label="Close"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            class="w-4 h-4 fill-current"
+          >
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59 15L12 13.41l-4.59 4.59L6 15.41 10.59 11 6 6.41 7.41 5 12 9.59 16.59 5 18 6.41 13.41 11 18 15.41z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <form [formGroup]="kycForm" (ngSubmit)="onSubmit()">
+            <div class="row mb-3">
+              <div class="col">
+                <label for="raid" class="form-label required">RAID</label>
+                <br />
+                <input
+                  type="text"
+                  class="h-8 bg-transparent text-black dark:text-white dark:border-gray-700 rounded-md border-1 border-black px-2 py-1 text-xs placeholder-gray-500 invalid:border-red-500 dark:placeholder-gray-500"
+                  id="raid"
+                  formControlName="raid"
+                />
+                <div
+                  *ngIf="
+                    kycForm.get('raid')?.touched && kycForm.get('raid')?.invalid
+                  "
+                  class="text-danger"
+                >
+                  <small *ngIf="kycForm.get('raid')?.errors?.['required']"
+                    >RAID is required.</small
+                  >
+                </div>
+              </div>
+              <div class="col">
+                <label for="licenseNo" class="form-label required"
+                  >License No.</label
+                >
+                <br />
+                <input
+                  type="text"
+                  class="h-8 bg-transparent text-black dark:text-white dark:border-gray-700 rounded-md border-1 border-black px-2 py-1 text-xs placeholder-gray-500 invalid:border-red-500 dark:placeholder-gray-500"
+                  id="licenseNo"
+                  formControlName="licenseNo"
+                />
+                <div
+                  *ngIf="
+                    kycForm.get('licenseNo')?.touched &&
+                    kycForm.get('licenseNo')?.invalid
+                  "
+                  class="text-danger"
+                >
+                  <small *ngIf="kycForm.get('licenseNo')?.errors?.['required']"
+                    >License No. is required.</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label for="gstNo" class="form-label required">GST No.</label>
+                <br />
+                <input
+                  type="text"
+                  class="h-8 bg-transparent text-black dark:text-white dark:border-gray-700 rounded-md border-1 border-black px-2 py-1 text-xs placeholder-gray-500 invalid:border-red-500 dark:placeholder-gray-500"
+                  id="gstNo"
+                  formControlName="gstNo"
+                />
+                <div
+                  *ngIf="
+                    kycForm.get('gstNo')?.touched &&
+                    kycForm.get('gstNo')?.invalid
+                  "
+                  class="text-danger"
+                >
+                  <small *ngIf="kycForm.get('gstNo')?.errors?.['required']"
+                    >GST No. is required.</small
+                  >
+                </div>
+              </div>
+              <div class="col">
+                <label for="authSignEmail" class="form-label required"
+                  >Authorization Signatory Email</label
+                >
+                <br />
+                <input
+                  type="text"
+                  class="h-8 bg-transparent text-black dark:text-white dark:border-gray-700 rounded-md border-1 border-black px-2 py-1 text-xs placeholder-gray-500 invalid:border-red-500 dark:placeholder-gray-500"
+                  id="authSignEmail"
+                  formControlName="authSignEmail"
+                />
+                <div
+                  *ngIf="
+                    kycForm.get('authSignEmail')?.touched &&
+                    kycForm.get('authSignEmail')?.invalid
+                  "
+                  class="text-danger"
+                >
+                  <small
+                    *ngIf="kycForm.get('authSignEmail')?.errors?.['required']"
+                    >Authorization Signatory Email is required.</small
+                  >
+                  <small *ngIf="kycForm.get('authSignEmail')?.errors?.['email']"
+                    >Invalid email format.</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label for="authSignPhone" class="form-label required"
+                  >Authorization Signatory Phone</label
+                >
+                <br />
+                <input
+                  type="text"
+                  class="h-8 bg-transparent text-black dark:text-white dark:border-gray-700 rounded-md border-1 border-black px-2 py-1 text-xs placeholder-gray-500 invalid:border-red-500 dark:placeholder-gray-500"
+                  id="authSignPhone"
+                  formControlName="authSignPhone"
+                />
+                <div
+                  *ngIf="
+                    kycForm.get('authSignPhone')?.touched &&
+                    kycForm.get('authSignPhone')?.invalid
+                  "
+                  class="text-danger"
+                >
+                  <small
+                    *ngIf="kycForm.get('authSignPhone')?.errors?.['required']"
+                    >Authorization Signatory Phone is required.</small
+                  >
+                  <small
+                    *ngIf="kycForm.get('authSignPhone')?.errors?.['pattern']"
+                    >Phone number must be 10 digits.</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button
+                  type="submit"
+                  class="btn bg-black hover:bg-blue-900 text-white px-4 py-2 rounded-md shadow-md"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

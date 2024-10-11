@@ -1,0 +1,330 @@
+<nav
+  class="navbar navbar-vertical fixed-start navbar-expand-md navbar-light"
+  style="background-color: #f9fbfd"
+>
+  <div class="container-fluid">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#sidebarCollapse"
+      aria-controls="sidebarCollapse"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="row align-items-center mt-4 mb-4">
+      <div class="col-auto mb-5">
+        <a class="avatar avatar-md">
+          <img
+            src="assets/img/yohirenew.png"
+            class="hidden-sm"
+            style="height: 50px !important"
+          />
+        </a>
+      </div>
+    </div>
+
+    <div class="collapse navbar-collapse" id="sidebarCollapse">
+      <ul class="navbar-nav">
+        <li class="nav-item mt-2">
+          <b
+            class="nav-link nav-link-head"
+            href="#sidebarGeneral"
+            data-bs-toggle="collapse"
+            role="button"
+            aria-expanded="true"
+            aria-controls="sidebarGeneral"
+          >
+            GENERAL
+          </b>
+          <div class="collapse show" id="sidebarGeneral">
+            <ul class="nav nav-sm flex-column">
+              <li class="nav-item mt-2">
+                <a class="nav-link px-4" routerLink="/jobs/admin/list">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="css-i6dzq1"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path
+                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                    ></path>
+                  </svg>
+                  &nbsp;&nbsp; Jobs
+                </a>
+              </li>
+              <li class="nav-item mt-2">
+                <a class="nav-link px-4" routerLink="/recruiters/manage">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="css-i6dzq1"
+                  >
+                    <rect
+                      x="2"
+                      y="3"
+                      width="20"
+                      height="14"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                  &nbsp;&nbsp; Recruiters
+                </a>
+              </li>
+              <li class="nav-item mt-2" routerLinkActive>
+                <a
+                  class="nav-link px-4"
+                  routerLink="/candidates/manage"
+                  routerLinkActive
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="feather feather-activity"
+                  >
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                  &nbsp;&nbsp; Candidates
+                </a>
+              </li>
+              <li class="nav-item mt-2" routerLinkActive>
+                <a
+                  class="nav-link px-4"
+                  routerLink="/messages/message-list"
+                  routerLinkActive
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M12 3.53846C7.32682 3.53846 3.53846 7.32682 3.53846 12C3.53846 13.4 3.87786 14.7185 4.4782 15.8798C4.53465 15.989 4.5641 16.1101 4.5641 16.233V19.4359H7.76697C7.88989 19.4359 8.01102 19.4654 8.12022 19.5218C9.28153 20.1221 10.6 20.4615 12 20.4615C16.6732 20.4615 20.4615 16.6732 20.4615 12C20.4615 7.32682 16.6732 3.53846 12 3.53846ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C10.4162 22 8.91649 21.6313 7.58388 20.9744H3.79487C3.37004 20.9744 3.02564 20.63 3.02564 20.2051V16.4161C2.36874 15.0835 2 13.5838 2 12Z"
+                      fill="#030D45"
+                    />
+                    <path
+                      d="M9.94872 12C9.94872 12.5664 9.48952 13.0256 8.92308 13.0256C8.35663 13.0256 7.89744 12.5664 7.89744 12C7.89744 11.4336 8.35663 10.9744 8.92308 10.9744C9.48952 10.9744 9.94872 11.4336 9.94872 12Z"
+                      fill="#030D45"
+                    />
+                    <path
+                      d="M13.0256 12C13.0256 12.5664 12.5664 13.0256 12 13.0256C11.4336 13.0256 10.9744 12.5664 10.9744 12C10.9744 11.4336 11.4336 10.9744 12 10.9744C12.5664 10.9744 13.0256 11.4336 13.0256 12Z"
+                      fill="#030D45"
+                    />
+                    <path
+                      d="M16.1026 12C16.1026 12.5664 15.6434 13.0256 15.0769 13.0256C14.5105 13.0256 14.0513 12.5664 14.0513 12C14.0513 11.4336 14.5105 10.9744 15.0769 10.9744C15.6434 10.9744 16.1026 11.4336 16.1026 12Z"
+                      fill="#030D45"
+                    />
+                  </svg>
+                  &nbsp;&nbsp; Messages
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <hr class="navbar-divider my-3" />
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="css-i6dzq1"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            &nbsp;&nbsp; Logout
+          </a>
+        </li>
+
+        <hr class="navbar-divider my-3" />
+      </ul>
+
+      <div class="mt-auto">
+        <div class="row align-items-center mb-1">
+          <div class="col-auto">
+            <a class="avatar avatar-md">
+              <img
+                src="assets/img/playstore-icon.png"
+                class="avatar-img rounded-circle"
+              />
+            </a>
+          </div>
+          <div class="col ms-n2">
+            <span
+              style="
+                font-weight: 500;
+                font-size: 15px;
+                text-transform: capitalize;
+              "
+              >{{ userData.name }}</span
+            ><br />
+            <span
+              class="small text-muted mb-1"
+              style="
+                color: #6b778c !important;
+                font-size: 13px;
+                text-transform: capitalize;
+              "
+            >
+              Admin
+            </span>
+          </div>
+        </div>
+        <!-- <a style="color: #42526e;font-size:13px;">
+          © Yohire 2022-2023</a> -->
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Old Style Starts -->
+<nav
+  class="navbar navbar-vertical fixed-start navbar-expand-md navbar-light"
+  style="display: none"
+>
+  <div class="container-fluid">
+    <!-- Toggler -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#sidebarCollapse"
+      aria-controls="sidebarCollapse"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Brand -->
+    <div class="text-center mb-3">
+      <img
+        src="assets/img/yohire.png"
+        class="navbar-brand-imgs mx-auto"
+        alt="..."
+        style="width: 75%"
+      />
+    </div>
+
+    <!-- Collapse -->
+    <div class="collapse navbar-collapse" id="sidebarCollapse">
+      <!-- Form -->
+      <form class="mt-4 mb-3 d-md-none">
+        <div
+          class="input-group input-group-rounded input-group-merge input-group-reverse"
+        >
+          <input
+            class="form-control"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <div class="input-group-text">
+            <span class="fe fe-search"></span>
+          </div>
+        </div>
+      </form>
+      <!-- Navigation -->
+      <ul class="navbar-nav">
+        <hr class="navbar-divider my-3" />
+
+        <!-- <li class="nav-item">
+            <a class="nav-link" routerLink="/">
+              <i class="fe fe-home"></i> Dashboard
+            </a>
+          </li> -->
+        <li class="nav-item" routerLinkActive>
+          <a class="nav-link" routerLink="/jobs/admin/list" routerLinkActive>
+            <i class="fe fe-grid"></i> Jobs
+          </a>
+        </li>
+        <li class="nav-item" routerLinkActive>
+          <a class="nav-link" routerLink="/recruiters/manage" routerLinkActive>
+            <i class="fe fe-briefcase"></i> Recruiters
+          </a>
+        </li>
+        <!-- <li class="nav-item">
+            <a class="nav-link" routerLink="/candidates/manage">
+              <i class="fe fe-file-text"></i> Candidates
+            </a>
+          </li> -->
+        <hr class="navbar-divider my-3" />
+        <!-- <li class="nav-item">
+            <a class="nav-link" routerLink="/jobs/requests/list" routerLinkActive>
+              <i class="fe fe-credit-card"></i> Candidate Job Requests
+            </a>
+          </li> -->
+        <!-- <li class="nav-item">
+            <a class="nav-link" routerLink="/reviews/list">
+              <i class="fe fe-file-text"></i> Reviews
+            </a>
+          </li>
+          <hr class="navbar-divider my-3">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/settings/manage">
+              <i class="fe fe-layout"></i> Settings
+            </a>
+          </li> -->
+
+        <!-- <li class="nav-item">
+            <a class="nav-link">
+              <i class="fe fe-git-branch"></i> Version <span class="badge bg-primary ms-auto">v 0.2.1</span>
+            </a>
+          </li> -->
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">
+            <i class="fe fe-log-out"></i> Logout
+          </a>
+        </li>
+        <hr class="navbar-divider my-3" />
+      </ul>
+
+      <div class="mt-auto text-center">
+        <a class="text-muted"> Powered By Yohire </a>
+      </div>
+    </div>
+  </div>
+</nav>

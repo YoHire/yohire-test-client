@@ -1,0 +1,1085 @@
+<div>
+  <header class="flex p-5 pt-12 gap-2 justify-center items-center relative">
+    <app-auth-dialog
+      [visible]="visible"
+      (close)="onDialogClose()"
+    ></app-auth-dialog>
+    <a [routerLink]="'/circle'">
+      <img
+        class="mb-2 w-32 sm:w-40 md:w-48 lg:w-56"
+        src="/assets/img/yohire-circle.png"
+        alt="circle-img"
+      />
+    </a>
+    <div class="relative w-full">
+      <input
+        type="text"
+        class="py-4 outline-none px-4 sm:px-8 md:px-12 lg:px-20 shadow-md w-full max-w-7xl rounded-2xl font-sans font-medium pr-20"
+        placeholder="Search for profiles"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch($event)"
+        (keydown)="onKeydown($event)"
+      />
+      <p-button
+        *ngIf="!loading"
+        class="absolute right-14 top-1/2 transform -translate-y-1/2 bg-blue-900 hover:bg-blue-700 p-2 rounded-full transition-transform duration-300 ease-in-out hover:rotate-12"
+        aria-label="Filter"
+        (click)="openFilterDialog()"
+      >
+        <svg
+          class="w-6 h-6 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707l-7 7V19a1 1 0 01-1 1h-4a1 1 0 01-1-1v-5.293l-7-7A1 1 0 013 6V4z"
+          />
+        </svg>
+      </p-button>
+      <button
+        class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-900 hover:bg-blue-700 p-2 rounded-full transition-transform duration-300 ease-in-out hover:rotate-12"
+        aria-label="Search"
+      >
+        <svg
+          class="w-6 h-6 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-5.35-5.35M11 4a7 7 0 017 7v0a7 7 0 01-7 7 7 7 0 01-7-7v0a7 7 0 017-7z"
+          />
+        </svg>
+      </button>
+      <div
+        *ngIf="searchResults && searchResults.length > 0"
+        class="absolute bg-white border border-gray-300 rounded-lg shadow-lg mt-2 w-full max-w-7xl max-h-60 overflow-y-auto z-10"
+        style="left: 0"
+      >
+        <ul class="divide-y divide-gray-200">
+          <li
+            *ngFor="let result of searchResults; let i = index"
+            (click)="onSearchedProfiles(result.name)"
+            [class.bg-gray-100]="i === highlightedIndex"
+            class="px-4 py-3 font-sans font-medium hover:bg-gray-100 cursor-pointer flex items-center justify-between transition-colors duration-150 ease-in-out"
+          >
+            <span class="flex-1 text-gray-800">{{ result.name }}</span>
+            <span *ngIf="i === highlightedIndex" class="text-blue-500"
+              >&#x2713;</span
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <p-sidebar
+      [(visible)]="filterVisible"
+      position="right"
+      [style]="{ width: '350px', backgroundColor: '#12263f', color: 'white' }"
+    >
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-2xl font-semibold">Filter Profiles</h3>
+        <button
+          type="button"
+          (click)="clearFilters()"
+          class="flex items-center justify-center w-12 h-12 bg-yellow-500 text-white rounded-full shadow-lg hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-300 transition duration-300 ease-in-out"
+          aria-label="Clear Filters"
+        >
+          <i class="pi pi-trash text-2xl"></i>
+        </button>
+      </div>
+      <form [formGroup]="filterForm" class="space-y-6">
+        <div
+          class="bg-gray-50 p-4 rounded-lg shadow-md"
+          formGroupName="experiences"
+        >
+          <h4
+            class="text-lg font-semibold mb-3 text-black flex items-center justify-between"
+          >
+            Experience
+            <span
+              class="bg-gray-800 text-white p-2 rounded-full focus:outline-none hover:bg-gray-700 cursor-pointer"
+              tooltipPlacement="left"
+              pTooltip="Filter candidates based on their years of experience within this range"
+            >
+              <i class="pi pi-info-circle"></i>
+            </span>
+          </h4>
+          <p-multiSelect
+            [options]="countries"
+            optionLabel="name"
+            formControlName="experienceTargetingCountries"
+            [style]="{ width: '100%', color: 'black' }"
+            [selectedItemsLabel]="'{ selectedCountries } countries selected'"
+            placeholder="Select Countries"
+          />
+          <mat-slider
+            min="0"
+            max="30"
+            step="1"
+            discrete
+            [displayWith]="formatLabelWithUnitExp()"
+            style="width: 265px"
+          >
+            <input
+              matSliderStartThumb
+              (input)="onExperienceChange($event.target, 'minExperience')"
+              formControlName="minExperience"
+              numbersOnly
+            />
+            <input
+              matSliderEndThumb
+              (input)="onExperienceChange($event.target, 'maxExperience')"
+              formControlName="maxExperience"
+              numbersOnly
+            />
+          </mat-slider>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+          <h4
+            class="text-lg text-black font-semibold mb-3 flex items-center justify-between"
+          >
+            Education
+            <span
+              class="bg-gray-800 text-white p-2 rounded-full focus:outline-none hover:bg-gray-700 cursor-pointer"
+              tooltipPlacement="left"
+              pTooltip="Filter candidates based on their educational qualifications"
+            >
+              <i class="pi pi-info-circle"></i>
+            </span>
+          </h4>
+          <div class="p-fluid">
+            <div class="p-field" formGroupName="qualifications">
+              <label for="educationLevel" class="block text-gray-700"
+                >Level</label
+              >
+              <p-dropdown
+                id="educationLevel"
+                [options]="levels"
+                #levelDropdown
+                placeholder="Select Level"
+                defaultLabel="does not work"
+                [style]="{ width: '100%' }"
+                (onChange)="onLevelChange($event)"
+              >
+              </p-dropdown>
+            </div>
+            <div
+              class="p-field"
+              *ngIf="
+                levels &&
+                subCategory &&
+                levels.length > 0 &&
+                subCategory.length > 0
+              "
+            >
+              <label for="educationSubCategory" class="block text-gray-700"
+                >Subcategory</label
+              >
+              <p-dropdown
+                id="subCategory"
+                [options]="subCategory"
+                optionLabel="subCategory"
+                #subCategoryDropdown
+                placeholder="Select Subcategory"
+                (onChange)="onSubCategoryChange($event)"
+                [style]="{ width: '100%' }"
+              >
+              </p-dropdown>
+            </div>
+            <div class="p-field" *ngIf="course && course.length > 0">
+              <label for="educationCourse" class="block text-gray-700"
+                >Course</label
+              >
+              <p-dropdown
+                [options]="course"
+                #courseDropdown
+                (onChange)="onCourseChange($event)"
+                placeholder="Select Course"
+                [style]="{ width: '100%' }"
+              >
+              </p-dropdown>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+          <h4
+            class="text-lg text-black font-semibold mb-3 flex items-center justify-between"
+          >
+            Skills
+            <span
+              class="bg-gray-800 text-white p-2 rounded-full focus:outline-none hover:bg-gray-700 cursor-pointer"
+              tooltipPlacement="left"
+              pTooltip="Filter candidates based on their specific skill sets and expertise"
+            >
+              <i class="pi pi-info-circle"></i>
+            </span>
+          </h4>
+          <div class="p-fluid">
+            <div class="p-field">
+              <p-multiSelect
+                [options]="skills || []"
+                formControlName="selectedSkills"
+                (input)="onSkillsChange($event.target)"
+                placeholder="Select Skills"
+                optionLabel="name"
+                display="chip"
+                [showClear]="true"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+          <h4
+            class="text-lg text-black font-semibold mb-3 flex items-center justify-between"
+          >
+            Languages Read & Write
+            <span
+              class="bg-gray-800 text-white p-2 rounded-full focus:outline-none hover:bg-gray-700 cursor-pointer"
+              tooltipPlacement="left"
+              pTooltip="Filter candidates based on the languages they can read and write proficiently"
+            >
+              <i class="pi pi-info-circle"></i>
+            </span>
+          </h4>
+          <div class="p-fluid">
+            <div class="p-field">
+              <p-multiSelect
+                [options]="languagesReadAndWrite || []"
+                formControlName="selectedLanguagesReadAndWrite"
+                placeholder="Select Languages Read & Write"
+                (input)="
+                  onLanguagesChange($event.target, 'languagesReadAndWrite')
+                "
+                optionLabel="name"
+                display="chip"
+                [style]="{ width: '100%' }"
+                [showClear]="true"
+                class="relative flex flex-wrap"
+              >
+                <ng-template let-item pTemplate="item">
+                  <div
+                    [ngStyle]="{
+                      'max-width': '200px',
+                      overflow: 'hidden',
+                      'text-overflow': 'ellipsis',
+                      'white-space': 'nowrap'
+                    }"
+                    class="truncate"
+                  >
+                    {{ item.name }}
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+          <h4
+            class="text-lg text-black font-semibold mb-3 flex items-center justify-between"
+          >
+            Languages Speak
+            <span
+              class="bg-gray-800 text-white p-2 rounded-full focus:outline-none hover:bg-gray-700 cursor-pointer"
+              tooltipPlacement="left"
+              pTooltip="Filter candidates based on the languages they can speak fluently"
+            >
+              <i class="pi pi-info-circle"></i>
+            </span>
+          </h4>
+          <div class="p-fluid">
+            <div class="p-field">
+              <p-multiSelect
+                [options]="languagesSpeak"
+                formControlName="selectedLanguagesSpeak"
+                placeholder="Select Languages Speak"
+                (input)="onLanguagesChange($event.target, 'languagesSpeak')"
+                optionLabel="name"
+                display="chip"
+                [style]="{ width: '100%' }"
+                [showClear]="true"
+                class="relative flex flex-wrap"
+              >
+                <ng-template let-item pTemplate="item">
+                  <div
+                    [ngStyle]="{
+                      'max-width': '200px',
+                      overflow: 'hidden',
+                      'text-overflow': 'ellipsis',
+                      'white-space': 'nowrap'
+                    }"
+                    class="truncate"
+                  >
+                    {{ item.name }}
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+          <h4
+            class="text-lg font-semibold mb-3 text-black flex items-center justify-between"
+          >
+            Gender
+            <span
+              class="bg-gray-800 text-white p-2 rounded-full focus:outline-none hover:bg-gray-700 cursor-pointer"
+              tooltipPlacement="left"
+              pTooltip="Filter candidates based on their gender identity"
+            >
+              <i class="pi pi-info-circle"></i>
+            </span>
+          </h4>
+          <p-dropdown
+            [options]="gender"
+            optionLabel="label"
+            #genderDropdown
+            (onChange)="onGenderChange($event)"
+            placeholder="Select Gender"
+            [style]="{ width: '100%' }"
+          >
+          </p-dropdown>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+          <h4
+            class="text-lg font-semibold mb-3 text-black flex items-center justify-between"
+          >
+            Targeted Country
+            <span
+              class="bg-gray-800 text-white p-2 rounded-full focus:outline-none hover:bg-gray-700 cursor-pointer"
+              tooltipPlacement="left"
+              pTooltip="Filter candidates based on the countries they are targeting for job opportunities"
+            >
+              <i class="pi pi-info-circle"></i>
+            </span>
+          </h4>
+          <p-dropdown
+            [options]="countries"
+            optionLabel="name"
+            #countriesDropdown
+            (onChange)="onCountriesChange($event)"
+            placeholder="Select Targeting Country"
+            [style]="{ width: '100%' }"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+          <h4
+            class="text-lg font-semibold mb-3 text-black flex items-center justify-between"
+          >
+            Salary Range
+            <span
+              class="bg-gray-800 text-white p-2 rounded-full focus:outline-none hover:bg-gray-700 cursor-pointer"
+              tooltipPlacement="left"
+              pTooltip="Filter candidates based on their expected salary ranges"
+            >
+              <i class="pi pi-info-circle"></i>
+            </span>
+          </h4>
+          <p-dropdown
+            [options]="salaryRanges"
+            optionLabel="label"
+            #salaryRangeDropdown
+            (onChange)="onSalaryRangeChange($event)"
+            placeholder="Select Salary Range"
+            [style]="{ width: '100%' }"
+          >
+          </p-dropdown>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg shadow-md" formGroupName="age">
+          <h4
+            class="text-lg font-semibold mb-3 text-black flex items-center justify-between"
+          >
+            Age
+            <span
+              class="bg-gray-800 text-white p-2 rounded-full focus:outline-none hover:bg-gray-700 cursor-pointer"
+              tooltipPlacement="left"
+              pTooltip="Filter candidates based on their age range"
+            >
+              <i class="pi pi-info-circle"></i>
+            </span>
+          </h4>
+          <mat-slider
+            min="18"
+            max="65"
+            step="1"
+            discrete
+            [displayWith]="formatLabelWithUnit()"
+            style="width: 265px"
+          >
+            <input
+              matSliderStartThumb
+              (input)="onAgeChange($event.target, 'minAge')"
+              formControlName="minAge"
+              numbersOnly
+            />
+            <input
+              matSliderEndThumb
+              (input)="onAgeChange($event.target, 'maxAge')"
+              formControlName="maxAge"
+              numbersOnly
+            />
+          </mat-slider>
+        </div>
+        <div class="flex justify-end mt-6">
+          <button
+            type="button"
+            (click)="applyFilters()"
+            class="bg-gradient-to-r from-blue-800 to-blue-900 text-white font-semibold shadow-lg py-2 px-4 rounded-lg hover:from-circleYellow hover:to-circleYellow focus:ring-4 focus:ring-green-300 focus:outline-none transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95"
+          >
+            Apply Filters
+          </button>
+        </div>
+      </form>
+    </p-sidebar>
+  </header>
+
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
+      <ng-container *ngIf="loading; else dataLoaded">
+        <div
+          *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+          class="bg-white font-semibold text-center rounded-3xl border shadow-lg p-6 sm:p-8 lg:p-10 max-w-xs mx-auto"
+        >
+          <p-skeleton
+            shape="circle"
+            size="8rem"
+            styleClass="mb-3 w-32 h-32 object-cover rounded-full shadow-lg mx-auto"
+          ></p-skeleton>
+          <p-skeleton
+            width="8rem"
+            height="1rem"
+            styleClass="mb-2 rounded block mx-auto"
+          ></p-skeleton>
+          <p-skeleton
+            width="10rem"
+            height="1.25rem"
+            styleClass="rounded block mx-auto"
+          ></p-skeleton>
+          <p-skeleton
+            width="10rem"
+            height="2.5rem"
+            styleClass="rounded-3xl mt-4 block mx-auto"
+          ></p-skeleton>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!loading && searchedProfiles.length === 0">
+        <div class="col-span-full text-center text-gray-600">
+          No results found.
+          <h3
+            class="text-lg font-semibold text-blue-900 mt-3"
+            *ngIf="suggestions && suggestions.length > 0"
+          >
+            You might also look for:
+          </h3>
+        </div>
+
+        <div
+          *ngFor="let result of suggestions"
+          (click)="onFetchDialogProfile(result?.Users?.id, result.id)"
+          class="relative bg-white font-semibold text-center rounded-3xl border shadow-lg p-6 sm:p-8 lg:p-10 max-w-xs mx-auto"
+        >
+          <div class="absolute top-4 left-4">
+            <input
+              type="checkbox"
+              class="bg-circleYellow"
+              [checked]="isProfileSelected(result)"
+              (change)="toggleProfileSelection(result)"
+              (click)="$event.stopPropagation()"
+            />
+          </div>
+
+          <img
+            class="mb-3 w-32 h-32 object-cover rounded-full shadow-lg mx-auto"
+            [src]="
+              result.Users?.profileImage
+                ? result.Users?.profileImage
+                : '/assets/img/blank-profile.webp'
+            "
+            alt="Profile Image"
+          />
+          <h1 class="text-lg text-gray-700">{{ result.Users?.username }}</h1>
+          <h3 class="text-sm text-gray-500">{{ result.jobRoles[0] }}</h3>
+
+          <button
+            (click)="
+              onFetchUserDetail(result.Users?.id); $event.stopPropagation()
+            "
+            class="bg-circleYellow px-4 py-2 mt-4 rounded-3xl text-white font-semibold tracking-wide"
+          >
+            Download Profile
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-template #dataLoaded>
+        <div
+          *ngFor="let result of searchedProfiles"
+          (click)="onFetchDialogProfile(result?.Users?.id, result.id)"
+          class="relative bg-white font-semibold text-center rounded-3xl border shadow-lg p-6 sm:p-8 lg:p-10 max-w-xs mx-auto"
+        >
+          <div class="absolute top-4 left-4">
+            <input
+              type="checkbox"
+              class="bg-circleYellow"
+              [checked]="isProfileSelected(result)"
+              (change)="toggleProfileSelection(result)"
+              (click)="$event.stopPropagation()"
+            />
+          </div>
+
+          <img
+            class="mb-3 w-32 h-32 object-cover rounded-full shadow-lg mx-auto"
+            [src]="
+              result.Users?.profileImage
+                ? result.Users?.profileImage
+                : '/assets/img/blank-profile.webp'
+            "
+            alt="Profile Image"
+          />
+          <h1 class="text-lg text-gray-700">{{ result.Users?.username }}</h1>
+          <h3 class="text-sm text-gray-400">{{ result.Users?.jobTitle }}</h3>
+
+          <button
+            (click)="
+              onFetchUserDetail(result.Users?.id); $event.stopPropagation()
+            "
+            class="bg-circleYellow px-4 py-2 mt-4 rounded-3xl text-white font-semibold tracking-wide"
+          >
+            Download Profile
+          </button>
+        </div>
+      </ng-template>
+    </div>
+    <p-dialog
+      [(visible)]="profileVisible"
+      [modal]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [closable]="true"
+      [dismissableMask]="true"
+      [style]="{ width: '100%', maxWidth: '700px' }"
+      [contentStyle]="{ padding: '0' }"
+    >
+      <ng-template pTemplate="headless">
+        <div
+          class="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden"
+        >
+          <div
+            class="w-full md:w-1/3 bg-gray-100 p-6 flex flex-col items-center"
+          >
+            <img
+              [src]="
+                selectedUserProfile?.Users?.profileImage ||
+                '/assets/img/blank-profile.webp'
+              "
+              alt="User Profile Image"
+              class="w-32 h-32 rounded-full object-cover mb-4"
+            />
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+              {{ selectedUserProfile?.Users?.username }}
+            </h2>
+            <p class="text-sm text-gray-600 mb-4 bg-transparent">
+              ({{ selectedUserProfile?.Users?.gender }})
+            </p>
+
+            <div
+              class="text-center mb-4"
+              *ngIf="selectedUserProfile?.Users.socialLinks.length > 0"
+            >
+              <h3 class="text-xl font-semibold mb-4">Socials:</h3>
+              <div class="grid grid-cols-3 gap-4 justify-items-center">
+                <a
+                  *ngIf="linkedInLink"
+                  [href]="linkedInLink"
+                  target="_blank"
+                  class="text-blue-600 hover:text-blue-700"
+                >
+                  <svg
+                    height="35px"
+                    width="35px"
+                    version="1.1"
+                    id="Layer_1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    viewBox="0 0 382 382"
+                    xml:space="preserve"
+                  >
+                    <path
+                      style="fill: #0077b7"
+                      d="M347.445,0H34.555C15.471,0,0,15.471,0,34.555v312.889C0,366.529,15.471,382,34.555,382h312.889
+                         C366.529,382,382,366.529,382,347.444V34.555C382,15.471,366.529,0,347.445,0z M118.207,329.844c0,5.554-4.502,10.056-10.056,10.056
+                         H65.345c-5.554,0-10.056-4.502-10.056-10.056V150.403c0-5.554,4.502-10.056,10.056-10.056h42.806
+                         c5.554,0,10.056,4.502,10.056,10.056V329.844z M86.748,123.432c-22.459,0-40.666-18.207-40.666-40.666S64.289,42.1,86.748,42.1
+                         s40.666,18.207,40.666,40.666S109.208,123.432,86.748,123.432z M341.91,330.654c0,5.106-4.14,9.246-9.246,9.246H286.73
+                         c-5.106,0-9.246-4.14-9.246-9.246v-84.168c0-12.556,3.683-55.021-32.813-55.021c-28.309,0-34.051,29.066-35.204,42.11v97.079
+                         c0,5.106-4.139,9.246-9.246,9.246h-44.426c-5.106,0-9.246-4.14-9.246-9.246V149.593c0-5.106,4.14-9.246,9.246-9.246h44.426
+                         c5.106,0,9.246,4.14,9.246,9.246v15.655c10.497-15.753,26.097-27.912,59.312-27.912c73.552,0,73.131,68.716,73.131,106.472
+                         L341.91,330.654L341.91,330.654z"
+                    />
+                  </svg>
+                </a>
+
+                <a
+                  *ngIf="xLink"
+                  [href]="xLink"
+                  target="_blank"
+                  class="text-black hover:text-gray-700"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    version="1.1"
+                    id="Layer_1"
+                    width="34px"
+                    height="34px"
+                    viewBox="0 0 24 24"
+                    style="enable-background: new 0 0 24 24"
+                    xml:space="preserve"
+                  >
+                    <g>
+                      <polygon
+                        points="12.153992,10.729553 8.088684,5.041199 5.92041,5.041199 10.956299,12.087097 11.59021,12.97345    15.900635,19.009583 18.068909,19.009583 12.785217,11.615906  "
+                      />
+                      <path
+                        d="M21.15979,1H2.84021C1.823853,1,1,1.823853,1,2.84021v18.31958C1,22.176147,1.823853,23,2.84021,23h18.31958   C22.176147,23,23,22.176147,23,21.15979V2.84021C23,1.823853,22.176147,1,21.15979,1z M15.235352,20l-4.362549-6.213013   L5.411438,20H4l6.246887-7.104675L4,4h4.764648l4.130127,5.881958L18.06958,4h1.411377l-5.95697,6.775635L20,20H15.235352z"
+                      />
+                    </g>
+                  </svg>
+                </a>
+
+                <a
+                  *ngIf="facebookLink"
+                  [href]="facebookLink"
+                  target="_blank"
+                  class="text-pink-600 hover:text-pink-700"
+                >
+                  <svg
+                    height="35px"
+                    width="35px"
+                    version="1.1"
+                    id="Layer_1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    viewBox="0 0 551.034 551.034"
+                    xml:space="preserve"
+                  >
+                    <g id="XMLID_13_">
+                      <linearGradient
+                        id="XMLID_2_"
+                        gradientUnits="userSpaceOnUse"
+                        x1="275.517"
+                        y1="4.5714"
+                        x2="275.517"
+                        y2="549.7202"
+                        gradientTransform="matrix(1 0 0 -1 0 554)"
+                      >
+                        <stop offset="0" style="stop-color: #e09b3d" />
+                        <stop offset="0.3" style="stop-color: #c74c4d" />
+                        <stop offset="0.6" style="stop-color: #c21975" />
+                        <stop offset="1" style="stop-color: #7024c4" />
+                      </linearGradient>
+                      <path
+                        id="XMLID_17_"
+                        style="fill: url(#XMLID_2_)"
+                        d="M386.878,0H164.156C73.64,0,0,73.64,0,164.156v222.722
+                           c0,90.516,73.64,164.156,164.156,164.156h222.722c90.516,0,164.156-73.64,164.156-164.156V164.156
+                           C551.033,73.64,477.393,0,386.878,0z M495.6,386.878c0,60.045-48.677,108.722-108.722,108.722H164.156
+                           c-60.045,0-108.722-48.677-108.722-108.722V164.156c0-60.046,48.677-108.722,108.722-108.722h222.722
+                           c60.045,0,108.722,48.676,108.722,108.722L495.6,386.878L495.6,386.878z"
+                      />
+
+                      <linearGradient
+                        id="XMLID_3_"
+                        gradientUnits="userSpaceOnUse"
+                        x1="275.517"
+                        y1="4.5714"
+                        x2="275.517"
+                        y2="549.7202"
+                        gradientTransform="matrix(1 0 0 -1 0 554)"
+                      >
+                        <stop offset="0" style="stop-color: #e09b3d" />
+                        <stop offset="0.3" style="stop-color: #c74c4d" />
+                        <stop offset="0.6" style="stop-color: #c21975" />
+                        <stop offset="1" style="stop-color: #7024c4" />
+                      </linearGradient>
+                      <path
+                        id="XMLID_81_"
+                        style="fill: url(#XMLID_3_)"
+                        d="M275.517,133.957c-77.963,0-141.559,63.596-141.559,141.559
+                           s63.596,141.559,141.559,141.559S417.076,353.48,417.076,275.517S353.48,133.957,275.517,133.957z M275.517,366.314
+                           c-50.112,0-90.798-40.686-90.798-90.798s40.686-90.798,90.798-90.798s90.798,40.686,90.798,90.798
+                           S325.629,366.314,275.517,366.314z"
+                      />
+                      <linearGradient
+                        id="XMLID_4_"
+                        gradientUnits="userSpaceOnUse"
+                        x1="418.31"
+                        y1="4.5714"
+                        x2="418.31"
+                        y2="549.7202"
+                        gradientTransform="matrix(1 0 0 -1 0 554)"
+                      >
+                        <stop offset="0" style="stop-color: #e09b3d" />
+                        <stop offset="0.3" style="stop-color: #c74c4d" />
+                        <stop offset="0.6" style="stop-color: #c21975" />
+                        <stop offset="1" style="stop-color: #7024c4" />
+                      </linearGradient>
+                      <circle
+                        id="XMLID_83_"
+                        style="fill: url(#XMLID_4_)"
+                        cx="418.31"
+                        cy="134.07"
+                        r="34.149"
+                      />
+                    </g>
+                  </svg>
+                </a>
+                <a
+                  *ngIf="facebookLink"
+                  [href]="facebookLink"
+                  target="_blank"
+                  class="text-blue-600 hover:text-blue-700"
+                >
+                  <svg
+                    enable-background="new 0 0 32 32"
+                    height="32px"
+                    id="Layer_1"
+                    version="1.0"
+                    viewBox="0 0 32 32"
+                    width="32px"
+                    xml:space="preserve"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                  >
+                    <g>
+                      <path
+                        d="M32,30c0,1.104-0.896,2-2,2H2c-1.104,0-2-0.896-2-2V2c0-1.104,0.896-2,2-2h28c1.104,0,2,0.896,2,2V30z"
+                        fill="#3B5998"
+                      />
+                      <path
+                        d="M22,32V20h4l1-5h-5v-2c0-2,1.002-3,3-3h2V5c-1,0-2.24,0-4,0c-3.675,0-6,2.881-6,7v3h-4v5h4v12H22z"
+                        fill="#FFFFFF"
+                        id="f"
+                      />
+                    </g>
+                    <g />
+                    <g />
+                    <g />
+                    <g />
+                    <g />
+                    <g />
+                  </svg>
+                </a>
+                <a
+                  *ngIf="githubLink"
+                  [href]="githubLink"
+                  target="_blank"
+                  class="text-blue-600 hover:text-blue-700"
+                >
+                  <svg
+                    height="35px"
+                    id="Layer_1"
+                    style="enable-background: new 0 0 512 512"
+                    version="1.1"
+                    viewBox="0 0 512 512"
+                    width="35px"
+                    xml:space="preserve"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                  >
+                    <g>
+                      <path
+                        class="st0"
+                        d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"
+                      />
+                    </g>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full md:w-2/3 p-3 relative">
+            <p-progressBar
+              [color]="valueColor"
+              [value]="calculateRelevancy(selectedUserProfile)"
+            />
+
+            <div class="relative mt-2">
+              <div
+                class="absolute inset-0 border-2 border-gray-200 rounded-lg"
+              ></div>
+
+              <p-scrollPanel [style]="{ width: '100%', height: '400px' }">
+                <div class="relative z-10 p-4">
+                  <h3 class="text-xl font-semibold mb-4">About:</h3>
+                  <p class="text-gray-700 mb-6 bg-transparent">
+                    {{ selectedUserProfile?.bio || "No bio available" }}
+                  </p>
+                  <div class="mb-6">
+                    <h4 class="text-lg font-semibold mb-2 flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        class="w-6 h-6 inline-block mr-2 text-blue-600"
+                      >
+                        <path
+                          d="M12 2L1 8l11 6 11-6-11-6zm0 2.2L18.3 8 12 11.8 5.7 8 12 4.2zm1 12.16v5.12h-2v-5.12l-7-3.82v2.44L12 20l8-5v-2.44l-7 3.82z"
+                        />
+                      </svg>
+                      Education:
+                    </h4>
+
+                    <div
+                      *ngFor="let edu of selectedUserProfile?.Users?.education"
+                      class="mb-2"
+                    >
+                      <p class="font-medium bg-transparent">
+                        {{ edu.institution }}
+                      </p>
+                      <p class="text-sm text-gray-600 bg-transparent">
+                        {{ edu.course }}
+                      </p>
+                      <p class="text-sm text-gray-600 bg-transparent">
+                        {{ edu.completedDate | date : "yyyy" }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Experience Section -->
+                  <div>
+                    <h4 class="text-lg font-semibold mb-2 flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        class="w-6 h-6 inline-block mr-2 text-blue-600"
+                      >
+                        <path
+                          d="M20 6h-4V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2zM10 4h4v2h-4V4zm10 14H4V8h16v10z"
+                        />
+                      </svg>
+                      Experience:
+                    </h4>
+
+                    <div
+                      *ngFor="
+                        let exp of selectedUserProfile?.Users?.workExperience
+                      "
+                      class="mb-2"
+                    >
+                      <p class="font-medium bg-transparent">
+                        {{ exp.companyName }}
+                      </p>
+                      <p class="text-sm text-gray-600 bg-transparent">
+                        {{ exp.location }}
+                      </p>
+                      <p class="text-sm text-gray-600 bg-transparent">
+                        {{ exp.startDate | date : "yyyy" }} -
+                        {{
+                          exp.endDate
+                            ? (exp.endDate | date : "yyyy")
+                            : "Present"
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </p-scrollPanel>
+            </div>
+
+            <div class="flex justify-end mt-3">
+              <button
+                class="bg-blue-900 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none"
+                (click)="toggleProfileSelection(selectedUserProfile)"
+              >
+                {{
+                  isProfileSelected(selectedUserProfile) ? "Deselect" : "Select"
+                }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-dialog>
+  </section>
+
+  <div
+    class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg z-50"
+    *ngIf="selectedProfiles.length > 0"
+  >
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center overflow-x-auto">
+        <div class="flex items-center -space-x-4">
+          <img
+            *ngFor="let profile of selectedProfiles.slice(0, 6)"
+            [src]="
+              profile.Users?.profileImage
+                ? profile.Users?.profileImage
+                : '/assets/img/blank-profile.webp'
+            "
+            alt="Selected Profile Image"
+            class="relative inline-block h-12 w-12 rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10"
+          />
+        </div>
+        <div *ngIf="selectedProfiles.length > 6" class="text-lg font-bold">
+          + {{ selectedProfiles.length - 6 }} more
+        </div>
+      </div>
+      <div class="flex space-x-4">
+        <p-button
+          (onClick)="showDialog('invitation')"
+          class="bg-circleYellow text-white py-2 px-4 rounded-full hover:bg-yellow-500 transition duration-300"
+        >
+          Send Invitation
+        </p-button>
+        <p-button
+          (onClick)="onCancel('selectedProfiles')"
+          class="bg-blue-900 text-white py-2 px-4 rounded-full hover:bg-blue-950 transition duration-300"
+          >Cancel</p-button
+        >
+        <p-dialog
+          (onHide)="onCancel('invitations')"
+          [(visible)]="invitationVisible"
+          [modal]="true"
+          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+          [style]="{ width: '50vw' }"
+          [draggable]="false"
+          [resizable]="false"
+          header="Invitation"
+          [closable]="true"
+          class="bg-white rounded-lg shadow-lg"
+        >
+          <div class="p-6 space-y-4">
+            <h2 class="text-2xl font-semibold text-gray-800 text-center">
+              You're Invited!
+            </h2>
+            <p class="text-gray-600 text-center bg-white">
+              Choose a job title to send details to the candidate.
+            </p>
+            <div class="border-t border-gray-300 my-4"></div>
+            <form [formGroup]="jobForm" class="space-y-4">
+              <div class="relative">
+                <label
+                  for="jobTitle"
+                  class="block text-gray-700 font-medium mb-2"
+                  >Job Title</label
+                >
+                <input
+                  id="jobTitle"
+                  formControlName="jobTitle"
+                  placeholder="Enter the job title"
+                  class="block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <div
+                  *ngIf="
+                    jobForm.get('jobTitle')?.touched &&
+                    jobForm.get('jobTitle')?.invalid
+                  "
+                  class="text-red-500 mt-1"
+                >
+                  <div *ngIf="jobForm.get('jobTitle')?.errors?.required">
+                    Job title is required.
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label
+                  for="jobDescription"
+                  class="block text-gray-700 font-medium mb-2"
+                  >Job Description</label
+                >
+                <textarea
+                  id="jobDescription"
+                  formControlName="jobDescription"
+                  class="block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows="4"
+                  placeholder="Enter the job description here..."
+                ></textarea>
+              </div>
+              <div class="flex justify-end space-x-4 mt-6">
+                <button
+                  (click)="sendInvitation()"
+                  class="bg-blue-900 text-white py-2 px-4 rounded-full hover:bg-blue-950 transition duration-300"
+                >
+                  Send
+                </button>
+              </div>
+            </form>
+          </div>
+        </p-dialog>
+      </div>
+    </div>
+  </div>
+  <div
+    class="flex items-center justify-center mt-6"
+    *ngIf="searchedProfiles && searchedProfiles.length > 0"
+  >
+    <nav aria-label="Pagination">
+      <ul class="inline-flex space-x-2">
+        <li>
+          <button
+            (click)="onPageChange(currentPage - 1)"
+            [disabled]="currentPage === 1"
+            class="flex items-center justify-center w-10 h-10 text-blue-900 transition-colors duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-900 hover:bg-indigo-100"
+            aria-label="Previous"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+              <path
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        </li>
+
+        <li *ngFor="let page of [].constructor(totalPages); let i = index">
+          <button
+            (click)="onPageChange(i + 1)"
+            [ngClass]="{
+              'bg-blue-900 text-white': currentPage === i + 1,
+              'text-blue-900': currentPage !== i + 1
+            }"
+            class="w-10 h-10 transition-colors duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-900 hover:bg-indigo-100"
+          >
+            {{ i + 1 }}
+          </button>
+        </li>
+
+        <li>
+          <button
+            (click)="onPageChange(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+            class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-900 hover:bg-indigo-100"
+            aria-label="Next"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+              <path
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+  <div
+  class="modal fade"
+  id="categoryFormModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-card card" data-list='{"valueNames": ["name"]}'>
+        <form (ngSubmit)="save()" novalidate>
+          <div class="card-header">
+            <!-- Title -->
+            <h4 class="card-header-title">
+              <span *ngIf="category.id == 0">Create</span>
+              <span *ngIf="category.id > 0">Update</span>
+              Category
+            </h4>
+
+            <!-- Close -->
+            <button
+              type="button"
+              class="btn-close"
+              #closeBtn
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12">
+                <!-- First name -->
+                <div class="form-group">
+                  <!-- Label -->
+                  <label class="form-label"> Category Name </label>
+
+                  <!-- Input -->
+                  <input
+                    type="text"
+                    class="form-control form-constrol-sm"
+                    [(ngModel)]="category.name"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+
+                  <label class="form-label mt-4"> Tags </label>
+
+                  <!-- Input -->
+                  <input
+                    type="text"
+                    class="form-control form-constrol-sm"
+                    [(ngModel)]="category.tags"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- / .row -->
+            <!-- <div class="row">
+                            <div class="col-12">
+
+                                <div class="form-group">
+
+                                    <label class="form-label">
+                                        Filter Tags
+                                    </label>
+
+                                    <input type="text" class="form-control form-constrol-sm" [(ngModel)]="category.filterTags"
+                                        [ngModelOptions]="{standalone: true}">
+                                </div>
+
+                            </div>
+                        </div> -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary text-left btn-sm"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <span *ngIf="category.id == 0">Create</span>
+              <span *ngIf="category.id > 0">Update</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

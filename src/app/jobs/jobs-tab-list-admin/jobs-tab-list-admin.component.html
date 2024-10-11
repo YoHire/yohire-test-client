@@ -1,0 +1,249 @@
+<div class="card" id="contactsList">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <form>
+          <div
+            class="input-group input-group-flush input-group-merge input-group-reverse"
+          >
+            <input
+              class="form-control list-search"
+              type="search"
+              placeholder="Search"
+              (keyup)="customFilter($event)"
+            />
+            <span class="input-group-text">
+              <i class="fe fe-search"></i>
+            </span>
+          </div>
+        </form>
+      </div>
+
+      <!-- <div class="col-auto me-n3">
+        <div class="row">
+          <p-floatLabel>
+            <p-calendar
+              [showIcon]="true"
+              selectionMode="range"
+              [readonlyInput]="true"
+              inputId="buttondisplay"
+            />
+            <label for="Select Dates">Select Date Ranges </label>
+          </p-floatLabel>
+        </div>
+      </div> -->
+      &nbsp;
+      <div class="col-auto me-n3">
+        <select
+          class="form-select form-select-sm form-control-flush"
+          [(ngModel)]="size"
+          (change)="paginateItems()"
+          style="width: 120px"
+        >
+          <option [value]="10">10 per page</option>
+          <option [value]="20">20 per page</option>
+          <option [value]="0">All</option>
+        </select>
+      </div>
+
+      <div class="col-auto"></div>
+    </div>
+    <!-- / .row -->
+  </div>
+
+  <div class="table-responsive tab-pane fade show active" id="home">
+    <table class="table table-sm table-hover table-nowrap card-table">
+      <thead>
+        <tr>
+          <th>Sl No.</th>
+          <th>
+            <a
+              class="list-sort text-muted"
+              data-sort="item-name"
+              (click)="sortByField('id')"
+              >Job Title</a
+            >
+          </th>
+          <th>
+            <a
+              class="list-sort text-muted"
+              data-sort="item-name"
+              (click)="sortByField('recruiter.name')"
+              >RA</a
+            >
+          </th>
+          <th>
+            <a
+              class="list-sort text-muted"
+              data-sort="item-name"
+              (click)="sortByField('title')"
+              >Placement Location</a
+            >
+          </th>
+          <th>
+            <a
+              class="list-sort text-muted"
+              data-sort="item-name"
+              (click)="sortByField('title')"
+              >Target Location</a
+            >
+          </th>
+          <th class="list-sort text-muted" *ngIf="tab == 'running'">
+            Applications
+          </th>
+          <th class="list-sort text-muted" *ngIf="tab == 'running'">
+            Downloads
+          </th>
+          <th>
+            <a
+              class="list-sort text-muted"
+              data-sort="item-name"
+              (click)="sortByField('category.name')"
+            >
+              Status</a
+            >
+          </th>
+          <th>
+            <a
+              class="list-sort text-muted"
+              data-sort="item-name"
+              (click)="sortByField('expiryDate')"
+            >
+              Expiry Date</a
+            >
+          </th>
+
+          <!-- <th>
+                        <a class="list-sort text-muted" data-sort="item-name" (click)="sortByField('candidateCount')">
+                            Vacancy Count</a>
+                    </th> -->
+          <th>
+            <a
+              class="list-sort text-muted"
+              data-sort="item-name"
+              (click)="sortByField('verified')"
+            >
+              Actions</a
+            >
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody class="list fs-base">
+        <tr
+          class="cursor"
+          *ngFor="
+            let item of itemsFiltered
+              | sort : sortedColumn : sortedDirection
+              | slice : pageStartIndex : pageEndIndex;
+            let i = index;
+            trackBy: trackByItemId
+          "
+        >
+          <td routerLink="/jobs/view/{{ item.id }}">
+            {{ page * size + (i + 1) }}
+          </td>
+          <td routerLink="/jobs/view/{{ item.id }}">{{ item.title }}</td>
+          <td routerLink="/jobs/view/{{ item.id }}">
+            {{ item.recruiter?.ra }}
+          </td>
+          <td routerLink="/jobs/view/{{ item.id }}">
+            {{ item.location }}
+          </td>
+          <td routerLink="/jobs/view/{{ item.id }}">
+            {{ item.targetLocation }}
+          </td>
+          <td *ngIf="tab == 'running'">
+            <span class="btn btn-sm btn-outline-primary"
+              >{{ item.applicationsCount }}
+            </span>
+          </td>
+          <td *ngIf="tab == 'running'">
+            <span class="btn btn-sm btn-outline-primary"
+              >{{ item.resumeDownloaded }}
+            </span>
+          </td>
+          <td routerLink="/jobs/view/{{ item.id }}">
+            {{ item.status }}
+          </td>
+          <!-- {{item.subCategory?.name}} -->
+          <td routerLink="/jobs/view/{{ item.id }}">
+            {{ item.expiryDate }}
+          </td>
+          <!-- <td routerLink="/jobs/view/{{item.id}}">{{item.candidateCount}}
+
+                    </td> -->
+          <td>
+            <p-splitButton
+              (click)="selectJob(item.id)"
+              [model]="data"
+              class="bg-gray-500 text-white rounded-lg pt-3 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </td>
+        </tr>
+        <tr *ngIf="itemsFiltered.length < 1">
+          <td colspan="10" class="text-center">No Jobs to list</td>
+        </tr>
+        <!-- <tr class="font-bold bg-gray-100 dark:bg-gray-700">
+          <td colspan="1" class="text-right pr-4">Total:</td>
+          <td colspan="4" class="text-right pr-4">Applicants:</td>
+          <td *ngIf="tab == 'running'">
+            <span class="btn btn-sm btn-outline-primary">
+              {{ 0 }}
+            </span>
+          </td>
+          <td colspan="4" class="text-right pr-4">Applicants:</td>
+          <td *ngIf="tab == 'running'">
+            <span class="btn btn-sm btn-outline-primary">
+              {{ 0 }}
+            </span>
+        </tr> -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer d-flex justify-content-between" *ngIf="pageCount > 0">
+    <!-- Pagination (prev) -->
+    <ul
+      class="list-pagination-prev pagination pagination-tabs card-pagination"
+      *ngIf="pageCount > 0"
+    >
+      <li class="page-item" [ngClass]="{ disabled: page < 1 }">
+        <button
+          class="page-link ps-0 pe-4 border-end"
+          (click)="page = page - 1; paginateItems()"
+          [disabled]="page < 1"
+        >
+          <i class="fe fe-arrow-left me-1"></i> Prev
+        </button>
+      </li>
+    </ul>
+
+    <!-- Pagination -->
+    <ul class="list-pagination pagination pagination-tabs card-pagination">
+      <li
+        *ngFor="let item of [].constructor(pageCount); let i = index"
+        [ngClass]="{ active: page == i }"
+      >
+        <button class="page" (click)="page = i; paginateItems()">
+          {{ i + 1 }}
+        </button>
+      </li>
+    </ul>
+
+    <!-- Pagination (next) -->
+    <ul class="list-pagination-next pagination pagination-tabs card-pagination">
+      <li class="page-item" [ngClass]="{ disabled: page >= pageCount - 1 }">
+        <button
+          class="page-link ps-4 pe-0 border-start"
+          (click)="page = page + 1; paginateItems()"
+          [disabled]="page >= pageCount - 1"
+        >
+          Next <i class="fe fe-arrow-right ms-1"></i>
+        </button>
+      </li>
+    </ul>
+
+    <!-- Alert -->
+  </div>
+</div>

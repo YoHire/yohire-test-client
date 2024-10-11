@@ -1,0 +1,1851 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-12 col-xl-12">
+        <div class="header my-3">
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col col-md-2 col-lg-1">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button type="button" class="btn btn-white btn-md pb-1">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button type="button" class="btn btn-white btn-sm pb-1">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"></li>
+                    <li class="breadcrumb-item">
+                      <a routerLink="/jobs/recruiter/list">Manage Jobs</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                      <a> Job </a>
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+
+              <!-- <div
+                class="col-12 col-md-3 text-md-end mt-3 mt-md-0"
+                *ngIf="this.isInitialFormCompleted"
+              >
+                <p-dialog
+                  header="Recommended Format"
+                  [modal]="true"
+                  [(visible)]="visible"
+                  [style]="{ width: '70rem' }"
+                >
+                  <div class="p-6 space-y-6">
+                    <img
+                      src="assets/img/Excel.png"
+                      class="w-32 h-auto mx-auto mb-6"
+                    />
+                    <h2 class="text-xl font-semibold text-center mb-4">
+                      Map Your Fields
+                    </h2>
+                    <div class="space-y-4">
+                      <ng-container *ngFor="let fieldSet of fieldSets; let i = index">
+                        <div class="grid grid-cols-6 gap-4 mb-4">
+                          <ng-container *ngFor="let field of fieldSet">
+                            <input
+                              id="disabled-input-{{ field.id }}"
+                              type="text"
+                              class="bg-gray-100 border border-gray-300 px-3 py-2 rounded-md text-sm text-gray-700 placeholder-gray-400 cursor-not-allowed w-full"
+                              [value]="field.label"
+                              disabled
+                            />
+                            <select
+                              class="bg-white border border-gray-300 px-3 py-2 rounded-md text-sm text-gray-700 w-full"
+                              [ngModel]="selectedOptions[i][field.id]"
+                              (ngModelChange)="onOptionSelect($event, i, field.id)"
+                            >
+                              <option value="" disabled selected>Select an option</option>
+                              <option *ngFor="let option of options" [value]="option">{{ option }}</option>
+                            </select>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                      
+                      <div class="grid grid-cols-1 items-center gap-4 mb-4">
+                        <button (click)="uploadExcel()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                          Apply
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </p-dialog>
+                <div class="btn-group" role="group" aria-label="File Upload">
+                  <input
+                    type="file"
+                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    id="fileUploadInput"
+                    (change)="applyOptions($event)"
+                    accept=".xlsx, .xls"
+                  />
+                  <label
+                    for="fileUploadInput"
+                    class="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm flex items-center cursor-pointer"
+                  >
+                    <span class="mr-2">Upload Jobs</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 48 48"
+                      class="h-6 w-6"
+                    >
+                      <rect
+                        width="16"
+                        height="9"
+                        x="28"
+                        y="15"
+                        fill="#21a366"
+                      ></rect>
+                      <path
+                        fill="#185c37"
+                        d="M44,24H12v16c0,1.105,0.895,2,2,2h28c1.105,0,2-0.895,2-2V24z"
+                      ></path>
+                      <rect
+                        width="16"
+                        height="9"
+                        x="28"
+                        y="24"
+                        fill="#107c42"
+                      ></rect>
+                      <rect
+                        width="16"
+                        height="9"
+                        x="12"
+                        y="15"
+                        fill="#3fa071"
+                      ></rect>
+                      <path
+                        fill="#33c481"
+                        d="M42,6H28v9h16V8C44,6.895,43.105,6,42,6z"
+                      ></path>
+                      <path
+                        fill="#21a366"
+                        d="M14,6h14v9H12V8C12,6.895,12.895,6,14,6z"
+                      ></path>
+                      <path
+                        d="M22.319,13H12v24h10.319C24.352,37,26,35.352,26,33.319V16.681C26,14.648,24.352,13,22.319,13z"
+                        opacity=".05"
+                      ></path>
+                      <path
+                        d="M22.213,36H12V13.333h10.213c1.724,0,3.121,1.397,3.121,3.121v16.425	C25.333,34.603,23.936,36,22.213,36z"
+                        opacity=".07"
+                      ></path>
+                      <path
+                        d="M22.106,35H12V13.667h10.106c1.414,0,2.56,1.146,2.56,2.56V32.44C24.667,33.854,23.52,35,22.106,35z"
+                        opacity=".09"
+                      ></path>
+                      <linearGradient
+                        id="flEJnwg7q~uKUdkX0KCyBa_UECmBSgBOvPT_gr1"
+                        x1="4.725"
+                        x2="23.055"
+                        y1="14.725"
+                        y2="33.055"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#18884f"></stop>
+                        <stop offset="1" stop-color="#0b6731"></stop>
+                      </linearGradient>
+                      <path
+                        fill="url(#flEJnwg7q~uKUdkX0KCyBa_UECmBSgBOvPT_gr1)"
+                        d="M22,34H6c-1.105,0-2-0.895-2-2V16c0-1.105,0.895-2,2-2h16c1.105,0,2,0.895,2,2v16	C24,33.105,23.105,34,22,34z"
+                      ></path>
+                      <path
+                        fill="#fff"
+                        d="M9.807,19h2.386l1.936,3.754L16.175,19h2.229l-3.071,5l3.141,5h-2.351l-2.11-3.93L11.912,29H9.526	l3.193-5.018L9.807,19z"
+                      ></path>
+                    </svg>
+                  </label>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-body" id="scrollToTop">
+          <div class="row">
+            <div class="col-12">
+              <div class="flex">
+                <aside
+                  class="flex col-2 flex-col border-r border-gray-200 bg-white p-2 h-screen overflow-y-auto"
+                >
+                  <div class="flex flex-col space-y-2">
+                    <div>
+                      <ul class="mt-2">
+                        <li class="group">
+                          <div
+                            class="flex items-center justify-between cursor-pointer hover:bg-gray-100 rounded-lg p-2"
+                          >
+                            <span
+                              class="w-full text-blue-900 font-sans font-semibold text-xl text overflow-hidden text-ellipsis whitespace-nowrap max-w-[170px]"
+                              (click)="selectCompanyForm()"
+                              >{{ company.toUpperCase() }}</span
+                            >
+                          </div>
+                        </li>
+                      </ul>
+                      <ul class="mt-2">
+                        <ng-container *ngIf="isEdit; else jobList">
+                          <li class="group">
+                            <div
+                              class="flex items-center justify-between cursor-pointer hover:bg-blue-800 rounded-lg p-2 ml-3 bg-blue-900 mb-2"
+                            >
+                              <span
+                                class="truncate w-full text-sm font-sans font-semibold p-1 text-white"
+                              >
+                                {{ job?.title }}
+                              </span>
+                            </div>
+                          </li>
+                        </ng-container>
+                        <ng-template #jobList>
+                          <li
+                            *ngFor="let job of jobs; trackBy: trackByItemId"
+                            class="group"
+                          >
+                            <div
+                              class="flex items-center justify-between cursor-pointer hover:bg-blue-800 rounded-lg p-2 ml-3 bg-blue-900 mb-2"
+                            >
+                              <span
+                                class="truncate w-full text-sm font-sans font-semibold p-1 text-white"
+                                (click)="selectJob(job)"
+                              >
+                                {{ job.title }}
+                              </span>
+                              <div class="flex space-x-2">
+                                <button
+                                  class="text-white hover:text-red-700 transition-colors duration-300 ease-in-out transform group-hover:scale-110 focus:outline-none mr-2"
+                                  (click)="deleteJob(job)"
+                                >
+                                  <i class="fas fa-trash-alt"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </li>
+                        </ng-template>
+                      </ul>
+                    </div>
+                  </div>
+                </aside>
+
+                <div class="col col-6 p-4">
+                  <div class="main-content">
+                    <div
+                      class="flex flex-col justify-center items-center mb-4"
+                      *ngIf="loading"
+                    >
+                      <p-progressSpinner
+                        styleClass="w-1rem h-8"
+                        strokeWidth="8"
+                        fill="var(--surface-ground)"
+                        animationDuration=".9s"
+                      ></p-progressSpinner>
+                      <p class="text-center text-blue-900 bg-white mt-2">
+                        Saving . . .
+                      </p>
+                    </div>
+                    <div class="container-fluid">
+                      <div class="row justify-content-center">
+                        <div class="col-12 col-lg-12 col-xl-12">
+                          <div class="card card-body">
+                            <div class="row">
+                              <div class="col-12">
+                                <div *ngIf="!isEdit; else compForm">
+                                  <form
+                                    [formGroup]="companyForm"
+                                    *ngIf="
+                                      (!isInitialFormCompleted ||
+                                        isCompanyFormEdit) &&
+                                      !isEdit
+                                    "
+                                    (ngSubmit)="completeInitialForm()"
+                                  >
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <h3
+                                          class="text-black font-sans font-light text-lg"
+                                        >
+                                          Company Details
+                                        </h3>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          formControlName="company"
+                                          [(ngModel)]="company"
+                                          placeholder="Company Name *"
+                                          appTrim
+                                        />
+                                        <div
+                                          *ngIf="
+                                            companyForm.get('company')
+                                              ?.invalid && completeFormSubmitted
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <small
+                                            *ngIf="
+                                              companyForm.get('company')?.errors
+                                                ?.required &&
+                                              completeFormSubmitted
+                                            "
+                                          >
+                                            Company Name is required.
+                                          </small>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          id="pac-input"
+                                          placeholder="Placement Location *"
+                                          formControlName="location"
+                                          appTrim
+                                        />
+                                        <div
+                                          *ngIf="
+                                            companyForm.get('location')
+                                              ?.invalid && completeFormSubmitted
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <small
+                                            *ngIf="
+                                              companyForm.get('location')
+                                                ?.errors?.required &&
+                                              completeFormSubmitted
+                                            "
+                                          >
+                                            Placement Location is required.
+                                          </small>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <textarea
+                                          class="form-control"
+                                          placeholder="General Description"
+                                          formControlName="description"
+                                          appTrim
+                                        ></textarea>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                          <input
+                                            class="form-control"
+                                            angular-mydatepicker
+                                            placeholder="Job Expiry Date"
+                                            name="expiryDate"
+                                            appTrim
+                                            formControlName="expiryDate"
+                                            [options]="dateOptions"
+                                            #dp1="angular-mydatepicker"
+                                          />
+                                          <div class="input-group-append">
+                                            <button
+                                              class="btn btn-outline-secondary fe fe-calendar"
+                                              (click)="dp1.toggleCalendar()"
+                                              type="button"
+                                            ></button>
+                                          </div>
+                                        </div>
+                                        <div
+                                          *ngIf="
+                                            companyForm.get('expiryDate')
+                                              ?.touched &&
+                                            companyForm.get('expiryDate')
+                                              ?.invalid
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <small
+                                            *ngIf="
+                                              companyForm.get('expiryDate')
+                                                ?.errors?.required
+                                            "
+                                          >
+                                            Expiry Date is required.
+                                          </small>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                          <input
+                                            class="form-control"
+                                            angular-mydatepicker
+                                            name="interviewDate"
+                                            formControlName="interviewDate"
+                                            appTrim
+                                            placeholder="Interview Date"
+                                            [options]="dateOptionsInterview"
+                                            #dp2="angular-mydatepicker"
+                                          />
+                                          <div class="input-group-append">
+                                            <button
+                                              class="btn btn-outline-secondary fe fe-calendar"
+                                              (click)="dp2.toggleCalendar()"
+                                              type="button"
+                                            ></button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <div class="ng-autocomplete">
+                                          <mat-form-field
+                                            class="example-chip-list"
+                                          >
+                                            <mat-chip-grid
+                                              #langReadWriteGrid
+                                              aria-label="languages read and write selection"
+                                            >
+                                              <ng-container
+                                                *ngFor="
+                                                  let readWrite of selectedLanguagesReadWrite;
+                                                  let i = index;
+                                                  trackBy: trackByItemId
+                                                "
+                                              >
+                                                <mat-chip-row
+                                                  class="bg-white"
+                                                  (removed)="
+                                                    removeLanguagesRw(readWrite)
+                                                  "
+                                                >
+                                                  {{ readWrite.name }}
+                                                  <button
+                                                    matChipRemove
+                                                    [attr.aria-label]="
+                                                      'remove ' + readWrite.name
+                                                    "
+                                                  >
+                                                    <mat-icon>cancel</mat-icon>
+                                                  </button>
+                                                </mat-chip-row>
+                                              </ng-container>
+                                            </mat-chip-grid>
+                                            <input
+                                              name="currentLanguagesReadWrite"
+                                              placeholder="{{
+                                                selectedLanguagesReadWrite.size >=
+                                                5
+                                                  ? ''
+                                                  : 'Languages Read & Write...'
+                                              }}"
+                                              #readWriteInput
+                                              [matChipInputFor]="
+                                                langReadWriteGrid
+                                              "
+                                              [matAutocomplete]="auto"
+                                              (input)="
+                                                onSearchLanguagesReadWriteChange(
+                                                  $event
+                                                )
+                                              "
+                                              [disabled]="
+                                                selectedLanguagesReadWrite.size >=
+                                                5
+                                              "
+                                            />
+                                            <mat-autocomplete
+                                              #auto="matAutocomplete"
+                                              (optionSelected)="
+                                                selectedLangugagesRw($event)
+                                              "
+                                            >
+                                              <mat-option
+                                                *ngFor="
+                                                  let readWrite of languagesReadWrite;
+                                                  trackBy: trackByItemId
+                                                "
+                                                [value]="readWrite"
+                                              >
+                                                {{ readWrite.name }}
+                                              </mat-option>
+                                            </mat-autocomplete>
+                                          </mat-form-field>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <div class="ng-autocomplete">
+                                          <mat-form-field
+                                            class="example-chip-list"
+                                          >
+                                            <mat-chip-grid
+                                              #langSpeakGrid
+                                              aria-label="languages speak selection"
+                                            >
+                                              <ng-container
+                                                *ngFor="
+                                                  let speak of selectedLanguagesSpeak;
+                                                  let i = index;
+                                                  trackBy: trackByItemId
+                                                "
+                                              >
+                                                <mat-chip-row
+                                                  class="bg-white"
+                                                  (removed)="
+                                                    removeLanguagesSpeak(speak)
+                                                  "
+                                                >
+                                                  {{ speak.name }}
+                                                  <button
+                                                    matChipRemove
+                                                    [attr.aria-label]="
+                                                      'remove ' + speak.name
+                                                    "
+                                                  >
+                                                    <mat-icon>cancel</mat-icon>
+                                                  </button>
+                                                </mat-chip-row>
+                                              </ng-container>
+                                            </mat-chip-grid>
+                                            <input
+                                              name="currentLanguagesSpeak"
+                                              placeholder="{{
+                                                selectedLanguagesSpeak.size >= 5
+                                                  ? ''
+                                                  : 'Languages Speak...'
+                                              }}"
+                                              #speakInput
+                                              [matChipInputFor]="langSpeakGrid"
+                                              [matAutocomplete]="autoSpeak"
+                                              (input)="
+                                                onSearchLanguagesSpeak($event)
+                                              "
+                                              [disabled]="
+                                                selectedLanguagesSpeak.size >= 5
+                                              "
+                                            />
+                                            <mat-autocomplete
+                                              #autoSpeak="matAutocomplete"
+                                              (optionSelected)="
+                                                selectedLangugagesSpeak($event)
+                                              "
+                                            >
+                                              <mat-option
+                                                *ngFor="
+                                                  let speak of languagesSpeak;
+                                                  trackBy: trackByItemId
+                                                "
+                                                [value]="speak"
+                                              >
+                                                {{ speak.name }}
+                                              </mat-option>
+                                            </mat-autocomplete>
+                                          </mat-form-field>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          id="venue-input"
+                                          appTrim
+                                          formControlName="targetLocation"
+                                          placeholder="Target Location"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <label class="form-label">
+                                          Min - Max Height &nbsp;<span
+                                            class="text-muted"
+                                            >( in cm )</span
+                                          >
+                                        </label>
+                                        <mat-slider
+                                          min="100"
+                                          max="255"
+                                          step="1"
+                                          discrete
+                                          [displayWith]="formatLabelWithUnit()"
+                                        >
+                                          <input
+                                            matSliderStartThumb
+                                            formControlName="generalMinHeight"
+                                            numbersOnly
+                                            (input)="
+                                              onMinHeightChange($event.target)
+                                            "
+                                          />
+                                          <input
+                                            matSliderEndThumb
+                                            formControlName="generalMaxHeight"
+                                            numbersOnly
+                                            (input)="
+                                              onMaxHeightChange($event.target)
+                                            "
+                                          />
+                                        </mat-slider>
+                                        <div>
+                                          Min Height: {{ minHeight }} cm
+                                        </div>
+                                        <div>
+                                          Max Height: {{ maxHeight }} cm
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <label class="form-label">
+                                          Min - Max Weight &nbsp;<span
+                                            class="text-muted"
+                                            >( in kg )</span
+                                          >
+                                        </label>
+                                        <br />
+                                        <mat-slider
+                                          min="30"
+                                          max="130"
+                                          step="1"
+                                          discrete
+                                          [displayWith]="formatLabelWithUnit()"
+                                        >
+                                          <input
+                                            matSliderStartThumb
+                                            formControlName="generalMinWeight"
+                                            numbersOnly
+                                            min="30"
+                                            max="130"
+                                            (input)="
+                                              onMinWeightChange($event.target)
+                                            "
+                                          />
+                                          <input
+                                            matSliderEndThumb
+                                            formControlName="generalMaxWeight"
+                                            numbersOnly
+                                            (input)="
+                                              onMaxWeightChange($event.target)
+                                            "
+                                          />
+                                        </mat-slider>
+                                        <div>
+                                          Min Weight: {{ minWeight }} KG
+                                        </div>
+                                        <div>
+                                          Max Weight: {{ maxWeight }} Kg
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <label class="form-label">
+                                          Min - Max Age &nbsp;<span
+                                            class="text-muted"
+                                            >⠀</span
+                                          >
+                                        </label>
+                                        <br />
+                                        <mat-slider
+                                          min="18"
+                                          max="65"
+                                          step="1"
+                                          discrete
+                                          [displayWith]="formatLabelWithUnit()"
+                                        >
+                                          <input
+                                            matSliderStartThumb
+                                            formControlName="generalMinAge"
+                                            numbersOnly
+                                            (input)="
+                                              onMinAgeChange($event.target)
+                                            "
+                                          />
+                                          <input
+                                            matSliderEndThumb
+                                            formControlName="generalMaxAge"
+                                            numbersOnly
+                                            (input)="
+                                              onMaxAgeChange($event.target)
+                                            "
+                                          />
+                                        </mat-slider>
+                                        <div>Min Age: {{ minAge }}</div>
+                                        <div>Max Age: {{ maxAge }}</div>
+                                      </div>
+                                    </div>
+                                    <button
+                                      type="submit"
+                                      class="shadow-sm p-2 bg-black text-white rounded-md hover:text-white"
+                                    >
+                                      {{ isCompanyFormEdit ? "Save" : "Next" }}
+                                    </button>
+                                  </form>
+                                </div>
+                                <ng-template #compForm>
+                                  <form [formGroup]="companyForm">
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          formControlName="company"
+                                          [(ngModel)]="company"
+                                          placeholder="Company Name *"
+                                          appTrim
+                                        />
+                                        <div
+                                          *ngIf="
+                                            companyForm.get('company')
+                                              ?.invalid && completeFormSubmitted
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <small
+                                            *ngIf="
+                                              companyForm.get('company')?.errors
+                                                ?.required &&
+                                              completeFormSubmitted
+                                            "
+                                          >
+                                            Company Name is required.
+                                          </small>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          id="pac-input"
+                                          placeholder="Placement Location *"
+                                          formControlName="location"
+                                          appTrim
+                                        />
+                                        <div
+                                          *ngIf="
+                                            companyForm.get('location')
+                                              ?.invalid && completeFormSubmitted
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <small
+                                            *ngIf="
+                                              companyForm.get('location')
+                                                ?.errors?.required &&
+                                              completeFormSubmitted
+                                            "
+                                          >
+                                            Placement Location is required.
+                                          </small>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <input
+                                          type="text"
+                                          class="form-control"
+                                          id="venue-input"
+                                          appTrim
+                                          formControlName="targetLocation"
+                                          placeholder="Target Location"
+                                        />
+                                      </div>
+                                    </div>
+                                  </form>
+                                </ng-template>
+                                <div>
+                                  <form
+                                    *ngIf="
+                                      (isInitialFormCompleted &&
+                                        !isCompanyFormEdit) ||
+                                      isEdit
+                                    "
+                                    [formGroup]="jobForm"
+                                    (ngSubmit)="!isEdit ? addJob() : saveEdit()"
+                                  >
+                                    <div class="col-12" *ngIf="!isEdit">
+                                      <div class="form-group">
+                                        <h3
+                                          class="text-black font-sans font-light text-lg"
+                                        >
+                                          Job
+                                          {{ currentJob }}
+                                        </h3>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                       
+                                      <div class="form-group">
+                                        <input
+                                          id="jobTitle"
+                                          type="text"
+                                          class="form-control"
+                                          placeholder="Job Title *"
+                                          formControlName="title"
+                                          appTrim
+                                        />
+                                        <div
+                                          *ngIf="
+                                            jobForm.get('title')?.invalid &&
+                                            completeFormSubmitted
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <small
+                                            *ngIf="
+                                              jobForm.get('title')?.errors
+                                                ?.required &&
+                                              completeFormSubmitted
+                                            "
+                                          >
+                                            Job Title is required.
+                                          </small>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <label class="form-label">
+                                          Salary </label
+                                        >&nbsp;&nbsp;&nbsp;
+
+                                        <div
+                                          class="form-check form-check-inline"
+                                        >
+                                          <input
+                                            appTrim
+                                            class="form-check-input"
+                                            type="radio"
+                                            id="negotiable"
+                                            (click)="
+                                              salaryChangeInput(
+                                                'Salary Negotiable'
+                                              )
+                                            "
+                                            [checked]="
+                                              jobForm.get('salary')?.value ===
+                                              'Salary Negotiable'
+                                            "
+                                          />
+                                          <label
+                                            class="form-check-label"
+                                            for="negotiable"
+                                            >Negotiable</label
+                                          >
+                                        </div>
+                                        <div
+                                          class="form-check form-check-inline"
+                                        >
+                                          <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            id="basedonexperience"
+                                            (click)="
+                                              salaryChangeInput(
+                                                'Salary Based On Experience'
+                                              )
+                                            "
+                                            [checked]="
+                                              jobForm.get('salary')?.value ===
+                                              'Salary Based On Experience'
+                                            "
+                                          />
+                                          <label
+                                            class="form-check-label"
+                                            for="basedonexperience"
+                                            >Based on Experience</label
+                                          >
+                                        </div>
+                                        <div
+                                          class="form-check form-check-inline"
+                                        >
+                                          <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            id="fixedsalary"
+                                            (click)="salaryChangeInput('')"
+                                            [checked]="
+                                              jobForm.get('salary')?.value !==
+                                                'Salary Based On Experience' &&
+                                              jobForm.get('salary')?.value !==
+                                                'Salary Negotiable'
+                                            "
+                                          />
+                                          <label
+                                            class="form-check-label"
+                                            for="fixedsalary"
+                                            >Salary</label
+                                          >
+                                        </div>
+                                        <div class="d-flex">
+                                          <select
+                                            class="form-control me-1"
+                                            *ngIf="
+                                              currencies &&
+                                              jobForm.get('salary')?.value !==
+                                                'Salary Based On Experience' &&
+                                              jobForm.get('salary')?.value !==
+                                                'Salary Negotiable'
+                                            "
+                                            formControlName="currency"
+                                            appTrim
+                                            style="width: 150px"
+                                          >
+                                            <option disabled selected>
+                                              Select Currency
+                                            </option>
+                                            <option
+                                              *ngFor="
+                                                let currency of currencies;
+                                                trackBy: trackByItemId
+                                              "
+                                            >
+                                              {{ currency.code }}
+                                            </option>
+                                          </select>
+                                          <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="Enter Salary In Ranges ( 100000 - 500000 )"
+                                            formControlName="salary"
+                                            [readonly]="
+                                              this.jobForm.get('salary')
+                                                ?.value ===
+                                                'BASEDONEXPERIENCE' ||
+                                              this.jobForm.get('salary')
+                                                ?.value === 'NEGOTIABLE'
+                                            "
+                                            [value]="
+                                              this.jobForm.get('salary')?.value
+                                            "
+                                            onkeypress="return /^[a-zA-Z0-9\+\-]*$/.test(event.key)"
+                                          />
+                                        </div>
+                                        <div
+                                          *ngIf="
+                                            jobForm.get('salary')?.invalid &&
+                                            completeFormSubmitted
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <small
+                                            *ngIf="
+                                              jobForm.get('salary')?.errors
+                                                ?.required &&
+                                              completeFormSubmitted
+                                            "
+                                          >
+                                            Salary is required.
+                                          </small>
+                                        </div>
+                                        <div
+                                          *ngIf="
+                                            jobForm.get('currency')?.invalid &&
+                                            completeFormSubmitted
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <small
+                                            *ngIf="
+                                              jobForm.get('currency')?.errors
+                                                ?.required &&
+                                              completeFormSubmitted
+                                            "
+                                          >
+                                            Currency is required
+                                          </small>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <textarea
+                                          class="form-control"
+                                          placeholder="Enter Job Description"
+                                          formControlName="description"
+                                          appTrim
+                                        ></textarea>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <label class="form-check-label block mb-2"
+                                        >Qualifications</label
+                                      >
+                                      <div formArrayName="qualifications">
+                                        <div
+                                          *ngFor="
+                                            let qualification of qualifications.controls;
+                                            let i = index
+                                          "
+                                          [formGroupName]="i"
+                                          class="flex flex-wrap gap-4 mb-4 items-center"
+                                        >
+                                          <div class="w-full sm:w-auto">
+                                            <p-dropdown
+                                              [options]="levels"
+                                              placeholder="Education"
+                                              formControlName="selectedLevel"
+                                              [style]="{ width: '165px' }"
+                                              (onChange)="
+                                                onLevelChange($event, i)
+                                              "
+                                              class="block border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                            ></p-dropdown>
+                                          </div>
+
+                                          <div
+                                            *ngIf="
+                                              qualification.value.subCategories
+                                                ?.length > 0
+                                            "
+                                            class="w-full sm:w-auto"
+                                          >
+                                            <p-dropdown
+                                              [options]="
+                                                qualification.value
+                                                  .subCategories
+                                              "
+                                              optionLabel="subCategory"
+                                              formControlName="selectedSubCategory"
+                                              placeholder="Course"
+                                              [style]="{ width: '120px' }"
+                                              (onChange)="
+                                                onSubCategoryChange($event, i)
+                                              "
+                                              class="block border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                            ></p-dropdown>
+                                          </div>
+
+                                          <div
+                                            *ngIf="
+                                              qualification.value.courses
+                                                ?.length > 0
+                                            "
+                                            class="w-full sm:w-auto"
+                                          >
+                                            <p-dropdown
+                                              [options]="
+                                                qualification.value.courses
+                                              "
+                                              placeholder="Specialization"
+                                              formControlName="selectedCourse"
+                                              [style]="{ width: '105px' }"
+                                              (onChange)="
+                                                onCourseChange($event, i)
+                                              "
+                                              class="block border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                            ></p-dropdown>
+                                          </div>
+
+                                          <button
+                                            type="button"
+                                            (click)="removeQualification(i)"
+                                            class="text-red-500"
+                                          >
+                                            Remove
+                                          </button>
+                                        </div>
+                                      </div>
+
+                                      <button
+                                        *ngIf="
+                                          (jobForm.get('qualifications')?.value
+                                            .length || 0) < 5
+                                        "
+                                        type="button"
+                                        (click)="addQualification()"
+                                        class="mt-2 px-4 py-2 bg-black text-white rounded-md shadow hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
+                                      >
+                                        Add Qualification
+                                      </button>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <label class="form-label">
+                                          Min - Max Height &nbsp;<span
+                                            class="text-muted"
+                                            >( in cm )</span
+                                          >
+                                        </label>
+                                        <mat-slider
+                                          min="100"
+                                          max="255"
+                                          step="1"
+                                          discrete
+                                          [displayWith]="formatLabelWithUnit()"
+                                        >
+                                          <input
+                                            matSliderStartThumb
+                                            formControlName="minHeight"
+                                            numbersOnly
+                                            (input)="
+                                              onMinHeightChange($event.target)
+                                            "
+                                          />
+                                          <input
+                                            matSliderEndThumb
+                                            formControlName="maxHeight"
+                                            numbersOnly
+                                            (input)="
+                                              onMaxHeightChange($event.target)
+                                            "
+                                          />
+                                        </mat-slider>
+                                        <div>
+                                          Min Height: {{ minHeight }} cm
+                                        </div>
+                                        <div>
+                                          Max Height: {{ maxHeight }} cm
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <label class="form-label">
+                                          Min - Max Weight &nbsp;<span
+                                            class="text-muted"
+                                            >( in kg )</span
+                                          >
+                                        </label>
+                                        <br />
+                                        <mat-slider
+                                          min="30"
+                                          max="130"
+                                          step="1"
+                                          discrete
+                                          [displayWith]="formatLabelWithUnit()"
+                                        >
+                                          <input
+                                            matSliderStartThumb
+                                            formControlName="minWeight"
+                                            numbersOnly
+                                            min="30"
+                                            max="130"
+                                            (input)="
+                                              onMinWeightChange($event.target)
+                                            "
+                                          />
+                                          <input
+                                            matSliderEndThumb
+                                            formControlName="maxWeight"
+                                            numbersOnly
+                                            (input)="
+                                              onMaxWeightChange($event.target)
+                                            "
+                                          />
+                                        </mat-slider>
+                                        <div>
+                                          Min Weight: {{ minWeight }} KG
+                                        </div>
+                                        <div>
+                                          Max Weight: {{ maxWeight }} Kg
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <label class="form-label">
+                                          Min - Max Age &nbsp;<span
+                                            class="text-muted"
+                                            >⠀</span
+                                          >
+                                        </label>
+                                        <br />
+                                        <mat-slider
+                                          min="18"
+                                          max="65"
+                                          step="1"
+                                          discrete
+                                          [displayWith]="formatLabelWithUnit()"
+                                        >
+                                          <input
+                                            matSliderStartThumb
+                                            formControlName="minAge"
+                                            numbersOnly
+                                            (input)="
+                                              onMinAgeChange($event.target)
+                                            "
+                                          />
+                                          <input
+                                            matSliderEndThumb
+                                            formControlName="maxAge"
+                                            numbersOnly
+                                            (input)="
+                                              onMaxAgeChange($event.target)
+                                            "
+                                          />
+                                        </mat-slider>
+                                        <div>Min Age: {{ minAge }}</div>
+                                        <div>Max Age: {{ maxAge }}</div>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                          <input
+                                            class="form-control"
+                                            angular-mydatepicker
+                                            placeholder="Job Expiry Date *"
+                                            name="expiryDate"
+                                            appTrim
+                                            formControlName="expiryDate"
+                                            [options]="dateOptions"
+                                            #dp1="angular-mydatepicker"
+                                          />
+                                          <div class="input-group-append">
+                                            <button
+                                              class="btn btn-outline-secondary fe fe-calendar"
+                                              (click)="dp1.toggleCalendar()"
+                                              type="button"
+                                            ></button>
+                                          </div>
+                                        </div>
+                                        <div
+                                          *ngIf="
+                                            jobForm.get('expiryDate')
+                                              ?.invalid && completeFormSubmitted
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <small
+                                            *ngIf="
+                                              jobForm.get('expiryDate')?.errors
+                                                ?.required &&
+                                              completeFormSubmitted
+                                            "
+                                          >
+                                            Expiry Date is required.
+                                          </small>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                          <input
+                                            class="form-control"
+                                            angular-mydatepicker
+                                            name="interviewDate"
+                                            formControlName="interviewDate"
+                                            appTrim
+                                            placeholder="Interview Date"
+                                            [options]="dateOptionsInterview"
+                                            #dp2="angular-mydatepicker"
+                                          />
+                                          <div class="input-group-append">
+                                            <button
+                                              class="btn btn-outline-secondary fe fe-calendar"
+                                              (click)="dp2.toggleCalendar()"
+                                              type="button"
+                                            ></button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-12">
+                                      <div class="form-group">
+                                        <input
+                                          type="number"
+                                          min="0"
+                                          class="form-control"
+                                          appTrim
+                                          pattern="[0-9]*"
+                                          inputmode="numeric"
+                                          onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                          formControlName="requirementCount"
+                                          placeholder="Enter Requirement Of Resumes"
+                                        />
+                                      </div>
+                                    </div>
+                                    <button
+                                      type="submit"
+                                      class="bg-blue-500 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition ease-in-out duration-150 shadow w-full sm:w-auto"
+                                    >
+                                      {{
+                                        isEditing || isEdit
+                                          ? "Save"
+                                          : "Save & Add Job"
+                                      }}
+                                    </button>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="col col-4 p-4"
+                  *ngIf="
+                    (isInitialFormCompleted && !isCompanyFormEdit) || isEdit
+                  "
+                >
+                  <div class="main-content">
+                    <div class="container-fluid">
+                      <div class="row justify-content-center">
+                        <div class="col-12 col-lg-12 col-xl-12">
+                          <div class="card card-body">
+                            <div class="row">
+                              <div class="col-12">
+                                <div>
+                                  <div class="col-12">
+                                    <div class="form-group">
+                                      <div class="ng-autocomplete">
+                                        <mat-form-field
+                                          class="example-chip-list"
+                                        >
+                                          <mat-chip-grid
+                                            #categGrid
+                                            aria-label="category selection"
+                                          >
+                                            <ng-container
+                                              *ngFor="
+                                                let categ of selectedCategories;
+                                                let i = index;
+                                                trackBy: trackByItemId
+                                              "
+                                            >
+                                              <mat-chip-row
+                                                class="bg-white"
+                                                (removed)="
+                                                  removeCategory(categ)
+                                                "
+                                              >
+                                                <span class="truncate">
+                                                  {{
+                                                    categ.name.length > 30
+                                                      ? categ.name.slice(
+                                                          0,
+                                                          30
+                                                        ) + "..."
+                                                      : categ.name
+                                                  }}
+                                                </span>
+                                                <button
+                                                  matChipRemove
+                                                  [attr.aria-label]="
+                                                    'remove ' + categ.name
+                                                  "
+                                                >
+                                                  <mat-icon>cancel</mat-icon>
+                                                </button>
+                                              </mat-chip-row>
+                                            </ng-container>
+                                          </mat-chip-grid>
+                                          <input
+                                            name="currentCategory"
+                                            placeholder="{{
+                                              selectedCategories.size >= 5
+                                                ? ''
+                                                : 'Job Roles *'
+                                            }}"
+                                            #categInput
+                                            [matChipInputFor]="categGrid"
+                                            [matAutocomplete]="autoCateg"
+                                            (input)="onSearchChange($event)"
+                                            [disabled]="
+                                              selectedCategories.size >= 5
+                                            "
+                                          />
+
+                                          <mat-autocomplete
+                                            #autoCateg="matAutocomplete"
+                                            (optionSelected)="selected($event)"
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let categ of categories;
+                                                trackBy: trackByItemId
+                                              "
+                                              [value]="categ"
+                                            >
+                                              {{ categ.name }}
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                        <div
+                                          *ngIf="
+                                            selectedCategories.size < 1 &&
+                                            completeFormSubmitted
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <small
+                                            *ngIf="
+                                              selectedCategories.size < 1 &&
+                                              completeFormSubmitted
+                                            "
+                                          >
+                                            Select atleast one job role.
+                                          </small>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-12">
+                                    <div class="form-group">
+                                      <mat-form-field class="example-chip-list">
+                                        <mat-chip-grid
+                                          #chipGrid
+                                          aria-label="Job Tags"
+                                        >
+                                          @for (tag of highlightTags; track tag)
+                                          {
+                                          <mat-chip-row
+                                            class="bg-white truncate"
+                                            (removed)="remove(tag, 'job')"
+                                            [editable]="true"
+                                            (edited)="edits(tag, $event, 'job')"
+                                            [aria-description]="
+                                              'press enter to edit ' + tag.name
+                                            "
+                                          >
+                                            <span class="truncate">
+                                              {{
+                                                tag.name.length > 35
+                                                  ? tag.name.slice(0, 35) +
+                                                    "..."
+                                                  : tag.name
+                                              }}
+                                            </span>
+                                            <button
+                                              matChipRemove
+                                              [attr.aria-label]="
+                                                'remove ' + tag.name
+                                              "
+                                            >
+                                              <mat-icon>cancel</mat-icon>
+                                            </button>
+                                          </mat-chip-row>
+                                          }
+                                          <input
+                                            placeholder="{{
+                                              highlightTags.length >= 5
+                                                ? ''
+                                                : 'Job Tags..'
+                                            }}"
+                                            [matChipInputFor]="chipGrid"
+                                            [matChipInputAddOnBlur]="addOnBlur"
+                                            (matChipInputTokenEnd)="
+                                              add($event, 'job')
+                                            "
+                                            [disabled]="
+                                              highlightTags.length >= 5
+                                            "
+                                            appTrim
+                                          />
+                                          <button
+                                            mat-icon-button
+                                            matTooltip="Add tags to highlight important job details"
+                                          >
+                                            <mat-icon>info</mat-icon>
+                                          </button>
+                                        </mat-chip-grid>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+
+                                  <div class="col-12">
+                                    <div class="form-group">
+                                      <div class="ng-autocomplete">
+                                        <mat-form-field
+                                          class="example-chip-list"
+                                        >
+                                          <mat-chip-grid
+                                            #langReadWriteGrid
+                                            aria-label="languages read and write selection"
+                                          >
+                                            <ng-container
+                                              *ngFor="
+                                                let readWrite of selectedLanguagesReadWrite;
+                                                let i = index;
+                                                trackBy: trackByItemId
+                                              "
+                                            >
+                                              <mat-chip-row
+                                                class="bg-white"
+                                                (removed)="
+                                                  removeLanguagesRw(readWrite)
+                                                "
+                                              >
+                                                <span class="truncate">
+                                                  {{
+                                                    readWrite.name.length > 35
+                                                      ? readWrite.name.slice(
+                                                          0,
+                                                          35
+                                                        ) + "..."
+                                                      : readWrite.name
+                                                  }}
+                                                </span>
+                                                <button
+                                                  matChipRemove
+                                                  [attr.aria-label]="
+                                                    'remove ' + readWrite.name
+                                                  "
+                                                >
+                                                  <mat-icon>cancel</mat-icon>
+                                                </button>
+                                              </mat-chip-row>
+                                            </ng-container>
+                                          </mat-chip-grid>
+                                          <input
+                                            name="currentLanguagesReadWrite"
+                                            placeholder="{{
+                                              selectedLanguagesReadWrite.size >=
+                                              5
+                                                ? ''
+                                                : 'Languages Read & Write...'
+                                            }}"
+                                            #readWriteInput
+                                            [matChipInputFor]="
+                                              langReadWriteGrid
+                                            "
+                                            [matAutocomplete]="auto"
+                                            (input)="
+                                              onSearchLanguagesReadWriteChange(
+                                                $event
+                                              )
+                                            "
+                                            [disabled]="
+                                              selectedLanguagesReadWrite.size >=
+                                              5
+                                            "
+                                          />
+                                          <mat-autocomplete
+                                            #auto="matAutocomplete"
+                                            (optionSelected)="
+                                              selectedLangugagesRw($event)
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let readWrite of languagesReadWrite;
+                                                trackBy: trackByItemId
+                                              "
+                                              [value]="readWrite"
+                                            >
+                                              {{ readWrite.name }}
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-12">
+                                    <div class="form-group">
+                                      <div class="ng-autocomplete">
+                                        <mat-form-field
+                                          class="example-chip-list"
+                                        >
+                                          <mat-chip-grid
+                                            #langSpeakGrid
+                                            aria-label="languages speak selection"
+                                          >
+                                            <ng-container
+                                              *ngFor="
+                                                let speak of selectedLanguagesSpeak;
+                                                let i = index;
+                                                trackBy: trackByItemId
+                                              "
+                                            >
+                                              <mat-chip-row
+                                                class="bg-white"
+                                                (removed)="
+                                                  removeLanguagesSpeak(speak)
+                                                "
+                                              >
+                                                <span class="truncate">
+                                                  {{
+                                                    speak.name.length > 35
+                                                      ? speak.name.slice(
+                                                          0,
+                                                          35
+                                                        ) + "..."
+                                                      : speak.name
+                                                  }}
+                                                </span>
+                                                <button
+                                                  matChipRemove
+                                                  [attr.aria-label]="
+                                                    'remove ' + speak.name
+                                                  "
+                                                >
+                                                  <mat-icon>cancel</mat-icon>
+                                                </button>
+                                              </mat-chip-row>
+                                            </ng-container>
+                                          </mat-chip-grid>
+                                          <input
+                                            name="currentLanguagesSpeak"
+                                            placeholder="{{
+                                              selectedLanguagesSpeak.size >= 5
+                                                ? ''
+                                                : 'Languages Speak...'
+                                            }}"
+                                            #speakInput
+                                            [matChipInputFor]="langSpeakGrid"
+                                            [matAutocomplete]="autoSpeak"
+                                            (input)="
+                                              onSearchLanguagesSpeak($event)
+                                            "
+                                            [disabled]="
+                                              selectedLanguagesSpeak.size >= 5
+                                            "
+                                          />
+                                          <mat-autocomplete
+                                            #autoSpeak="matAutocomplete"
+                                            (optionSelected)="
+                                              selectedLangugagesSpeak($event)
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let speak of languagesSpeak;
+                                                trackBy: trackByItemId
+                                              "
+                                              [value]="speak"
+                                            >
+                                              {{ speak.name }}
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-12">
+                                    <div class="form-group">
+                                      <div class="ng-autocomplete">
+                                        <mat-form-field
+                                          class="example-chip-list"
+                                        >
+                                          <mat-chip-grid
+                                            #skillsGrid
+                                            aria-label="skill selection"
+                                          >
+                                            <ng-container
+                                              *ngFor="
+                                                let skill of selectedSkills;
+                                                let i = index;
+                                                trackBy: trackByItemId
+                                              "
+                                            >
+                                              <mat-chip-row
+                                                class="bg-white"
+                                                (removed)="removeSkill(skill)"
+                                              >
+                                                <span class="truncate">
+                                                  {{
+                                                    skill.name.length > 35
+                                                      ? skill.name.slice(
+                                                          0,
+                                                          35
+                                                        ) + "..."
+                                                      : skill.name
+                                                  }}
+                                                </span>
+                                                <button
+                                                  matChipRemove
+                                                  [attr.aria-label]="
+                                                    'remove ' + skill.name
+                                                  "
+                                                >
+                                                  <mat-icon>cancel</mat-icon>
+                                                </button>
+                                              </mat-chip-row>
+                                            </ng-container>
+                                          </mat-chip-grid>
+                                          <input
+                                            name="currentSkill"
+                                            placeholder="{{
+                                              selectedSkills.size >= 5
+                                                ? ''
+                                                : 'Skills ...'
+                                            }}"
+                                            #skillsInput
+                                            [matChipInputFor]="skillsGrid"
+                                            [matAutocomplete]="autoSkills"
+                                            (input)="
+                                              onSearchSkillsChange($event)
+                                            "
+                                            [disabled]="
+                                              selectedSkills.size >= 5
+                                            "
+                                          />
+
+                                          <mat-autocomplete
+                                            #autoSkills="matAutocomplete"
+                                            (optionSelected)="
+                                              selectedSkill($event)
+                                            "
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let skill of skills;
+                                                trackBy: trackByItemId
+                                              "
+                                              [value]="skill"
+                                            >
+                                              {{ skill.name }}
+                                            </mat-option>
+                                          </mat-autocomplete>
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    class="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[400px] w-[200px]"
+                                  >
+                                    <div
+                                      class="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -start-[17px] top-[72px] rounded-s-lg"
+                                    ></div>
+                                    <div
+                                      class="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -start-[17px] top-[124px] rounded-s-lg"
+                                    ></div>
+                                    <div
+                                      class="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -start-[17px] top-[178px] rounded-s-lg"
+                                    ></div>
+                                    <div
+                                      class="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -end-[17px] top-[142px] rounded-e-lg"
+                                    ></div>
+                                    <div
+                                      class="relative rounded-[2rem] overflow-hidden w-[172px] h-[371px] bg-white dark:bg-gray-800"
+                                    >
+                                      <h3
+                                        class="absolute top-36 left-4 text-black text-lg font-semibold overflow-hidden text-ellipsis whitespace-nowrap max-w-[120px]"
+                                      >
+                                        {{ jobForm.get("title")?.value }}
+                                      </h3>
+
+                                      <h6
+                                        class="absolute top-73 left-22 text-gray-500 text-xxs font-sans overflow-hidden text-ellipsis whitespace-nowrap max-w-[76px]"
+                                      >
+                                        {{
+                                          jobForm.get("salary")?.value ===
+                                          "Salary Based On Experience"
+                                            ? "Based On Experience"
+                                            : jobForm.get("salary")?.value ===
+                                              "Salary Negotiable"
+                                            ? "Salary Negotiable"
+                                            : jobForm.get("salary")?.value ??
+                                              "Not Selected"
+                                        }}
+
+                                        {{
+                                          jobForm.get("salary")?.value !==
+                                            "Salary Based On Experience" &&
+                                          jobForm.get("salary")?.value !==
+                                            "Salary Negotiable"
+                                            ? jobForm.get("currency")?.value ===
+                                              "Select Currency"
+                                              ? ""
+                                              : jobForm.get("currency")?.value
+                                            : ""
+                                        }}
+                                      </h6>
+                                      <h6
+                                        class="absolute top-74 left-22 text-gray-500 text-xxs font-sans"
+                                      >
+                                        {{ companyForm.get("location")?.value }}
+                                      </h6>
+                                      <img
+                                        src="assets/img/home.png"
+                                        class="w-full h-full object-cover"
+                                        alt=""
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div
+                                *ngIf="jobs.length > 0 && !isEdit"
+                                id="marketing-banner"
+                                tabindex="-1"
+                                class="fixed z-50 flex flex-col justify-center items-center 0-2 -translate-x-1/2 bg-gray-50 border border-gray-100 rounded-lg shadow-sm lg:max-w-7xl left-1/2 bottom-2 dark:bg-gray-700 dark:border-gray-600"
+                              >
+                             
+
+                                <div class="flex items-center flex-shrink-0">
+                                  <button
+                                    type="submit"
+                                    (click)="submitJobs()"
+                                    [disabled]="submitting"
+                                    class="bg-green-500 hover:bg-green-400 text-white py-2 px-4 rounded-full transition duration-300 ease-in-out focus:outline-none items-center mt-3 mb-3"
+                                  >
+                                    {{
+                                      submitting ? "Publishing..." : "Publish"
+                                    }}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

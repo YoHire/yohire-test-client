@@ -1,0 +1,198 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="header">
+          <div class="header-body">
+            <div class="row align-items-center">
+              <div class="col">
+                <h6 class="header-pretitle">Overview</h6>
+                <h1 class="header-title text-truncate">Transaction Details</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            role="tabpanel"
+            aria-labelledby="contactsListTab"
+          >
+            <div class="card" id="contactsList">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <form>
+                      <div
+                        class="input-group input-group-flush input-group-merge input-group-reverse"
+                      >
+                        <input
+                          class="form-control list-search"
+                          type="search"
+                          placeholder="Search"
+                        />
+                        <span class="input-group-text">
+                          <i class="fe fe-search"></i>
+                        </span>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- <div class="col-auto me-n3">
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 100px"
+                    >
+                      <option [value]="10">Status</option>
+                      <option [value]="5">Lorem ipsum</option>
+                      <option [value]="0">Lorem ipsum</option>
+                    </select>
+                  </div> -->
+                  <div class="col-auto me-n3">
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      [(ngModel)]="size"
+                      (change)="paginateItems()"
+                      style="width: 120px"
+                    >
+                      <option [value]="10">10 per page</option>
+                      <option [value]="20">20 per page</option>
+                      <option [value]="0">All</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive tab-pane fade show active" id="home">
+                <table
+                  class="table table-sm table-hover table-nowrap card-table"
+                >
+                  <thead>
+                    <tr>
+                      <th>Sl No.</th>
+
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          href="#"
+                          >Transaction No.</a
+                        >
+                      </th>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          href="#"
+                        >
+                          Transaction Type</a
+                        >
+                      </th>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          href="#"
+                        >
+                          GST</a
+                        >
+                      </th>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          href="#"
+                        >
+                          Amount</a
+                        >
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="list fs-base">
+                    <tr
+                      *ngFor="
+                        let item of itemsFiltered
+                          | sort : sortedColumn : sortedDirection
+                          | slice : pageStartIndex : pageEndIndex;
+                        let i = index;
+                        trackBy: trackByItemId
+                      "
+                    >
+                      <td>{{ page * size + (i + 1) }}</td>
+                      <td routerLink="/jobs/recruiter-detailed">
+                        <span class="item-title">{{ item.transactionNo }}</span>
+                      </td>
+                      <td routerLink="/jobs/recruiter-detailed">
+                        <span class="item-name text-reset">{{
+                          item.type
+                        }}</span>
+                      </td>
+                      <td routerLink="/jobs/recruiter-detailed">
+                        <span class="item-name text-reset">{{ item.gst }}</span>
+                      </td>
+                      <td routerLink="/jobs/recruiter-detailed">
+                        <span class="item-title">{{ item.amount }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div
+                class="card-footer flex justify-between"
+                *ngIf="pageCount > 0"
+              >
+                <ul class="pagination-prev flex" *ngIf="pageCount > 0">
+                  <li class="page-item" [ngClass]="{ disabled: page < 1 }">
+                    <button
+                      class="page-link p-2 border-r border-gray-300"
+                      (click)="page = page - 1; paginateItems()"
+                      [disabled]="page < 1"
+                    >
+                      <i class="fe fe-arrow-left mr-1"></i> Prev
+                    </button>
+                  </li>
+                </ul>
+
+                <div
+                  class="pagination-wrapper flex overflow-x-auto space-x-2 mx-4"
+                >
+                  <ul class="pagination flex">
+                    <li
+                      *ngFor="
+                        let item of [].constructor(pageCount);
+                        let i = index
+                      "
+                      [ngClass]="{ active: page == i }"
+                    >
+                      <button
+                        class="page p-2 border border-gray-300"
+                        [class.bg-blue-500]="page == i"
+                        [class.text-white]="page == i"
+                        (click)="page = i; paginateItems()"
+                      >
+                        {{ i + 1 }}
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+
+                <ul class="pagination-next flex">
+                  <li
+                    class="page-item"
+                    [ngClass]="{ disabled: page >= pageCount - 1 }"
+                  >
+                    <button
+                      class="page-link p-2 border-l border-gray-300"
+                      (click)="page = page + 1; paginateItems()"
+                      [disabled]="page >= pageCount - 1"
+                    >
+                      Next <i class="fe fe-arrow-right ml-1"></i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

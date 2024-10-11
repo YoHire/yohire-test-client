@@ -1,0 +1,239 @@
+<nav
+  class="navbar navbar-vertical fixed-start navbar-expand-md navbar-light"
+  style="background-color: #f9fbfd"
+>
+  <div class="container-fluid">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#sidebarCollapse"
+      aria-controls="sidebarCollapse"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="row align-items-center mt-4 mb-4">
+      <div class="col-auto mb-5">
+        <a class="avatar avatar-md">
+          <img
+            src="assets/img/yohire_full.png"
+            class="hidden-sm"
+            style="height: 100px !important"
+          />
+        </a>
+      </div>
+    </div>
+
+    <div class="collapse navbar-collapse" id="sidebarCollapse">
+      <ul class="navbar-nav">
+        <li class="nav-item mt-2">
+          <b
+            class="nav-link nav-link-head"
+            href="#sidebarGeneral"
+            data-bs-toggle="collapse"
+            role="button"
+            aria-expanded="true"
+            aria-controls="sidebarGeneral"
+          >
+            GENERAL
+          </b>
+          <div class="collapse show" id="sidebarGeneral">
+            <ul class="nav nav-sm flex-column">
+              <li class="nav-item mt-2">
+                <a class="nav-link px-4" routerLink="/jobs/admin/list">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="css-i6dzq1"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path
+                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                    ></path>
+                  </svg>
+                  &nbsp;&nbsp; Jobs
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              stroke="currentColor"
+              stroke-width="2.5"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="css-i6dzq1"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            &nbsp;&nbsp; Logout
+          </a>
+        </li>
+
+        <hr class="navbar-divider my-3" />
+      </ul>
+
+      <div class="mt-auto">
+        <div class="row align-items-center mb-1">
+          <div class="col-auto">
+            <a class="avatar avatar-md">
+              <img
+                src="assets/img/playstore-icon.png"
+                class="avatar-img rounded-circle"
+              />
+            </a>
+          </div>
+          <div class="col ms-n2">
+            <!-- <span style="font-weight: 500;font-size:15px;text-transform: capitalize;">{{userData.name}}</span><br /> -->
+            <span
+              style="
+                font-weight: 500;
+                font-size: 15px;
+                text-transform: capitalize;
+              "
+              >{{ userData.name }}</span
+            ><br />
+            <span
+              class="small text-muted mb-1"
+              style="
+                color: #6b778c !important;
+                font-size: 13px;
+                text-transform: capitalize;
+              "
+            >
+              Support Officer
+            </span>
+          </div>
+        </div>
+        <!-- <a style="color: #42526e;font-size:13px;">
+          © Yohire 2022-2023</a> -->
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Old Design Starts -->
+<nav
+  class="navbar navbar-vertical fixed-start navbar-expand-md navbar-light"
+  style="display: none"
+>
+  <div class="container-fluid">
+    <!-- Toggler -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#sidebarCollapse"
+      aria-controls="sidebarCollapse"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Brand -->
+    <div class="text-center mb-3">
+      <img
+        src="assets/img/yohire.png"
+        class="navbar-brand-imgs mx-auto"
+        alt="..."
+        style="width: 75%"
+      />
+    </div>
+
+    <!-- Collapse -->
+    <div class="collapse navbar-collapse" id="sidebarCollapse">
+      <!-- Form -->
+      <form class="mt-4 mb-3 d-md-none">
+        <div
+          class="input-group input-group-rounded input-group-merge input-group-reverse"
+        >
+          <input
+            class="form-control"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <div class="input-group-text">
+            <span class="fe fe-search"></span>
+          </div>
+        </div>
+      </form>
+      <!-- Navigation -->
+      <ul class="navbar-nav">
+        <hr class="navbar-divider my-3" />
+
+        <!-- <li class="nav-item">
+            <a class="nav-link" routerLink="/">
+              <i class="fe fe-home"></i> Dashboard
+            </a>
+          </li> -->
+        <li class="nav-item" routerLinkActive>
+          <a class="nav-link" routerLink="/jobs/admin/list" routerLinkActive>
+            <i class="fe fe-grid"></i> Jobs
+          </a>
+        </li>
+
+        <!-- <li class="nav-item">
+            <a class="nav-link" routerLink="/candidates/manage">
+              <i class="fe fe-file-text"></i> Candidates
+            </a>
+          </li> -->
+
+        <hr class="navbar-divider my-3" />
+
+        <!-- <li class="nav-item">
+            <a class="nav-link" routerLink="/jobs/requests/list" routerLinkActive>
+              <i class="fe fe-credit-card"></i> Candidate Job Requests
+            </a>
+          </li> -->
+        <!-- <li class="nav-item">
+            <a class="nav-link" routerLink="/reviews/list">
+              <i class="fe fe-file-text"></i> Reviews
+            </a>
+          </li>
+          <hr class="navbar-divider my-3">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/settings/manage">
+              <i class="fe fe-layout"></i> Settings
+            </a>
+          </li> -->
+
+        <!-- <li class="nav-item">
+            <a class="nav-link">
+              <i class="fe fe-git-branch"></i> Version <span class="badge bg-primary ms-auto">v 0.2.1</span>
+            </a>
+          </li> -->
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">
+            <i class="fe fe-log-out"></i> Logout
+          </a>
+        </li>
+        <hr class="navbar-divider my-3" />
+      </ul>
+
+      <div class="mt-auto text-center">
+        <a class="text-muted"> Powered By Yohire </a>
+      </div>
+    </div>
+  </div>
+</nav>

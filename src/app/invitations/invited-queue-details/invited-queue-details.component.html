@@ -1,0 +1,204 @@
+<div class="col-12">
+  <div class="header sticky top-0 px-4">
+    <div class="header-body border-0 shadow-xl rounded-full my-3">
+      <div class="row align-items-center">
+        <div class="col col-md-2 col-lg-1 ml-5">
+          <div class="btn-group" role="group" aria-label="...">
+            <button
+              type="button"
+              class="btn btn-white btn-sm pb-1"
+              (click)="pageLocation.back()"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2.5"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="css-i6dzq1"
+              >
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="btn btn-white btn-sm pb-1"
+              (click)="pageLocation.forward()"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2.5"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="css-i6dzq1"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="col px-5">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+              </li>
+              <li class="breadcrumb-item active">Invited Users</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex flex-col min-h-screen bg-white p-3">
+  <div class="container mx-auto bg-white p-12 rounded-xl shadow-lg">
+    <div class="flex flex-col items-center w-full">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-2">Invited Users</h2>
+      <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <ng-container
+            *ngIf="
+              !invitedQueues || invitedQueues.length === 0;
+              else dataLoaded
+            "
+          >
+            <div
+              *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+              class="bg-white font-semibold text-center rounded-3xl border shadow-lg p-6 sm:p-8 lg:p-10 max-w-xs mx-auto"
+            >
+              <p-skeleton
+                shape="circle"
+                size="8rem"
+                styleClass="mb-3 w-32 h-32 object-cover rounded-full shadow-lg mx-auto"
+              ></p-skeleton>
+              <p-skeleton
+                width="8rem"
+                height="1rem"
+                styleClass="mb-2 rounded block mx-auto"
+              ></p-skeleton>
+              <p-skeleton
+                width="10rem"
+                height="1.25rem"
+                styleClass="rounded block mx-auto"
+              ></p-skeleton>
+              <p-skeleton
+                width="14rem"
+                height="2.5rem"
+                styleClass="rounded-3xl mt-4 block mx-auto"
+              ></p-skeleton>
+            </div>
+          </ng-container>
+          <ng-template #dataLoaded>
+            <div
+            *ngFor="let invitation of invitedQueues"
+            class="relative font-semibold text-center bg-gray-900 rounded-3xl border shadow-lg p-6 sm:p-8 lg:p-10 max-w-xs mx-auto"
+            [ngClass]="{
+              'bg-white border-gray-300': invitation.status === 'PENDING'
+            }"
+          >
+            <div [ngClass]="{'opacity-50': invitation.status === 'PENDING'}">
+              <img
+                class="mb-3 w-32 h-32 object-cover rounded-full shadow-lg mx-auto"
+                [src]="
+                  invitation.queue.Users.profileImage
+                    ? invitation.queue.Users.profileImage
+                    : '/assets/img/blank-profile.webp'
+                "
+                alt="Profile Image"
+              />
+              <h1 class="text-lg text-gray-600">
+                {{ invitation.queue.Users.username }}
+              </h1>
+              <h3 class="text-sm text-gray-600">
+                {{ invitation.queue.Users.email }}
+              </h3>
+              <h3
+                *ngIf="invitation.status !== 'PENDING'"
+                class="text-sm"
+                [ngClass]="{
+                  'text-green-500': invitation.status === 'ACCEPTED',
+                  'text-red-500 border-red-500': invitation.status === 'DECLINED',
+                  'text-gray-600': invitation.status === 'PENDING'
+                }"
+              >
+                {{ invitation.status }}
+              </h3>
+            </div>
+            <button
+              (click)="downloadPdf(invitation?.queue); $event.stopPropagation()"
+              class="px-4 bg-blue-900 py-2 mt-4 rounded-3xl text-white font-semibold tracking-wide"
+            >
+              Re-Download
+            </button>
+          </div>
+          </ng-template>
+        </div>
+      </section>
+    </div>
+  </div>
+  <div
+    class="flex items-center justify-center mt-6"
+    *ngIf="invitedQueues && invitedQueues.length > 0"
+  >
+    <nav aria-label="Pagination">
+      <ul class="inline-flex space-x-2">
+        <li>
+          <button
+            (click)="onPageChange(currentPage - 1)"
+            [disabled]="currentPage === 1"
+            class="flex items-center justify-center w-10 h-10 text-blue-900 transition-colors duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-900 hover:bg-indigo-100"
+            aria-label="Previous"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+              <path
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        </li>
+
+        <li *ngFor="let page of [].constructor(totalPages); let i = index">
+          <button
+            (click)="onPageChange(i + 1)"
+            [ngClass]="{
+              'bg-blue-900 text-white': currentPage === i + 1,
+              'text-blue-900': currentPage !== i + 1
+            }"
+            class="w-10 h-10 transition-colors duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-900 hover:bg-indigo-100"
+          >
+            {{ i + 1 }}
+          </button>
+        </li>
+
+        <li>
+          <button
+            (click)="onPageChange(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+            class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-900 hover:bg-indigo-100"
+            aria-label="Next"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+              <path
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

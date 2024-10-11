@@ -1,0 +1,36 @@
+body {
+  border: 2px linen;
+  color: #1a1a1a;
+  font-family: "Open Sans", Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.6em;
+  text-align: center;
+  background: #2c3e50;
+  background: -webkit-linear-gradient(to right, #3e4242, #2c3e50);
+  background: linear-gradient(to right, #4ca1af, #2c3e50);
+}
+.hover-switch > img {
+  position: absolute;
+}
+.hover-switch > img:last-of-type {
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -webkit-transition: opacity 0.4s ease-in-out;
+}
+
+.hover-switch:hover > div :last-of-type {
+  opacity: 0.75;
+  background-color: #6c7171;
+  height: 100%;
+  color: white;
+  text-align: center;
+}
+.hover-switch > div :last-of-type {
+  height: 100%;
+  color: white;
+  text-align: center;
+}
+.change :hover {
+  height: 100px;
+}

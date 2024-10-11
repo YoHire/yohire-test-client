@@ -1,0 +1,286 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="header my-3 xsticky-top" style="background-color: white">
+          <div class="header-body border-0">
+            <div class="row align-items-center">
+              <div class="col col-md-2 col-lg-1">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.back()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-white btn-sm pb-1"
+                    (click)="pageLocation.forward()"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="css-i6dzq1"
+                    >
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="col px-5">
+                <nav aria-label="breadcrumb" class="">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                      <a> Manage Recruiters</a>
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- new header ends -->
+        <!-- Header -->
+
+        <!-- <div class="right-tabs">
+          <ul class="nav nav-tabs justify-content-end" id="myTab" role="tablist" stysle="border: 1px solid red;">
+            <li class="nav-item" role="presentation" >
+              <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">New (<span style="color: blue;">3</span>)</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Verified</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Rejected</button>
+            </li>
+          </ul>
+        </div> -->
+        <!--  <div class="tab-content" id="myTabContent"> -->
+        <!-- <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div> -->
+        <!-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div> -->
+        <!-- <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> -->
+        <!-- </div>  -->
+
+        <!-- Tab content -->
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            role="tabpanel"
+            aria-labelledby="contactsListTab"
+          >
+            <!-- Card -->
+            <div class="card" id="contactsList">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <form>
+                      <div
+                        class="input-group input-group-flush input-group-merge input-group-reverse"
+                      >
+                        <input
+                          class="form-control list-search"
+                          type="search"
+                          placeholder="Search"
+                          (keyup)="customFilter($event)"
+                        />
+                        <span class="input-group-text">
+                          <i class="fe fe-search"></i>
+                        </span>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- <div class="col-auto me-n3">
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 100px"
+                      [(ngModel)]="status"
+                      (change)="list()"
+                    >
+                      <option [value]="2">All</option>
+                      <option [value]="1">Enabled</option>
+                      <option [value]="0">Disabled</option>
+                    </select>
+                  </div> -->
+
+                  <!-- <div class="col-auto me-n3">
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 100px"
+                      [(ngModel)]="verified"
+                      (change)="list()"
+                    >
+                      <option value="0">New</option>
+                      <option value="1">Verified</option>
+                    </select>
+                  </div> -->
+                  <div class="col-auto me-n3">
+                    <!-- Select -->
+                    <select
+                      class="form-select form-select-sm form-control-flush"
+                      style="width: 120px"
+                      [(ngModel)]="size"
+                      (change)="paginateItems()"
+                    >
+                      <option [value]="20">20 per page</option>
+                      <option [value]="10">10 per page</option>
+                      <option [value]="0">All</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- / .row -->
+              </div>
+
+              <div class="table-responsive tab-pane fade show active" id="home">
+                <table
+                  class="table table-sm table-hover table-nowrap card-table"
+                >
+                  <thead>
+                    <tr>
+                      <th>Sl No.</th>
+
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          (click)="sortByField('ra')"
+                          >Name</a
+                        >
+                      </th>
+
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          (click)="sortByField('email')"
+                          >Email ID</a
+                        >
+                      </th>
+                      <th>
+                        <a
+                          class="list-sort text-muted"
+                          data-sort="item-name"
+                          (click)="sortByField('mobile')"
+                          >Mobile Number</a
+                        >
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="list fs-base">
+                    <tr
+                      class="cursor"
+                      *ngFor="
+                        let item of itemsFiltered
+                          | sort : sortedColumn : sortedDirection
+                          | slice : pageStartIndex : pageEndIndex;
+                        let i = index;
+                        trackBy: trackByItemId
+                      "
+                    >
+                      <td>{{ page * size + (i + 1) }}</td>
+                      <td routerLink="/recruiters/detailed/{{ item.id }}">
+                        <!-- Text -->
+                        <span class="item-title"> {{ item.ra }}</span>
+                      </td>
+                      <td routerLink="/recruiters/detailed/{{ item.id }}">
+                        <span class="item-name text-reset">{{
+                          item.email
+                        }}</span>
+                      </td>
+                      <td routerLink="/recruiters/detailed/{{ item.id }}">
+                        <span class="item-name text-reset">{{
+                          item.mobile
+                        }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div
+                class="card-footer d-flex justify-content-between"
+                *ngIf="pageCount > 0"
+              >
+                <!-- Pagination (prev) -->
+                <ul
+                  class="list-pagination-prev pagination pagination-tabs card-pagination"
+                  *ngIf="pageCount > 0"
+                >
+                  <li class="page-item" [ngClass]="{ disabled: page < 1 }">
+                    <button
+                      class="page-link ps-0 pe-4 border-end"
+                      (click)="page = page - 1; paginateItems()"
+                      [disabled]="page < 1"
+                    >
+                      <i class="fe fe-arrow-left me-1"></i> Prev
+                    </button>
+                  </li>
+                </ul>
+
+                <!-- Pagination -->
+                <ul
+                  class="list-pagination pagination pagination-tabs card-pagination"
+                >
+                  <li
+                    *ngFor="
+                      let item of [].constructor(pageCount);
+                      let i = index
+                    "
+                    [ngClass]="{ active: page == i }"
+                  >
+                    <button class="page" (click)="page = i; paginateItems()">
+                      {{ i + 1 }}
+                    </button>
+                  </li>
+                </ul>
+
+                <!-- Pagination (next) -->
+                <ul
+                  class="list-pagination-next pagination pagination-tabs card-pagination"
+                >
+                  <li
+                    class="page-item"
+                    [ngClass]="{ disabled: page >= pageCount - 1 }"
+                  >
+                    <button
+                      class="page-link ps-4 pe-0 border-start"
+                      (click)="page = page + 1; paginateItems()"
+                      [disabled]="page >= pageCount - 1"
+                    >
+                      Next <i class="fe fe-arrow-right ms-1"></i>
+                    </button>
+                  </li>
+                </ul>
+
+                <!-- Alert -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / .row -->
+  </div>
+</div>
+<!-- / .main-content -->

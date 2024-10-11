@@ -1,0 +1,188 @@
+<div class="col-12">
+  <div class="header sticky top-0 px-4">
+    <div class="header-body border-0 shadow-xl rounded-full my-3">
+      <div class="row align-items-center">
+        <div class="col col-md-2 col-lg-1 ml-5">
+          <div class="btn-group" role="group" aria-label="...">
+            <button
+              type="button"
+              class="btn btn-white btn-sm pb-1"
+              (click)="pageLocation.back()"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2.5"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="css-i6dzq1"
+              >
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="btn btn-white btn-sm pb-1"
+              (click)="pageLocation.forward()"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2.5"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="css-i6dzq1"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="col px-5">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+              </li>
+              <li class="breadcrumb-item active">Invitations</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flex flex-col min-h-screen bg-white p-6">
+  <div class="container mx-auto bg-white p-12 rounded-xl shadow-lg w-full">
+    <div class="flex flex-col items-center w-full">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="text-blue-900 h-20 w-20 mb-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+        />
+      </svg>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-5">Invitations</h2>
+      <div
+        *ngIf="invitedJobs && invitedJobs.length === 0"
+        class="flex flex-col items-center justify-center w-full h-64 text-gray-600 p-6 rounded-lg"
+      >
+        <p class="text-lg font-semibold bg-transparent">
+          You haven't done any invitations.
+        </p>
+        <p class="text-sm mt-2 bg-transparent">
+          Get your first invitation by searching profiles.
+        </p>
+        <a
+          routerLink="/circle"
+          class="mt-4 bg-circleYellow text-white px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out hover:bg-blue-900"
+        >
+          Search Profiles
+        </a>
+      </div>
+      <div
+        *ngIf="invitedJobs && invitedJobs.length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full"
+      >
+        <div
+          *ngFor="let invitedJob of invitedJobs"
+          (click)="onInvitedJobClick(invitedJob.id)"
+          class="bg-blue-900 text-white p-5 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg cursor-pointer"
+        >
+          <div class="flex items-center">
+            <div class="bg-blue-900 p-3 rounded-full">
+              <svg
+                fill="currentColor"
+                class="w-8 h-8"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M0 4c0-1.1.9-2 2-2h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4z"
+                ></path>
+              </svg>
+            </div>
+            <div class="ml-4 flex-1">
+              <h4 class="font-bold text-lg">{{ invitedJob.jobTitle }}</h4>
+              <p class="text-sm bg-transparent">
+                {{ invitedJob.jobDescription }}
+              </p>
+              <p class="font-light text-sm bg-transparent">
+                {{ invitedJob.createdAt | date : "dd-MM-yyyy" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="flex items-center justify-center mt-6"
+    *ngIf="invitedJobs && invitedJobs.length > 0"
+  >
+    <nav aria-label="Pagination">
+      <ul class="inline-flex space-x-2">
+        <li>
+          <button
+            (click)="onPageChange(currentPage - 1)"
+            [disabled]="currentPage === 1"
+            class="flex items-center justify-center w-10 h-10 text-blue-900 transition-colors duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-900 hover:bg-indigo-100"
+            aria-label="Previous"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+              <path
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        </li>
+
+        <li *ngFor="let page of [].constructor(totalPages); let i = index">
+          <button
+            (click)="onPageChange(i + 1)"
+            [ngClass]="{
+              'bg-blue-900 text-white': currentPage === i + 1,
+              'text-blue-900': currentPage !== i + 1
+            }"
+            class="w-10 h-10 transition-colors duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-900 hover:bg-indigo-100"
+          >
+            {{ i + 1 }}
+          </button>
+        </li>
+
+        <li>
+          <button
+            (click)="onPageChange(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+            class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-900 hover:bg-indigo-100"
+            aria-label="Next"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+              <path
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

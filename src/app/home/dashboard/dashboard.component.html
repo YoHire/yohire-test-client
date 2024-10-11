@@ -1,0 +1,482 @@
+<div class="header">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-end">
+        <div class="col">
+          <h6 class="header-pretitle">Overview</h6>
+          <h1 class="header-title text-dark fw-light-bold">Dashboard</h1>
+        </div>
+        <div class="col-auto flex gap-3">
+          <button
+            routerLink="/jobs/add"
+            class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded-lg shadow-md transition transform hover:-translate-y-1 hover:scale-105"
+          >
+            <svg
+              viewBox="0 0 24 28"
+              width="20"
+              height="20"
+              stroke="currentColor"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="css-i6dzq1"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Post a Job
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row"></div>
+  <div class="row align-items-center mb-6">
+    <div class="col-auto">
+      <div
+        class="h-[90px] shadow-md w-[90px] rounded-full border-4 overflow-hidden border-white"
+      >
+        <img
+          [src]="data?.image ? data?.image : '/assets/img/blank-profile.webp'"
+          class="w-full h-full rounded-full object-center object-cover"
+        />
+      </div>
+    </div>
+    <div class="col">
+      <div class="mt-2">{{ userData.name }}</div>
+    </div>
+  </div>
+  <div
+    class="mb-12 grid gap-y-8 gap-x-6 md:grid-cols-1 xl:grid-cols-2 mt-4"
+    [routerLink]="['/jobs/recruiter/list', { tab: 'running' }]"
+  >
+    <div
+      class="bg-white rounded-xl shadow-md cursor-pointer transition-transform transform hover:scale-105"
+    >
+      <div
+        class="bg-gradient-to-tr from-blue-800 to-blue-900 text-white rounded-t-xl p-4"
+      >
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"></path>
+          <path
+            fill-rule="evenodd"
+            d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z"
+            clip-rule="evenodd"
+          ></path>
+          <path
+            d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z"
+          ></path>
+        </svg>
+      </div>
+      <div class="p-4 text-right">
+        <p class="text-sm text-blue-gray-600 bg-white">
+          Current Advertisements
+        </p>
+        <h4 class="text-2xl font-semibold text-blue-gray-900">
+          {{ dashboardData?.dashboardDetails?.runningJobsCount }}
+        </h4>
+      </div>
+    </div>
+
+    <div
+      class="bg-white rounded-xl shadow-md cursor-pointer transition-transform transform hover:scale-105"
+      [routerLink]="['/jobs/recruiter/list', { tab: 'expired' }]"
+    >
+      <div
+        class="bg-gradient-to-tr from-pink-800 to-pink-900 text-white rounded-t-xl p-4"
+      >
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"></path>
+          <path
+            fill-rule="evenodd"
+            d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z"
+            clip-rule="evenodd"
+          ></path>
+          <path
+            d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z"
+          ></path>
+        </svg>
+      </div>
+      <div class="p-4 text-right">
+        <p class="text-sm text-blue-gray-600 bg-white">
+          Expired Advertisements
+        </p>
+        <h4 class="text-2xl font-semibold text-blue-gray-900">
+          {{ dashboardData?.dashboardDetails?.expiredJobsCount }}
+        </h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <apx-chart
+      [series]="series"
+      [chart]="chart"
+      [xaxis]="xaxis"
+      class="flex-1"
+    ></apx-chart>
+  </div>
+  <div class="card grid grid-cols-1 md:grid-cols-2">
+    <div class="bg-white rounded-3xl p-4">
+      <div
+        class="px-6 py-4 bg-gray-900 text-white rounded-t-3xl flex items-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-8 h-8 mr-2"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+          <path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"></path>
+        </svg>
+        <h3 class="font-medium text-lg tracking-tight">Trending Jobs</h3>
+      </div>
+      <div class="p-5 bg-blue-50 text-black rounded-b-3xl h-80">
+        <div class="space-y-4">
+          <div
+            class="flex items-center justify-between"
+            *ngFor="let job of trendingJobs; trackBy: trackByItemId"
+          >
+            <div>
+              <h3 class="text-base font-medium">{{ job?.title }}</h3>
+            </div>
+            <span class="text-sm font-medium text-gray-800"
+              >Applicants: {{ job?.applicationsCount }}</span
+            >
+          </div>
+          <div *ngIf="trendingJobs?.length === 0" class="no-data-message">
+            No data available.
+          </div>
+          <hr />
+        </div>
+      </div>
+    </div>
+    <div *ngIf="chartOptions?.series.length > 0 || areAllSeriesEmpty()">
+      <div
+        class="bg-white rounded-3xl p-6"
+        [ngClass]="{ 'no-data': areAllSeriesEmpty() }"
+      >
+        <apx-chart
+          [series]="chartOptions.series"
+          [chart]="chartOptions.chart"
+          [labels]="chartOptions.labels"
+          [responsive]="chartOptions.responsive"
+        ></apx-chart>
+      </div>
+      <div *ngIf="areAllSeriesEmpty()" class="no-data-message">
+        No data available.
+      </div>
+    </div>
+  </div>
+  <p-dialog
+    [(visible)]="profileDialog"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="true"
+    [dismissableMask]="true"
+    [style]="{ width: '800px' }"
+    (onHide)="isSubmitting ? '' : onClosingDialog()"
+  >
+    <div class="card p-6 bg-white mx-auto max-w-4xl rounded-lg">
+      <div class="text-start w-full mb-4">
+        <h2 class="text-2xl font-semibold text-gray-800">
+          Complete Your Profile Details
+        </h2>
+      </div>
+      <div class="relative mb-6">
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <p-progressBar
+            [value]="value"
+            [style]="{ height: '14px' }"
+            [color]="valueColor"
+          />
+          <!-- <div *ngIf="tooltipVisible" class="flex justify-end mt-3">
+              <div
+                class="text-white bg-black shadow-lg rounded-2xl px-3 pt-1 pb-1"
+              >
+                {{ tooltipMessage }}
+              </div>
+            </div> -->
+        </div>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <p-stepper class="mb-6">
+          <p-stepperPanel header="Personal Info">
+            <ng-template pTemplate="content" let-nextCallback="nextCallback">
+              <div class="space-y-6">
+                <label class="block text-sm font-semibold text-gray-700"
+                  >Mobile No:</label
+                >
+                <div class="flex space-x-2">
+                  <p-dropdown
+                    formControlName="countryCode"
+                    [options]="countryCodes"
+                    optionLabel="code"
+                    optionValue="code"
+                    placeholder="Country Code"
+                    class="border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  ></p-dropdown>
+                  <input
+                    type="text"
+                    formControlName="mobile"
+                    maxlength="15"
+                    (input)="calculateReliabilityScore()"
+                    (keypress)="validateNumber($event)"
+                    class="mt-1 w-full block px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter your mobile no."
+                  />
+                </div>
+                <div
+                  *ngIf="
+                    profileForm.get('countryCode')?.invalid &&
+                    (profileForm.get('countryCode')?.touched ||
+                      profileForm.get('mobile')?.touched)
+                  "
+                >
+                  <span class="text-red-500"
+                    >Country code is required if mobile number is
+                    provided.</span
+                  >
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700"
+                    >Bio</label
+                  >
+                  <textarea
+                    formControlName="bio"
+                    (input)="calculateReliabilityScore()"
+                    rows="5"
+                    class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    placeholder="Enter your bio here..."
+                  ></textarea>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700"
+                    >Address</label
+                  >
+                  <textarea
+                    (input)="calculateReliabilityScore()"
+                    formControlName="address"
+                    rows="5"
+                    class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    placeholder="Enter your address here..."
+                  ></textarea>
+                </div>
+                <div class="pt-3 flex justify-end space-x-4">
+                  <p-button
+                    label="Next"
+                    icon="pi pi-arrow-right"
+                    iconPos="right"
+                    class="bg-blue-600 text-white hover:bg-blue-700 rounded-md transition duration-200 px-4 py-2"
+                    (onClick)="nextCallback.emit()"
+                  ></p-button>
+                </div>
+              </div>
+            </ng-template>
+          </p-stepperPanel>
+
+          <p-stepperPanel header="Links">
+            <ng-template
+              pTemplate="content"
+              let-prevCallback="prevCallback"
+              let-nextCallback="nextCallback"
+            >
+              <div class="flex justify-center">
+                <button
+                  *ngIf="canAddLink() && socialLinks.length < 5"
+                  type="button"
+                  (click)="addSocialLink()"
+                  class="mb-4 px-4 py-2 !bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Add Link
+                </button>
+              </div>
+
+              <div class="space-y-6">
+                <div formArrayName="socialLinks">
+                  <div
+                    *ngFor="let link of socialLinks.controls; let i = index"
+                    [formGroupName]="i"
+                    class="mb-4 p-4 border border-gray-300 rounded-lg shadow-sm bg-white"
+                  >
+                    <div class="flex items-center gap-4">
+                      <p-dropdown
+                        formControlName="type"
+                        [options]="getAvailableLinkTypes(i)"
+                        (change)="calculateReliabilityScore()"
+                        optionValue="value"
+                        optionLabel="label"
+                        [style]="{ width: '190px' }"
+                        placeholder="Select a link type"
+                        class="flex-1 border border-gray-300 rounded-md shadow-sm"
+                      ></p-dropdown>
+
+                      <input
+                        formControlName="url"
+                        type="text"
+                        placeholder="eg: https://www.example.com"
+                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+
+                      <button
+                        type="button"
+                        (input)="calculateReliabilityScore()"
+                        (click)="removeSocialLink(i)"
+                        class="px-4 py-2 !bg-red-600 text-white rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                      >
+                        Remove
+                      </button>
+                    </div>
+
+                    <div
+                      *ngIf="
+                        socialLinks.at(i).get('type')?.invalid &&
+                        socialLinks.at(i).get('type')?.touched
+                      "
+                      class="text-red-500 mt-2"
+                    >
+                      Link type is required.
+                    </div>
+                    <div
+                      *ngIf="
+                        socialLinks.at(i).get('url')?.invalid &&
+                        socialLinks.at(i).get('url')?.touched
+                      "
+                      class="text-red-500 mt-2"
+                    >
+                      <div
+                        *ngIf="socialLinks.at(i).get('url')?.errors?.['required']"
+                      >
+                        URL is required.
+                      </div>
+                      <div
+                        *ngIf="socialLinks.at(i).get('url')?.errors?.['pattern']"
+                      >
+                        Please enter a valid URL (starting with https://).
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex pt-6">
+                  <p-button
+                    *ngIf="!data?.mobile || !data?.address || !data?.bio"
+                    label="Back"
+                    icon="pi pi-arrow-left"
+                    class="bg-gray-600 text-white hover:bg-gray-700 rounded-md transition duration-200 px-4 py-2"
+                    (onClick)="prevCallback.emit()"
+                  ></p-button>
+
+                  <div class="flex-1"></div>
+
+                  <p-button
+                    label="Next"
+                    icon="pi pi-arrow-right"
+                    iconPos="right"
+                    class="bg-blue-600 text-white hover:bg-blue-700 rounded-md transition duration-200 px-4 py-2 ml-auto"
+                    (onClick)="nextCallback.emit()"
+                  ></p-button>
+                </div>
+              </div>
+            </ng-template>
+          </p-stepperPanel>
+
+          <p-stepperPanel
+            header="Upload Images"
+            *ngIf="uploadedImageUrls.length < 5"
+          >
+            <ng-template pTemplate="content" let-prevCallback="prevCallback">
+              <div class="flex justify-center">
+                <p-fileUpload
+                  *ngIf="uploadedImageUrls.length < 5"
+                  mode="basic"
+                  name="image"
+                  chooseIcon="pi pi-upload"
+                  [url]="uploadUrl"
+                  accept="image/*"
+                  maxFileSize="1000000"
+                  [auto]="true"
+                  chooseLabel="Upload"
+                  (onUpload)="onUpload()"
+                  class="ml-4"
+                />
+              </div>
+
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4"
+              >
+                <div
+                  *ngFor="let image of uploadedImageUrls; let i = index"
+                  class="relative bg-white rounded-lg overflow-hidden shadow-lg"
+                >
+                  <img
+                    [src]="image.url"
+                    class="h-52 w-full object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+                    alt="Uploaded Image"
+                  />
+                  <button
+                    type="button"
+                    (click)="deleteImage(i)"
+                    class="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="flex justify-end pt-6">
+                <p-button
+                  type="submit"
+                  label="Submit"
+                  icon="pi pi-check"
+                  iconPos="right"
+                  class="!bg-green-600 !text-white !hover:bg-green-700 !rounded-md !transition !duration-200 !px-4 !py-2"
+                ></p-button>
+              </div>
+            </ng-template>
+          </p-stepperPanel>
+        </p-stepper>
+      </form>
+
+      <div
+        class="flex items-center justify-between border-t border-gray-200 mt-3 pt-4"
+      >
+        <div class="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="neverShowAgain"
+            class="h-4 w-4 text-blue-600 border-gray-300 rounded"
+            [checked]="isNeverShowAgainChecked"
+            (change)="onNeverShowAgainChange($event)"
+          />
+          <label for="neverShowAgain" class="text-sm text-gray-700"
+            >Never show this again</label
+          >
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

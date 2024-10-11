@@ -1,0 +1,92 @@
+<!-- MAIN CONTENT -->
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <!-- Header -->
+        <div class="header">
+          <div class="header-body">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Pretitle -->
+                <h6 class="header-pretitle">Overview</h6>
+
+                <!-- Title -->
+                <h1 class="header-title text-truncate">Manage Settings</h1>
+              </div>
+            </div>
+            <!-- / .row -->
+          </div>
+        </div>
+        <!-- <div class="row h3">System Settings</div> -->
+        <div class="card">
+          <div class="card-body">
+            <!-- List group -->
+            <div class="list-group list-group-flush my-n3">
+              <div class="list-group-item" *ngFor="let item of settings; trackBy: trackByItemId
+              ">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <!-- Heading -->
+                    <h4 class="font-weight-base mb-1">
+                      {{ item.item }}
+                    </h4>
+                  </div>
+                  <div class="col-auto">
+                    <!-- Switch -->
+                    <div
+                      class="form-check form-switch"
+                      *ngIf="item.valueType == 'BOOLEAN'"
+                    >
+                      <input
+                        class="form-check-input"
+                        id="subscriptionsSwitchOne"
+                        type="checkbox"
+                        [(ngModel)]="item.value"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="subscriptionsSwitchOne"
+                      ></label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      [(ngModel)]="item.value"
+                      [ngModelOptions]="{ standalone: true }"
+                      *ngIf="
+                        item.valueType == 'STRING' || item.valueType == 'NUMBER'
+                      "
+                    />
+                  </div>
+                </div>
+                <!-- / .row -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- / .row -->
+
+        <div class="row mb-4">
+          <div class="col-12 col-md-3">
+            <button class="btn btn-white w-100" (click)="back()">
+              Back to Home
+            </button>
+          </div>
+          <div class="col-12 col-md-6"></div>
+          <div class="col-12 col-md-3 text-end">
+            <button
+              type="button"
+              class="btn btn-block btn-primary w-100"
+              (click)="save()"
+            >
+              Apply Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / .main-content -->
+  </div>
+</div>

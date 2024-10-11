@@ -1,0 +1,27 @@
+<div
+  class="progress progress-sm"
+  style="position: fixed; top: 0px; left: 0px; right: 0px; z-index: 9999"
+  *ngIf="generalService.loadingVisible"
+>
+  <div
+    class="progress-bar"
+    role="progressbar"
+    [ngStyle]="{ width: generalService.loadingPercent + '%' }"
+    [attr.aria-valuenow]="generalService.loadingPercent"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  ></div>
+</div>
+
+<div
+  class="flex h-screen"
+>
+  <app-sidebar-super-admin
+    *ngIf="role == 'SUPER_ADMIN'"
+  ></app-sidebar-super-admin>
+  <app-sidebar-admin *ngIf="role == 'ADMIN'"></app-sidebar-admin>
+  <app-sidebar-recruiter *ngIf="role == 'RECRUITER'"></app-sidebar-recruiter>
+  <main class="flex-1 p-4 overflow-y-auto">
+    <router-outlet></router-outlet>
+  </main>
+</div>

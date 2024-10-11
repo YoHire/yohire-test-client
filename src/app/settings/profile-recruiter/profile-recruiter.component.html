@@ -1,0 +1,480 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-12">
+      <div class="header my-3 xsticky-top" style="background-color: white">
+        <div class="header-body border-0">
+          <div class="row align-items-center">
+            <div class="col col-md-2 col-lg-1">
+              <div class="btn-group" role="group" aria-label="...">
+                <button
+                  type="button"
+                  class="btn btn-white btn-sm pb-1"
+                  (click)="pageLocation.back()"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="css-i6dzq1"
+                  >
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-white btn-sm pb-1"
+                  (click)="pageLocation.forward()"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="css-i6dzq1"
+                  >
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="col px-5">
+              <nav aria-label="breadcrumb" class="">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <a routerLink="/home/dashboard{{ loginUser }}">Home</a>
+                  </li>
+                  <li class="breadcrumb-item">
+                    <a routerLink="/settings/profile-recruiter-view">Profile</a>
+                  </li>
+                  <li class="breadcrumb-item active"><a>Profile Update</a></li>
+                </ol>
+              </nav>
+            </div>
+            <div class="col-auto">
+              <a
+                class="btn btn-sm btn-dark"
+                *ngIf="!isEdit"
+                (click)="isEdit = !isEdit"
+                >Update Profile</a
+              >
+              <a class="btn btn-sm btn-dark" *ngIf="isEdit" (click)="verify()">
+                <button type="submit" class="btn w-100 btn-dark btn-sm">
+                  <span>Save</span>
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form class="mb-4" [formGroup]="addForm" (ngSubmit)="verify()" novalidate>
+        <div
+          class="bg-white md:mx-auto rounded shadow-xl w-full overflow-hidden h-auto"
+        >
+          <div
+            class="h-[140px]"
+            [ngClass]="{
+              'bg-gradient-to-r': true,
+              'from-green-200 to-green-400': value >= 80,
+              'from-orange-200 to-orange-400': value >= 60 && value < 80,
+              'from-yellow-200 to-yellow-400': value >= 40 && value < 60,
+              'from-red-300 to-red-500': value < 40
+            }"
+          ></div>
+          <div class="px-5 py-2 flex flex-col gap-3 pb-6">
+            <div class="section">
+              <a
+                class="avatar avatar-xxl h-[90px] hover-switch shadow-md w-[90px] rounded-full border-4 overflow-hidden border-white"
+              >
+                <img
+                  *ngIf="selectedFile"
+                  [src]="selectedFile.src"
+                  class="avatar-img rounded-circle"
+                />
+                <img
+                  *ngIf="!selectedFile"
+                  [src]="
+                    data?.image ? imageUrl : '/assets/img/blank-profile.webp'
+                  "
+                  class="avatar-img rounded-circle"
+                />
+                <div
+                  *ngIf="isEdit"
+                  class="h5 avatar-img rounded align-items-center"
+                  (click)="imageInput.click()"
+                >
+                  <div class="pt-3">
+                    Add <br />
+                    Photo
+                  </div>
+                </div>
+                <input
+                  #imageInput
+                  class="form-control"
+                  type="file"
+                  accept="image/*"
+                  (change)="processFile(imageInput)"
+                  style="display: none"
+                />
+              </a>
+            </div>
+
+            <div class="section mt-4">
+              <h2 class="text-lg font-semibold mb-4">Personal Info</h2>
+              <div class="flex flex-col gap-3">
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                    <div class="form-group">
+                      <label class="form-label required"
+                        >Organization Name</label
+                      >
+                      <input
+                        type="text"
+                        [(ngModel)]="ra"
+                        maxlength="50"
+                        (input)="calculateReliabilityScore()"
+                        formControlName="ra"
+                        placeholder="Company Name"
+                        class="form-control"
+                        [disabled]="!isEdit"
+                        appTrim
+                      />
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label">Mobile</label>
+                    <div class="form-group flex items-center space-x-2">
+                      <p-dropdown
+                        formControlName="countryCode"
+                        [options]="countryCodes"
+                        optionLabel="code"
+                        optionValue="code"
+                        class="border border-gray-300 rounded-lg"
+                        placeholder="Country Code"
+                        [disabled]="!isEdit"
+                      ></p-dropdown>
+                      <input
+                        type="text"
+                        [(ngModel)]="mobile"
+                        formControlName="mobile"
+                        (input)="calculateReliabilityScore()"
+                        placeholder="Enter your mobile number"
+                        class="form-control flex-1"
+                        [disabled]="!isEdit"
+                        maxlength="15"
+                        (keypress)="validateNumber($event)"
+                        appTrim
+                      />
+                    </div>
+                    <div *ngIf="(addForm.get('countryCode')?.invalid && (addForm.get('countryCode')?.touched || addForm.get('mobile')?.touched))">
+                      <span class="text-red-500">Country code is required if mobile number is provided.</span>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <div class="form-group">
+                      <label class="form-label required">Email</label>
+                      <input
+                        type="text"
+                        [(ngModel)]="email"
+                        class="form-control"
+                        formControlName="email"
+                        readonly
+                        [disabled]="!isEdit"
+                        [ngClass]="
+                          isEdit
+                            ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed'
+                            : ''
+                        "
+                        appTrim
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section mt-4">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold">Bio</h2>
+              </div>
+              <div class="flex flex-col gap-3">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <textarea
+                        rows="5"
+                        cols="30"
+                        pInputTextarea
+                        [(ngModel)]="bio"
+                        formControlName="bio"
+                        (input)="calculateReliabilityScore()"
+                        [autoResize]="true"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                        placeholder="Enter your bio here..."
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="section mt-4">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold">Address</h2>
+              </div>
+              <div class="flex flex-col gap-3">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <textarea
+                        rows="5"
+                        cols="30"
+                        pInputTextarea
+                        [(ngModel)]="address"
+                        formControlName="address"
+                        (input)="calculateReliabilityScore()"
+                        [autoResize]="true"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                        placeholder="Enter your address here..."
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="section mt-4">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold">Social Links</h2>
+                <button
+                  *ngIf="canAddLink() && socialLinks.length < 5"
+                  type="button"
+                  (click)="addSocialLink()"
+                  class="px-4 py-2 !bg-blue-500 text-white rounded-lg shadow-sm !hover:bg-blue-600 focus:outline-none focus:ring-2 !focus:ring-blue-500"
+                >
+                  Add Link
+                </button>
+              </div>
+
+              <div
+                *ngIf="socialLinks.length === 0"
+                class="text-gray-500 mb-4 text-center"
+              >
+                You haven't added any links yet.
+              </div>
+
+              <div formArrayName="socialLinks">
+                <div
+                  *ngFor="let link of socialLinks.controls; let i = index"
+                  [formGroupName]="i"
+                  class="mb-4"
+                >
+                  <div class="flex items-center gap-4">
+                    <p-dropdown
+                      formControlName="type"
+                      (change)="calculateReliabilityScore()"
+                      [options]="getAvailableLinkTypes(i)"
+                      optionValue="value"
+                      optionLabel="label"
+                      placeholder="Select a link type"
+                      class="bg-white border border-gray-300 rounded-lg shadow-sm"
+                    ></p-dropdown>
+
+                    <input
+                      formControlName="url"
+                      type="text"
+                      placeholder="Enter your link here..."
+                      class="w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+
+                    <button
+                      (input)="calculateReliabilityScore()"
+                      type="button"
+                      (click)="removeSocialLink(i)"
+                      class="px-4 py-2 !bg-red-500 text-white rounded-lg shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  <div
+                    *ngIf="
+                      socialLinks.at(i).get('type')?.invalid &&
+                      socialLinks.at(i).get('type')?.touched
+                    "
+                    class="text-red-500 mt-1"
+                  >
+                    Link type is required.
+                  </div>
+
+                  <div
+                    *ngIf="
+                      socialLinks.at(i).get('url')?.invalid &&
+                      socialLinks.at(i).get('url')?.touched
+                    "
+                    class="text-red-500 mt-1"
+                  >
+                    <div
+                      *ngIf="socialLinks.at(i).get('url')?.errors?.['required']"
+                    >
+                      URL is required.
+                    </div>
+                    <div
+                      *ngIf="socialLinks.at(i).get('url')?.errors?.['pattern']"
+                    >
+                      Please enter a valid URL (starting with https://).
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section mt-4">
+              <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold mb-4">Organization Images</h2>
+                <p-fileUpload
+                  *ngIf="uploadedImageUrls.length < 5"
+                  mode="basic"
+                  name="image"
+                  chooseIcon="pi pi-upload"
+                  [url]="uploadUrl"
+                  accept="image/*"
+                  maxFileSize="1000000"
+                  [auto]="true"
+                  chooseLabel="Upload"
+                  (onUpload)="onUpload()"
+                  class="ml-4"
+                />
+              </div>
+              <div
+                *ngIf="uploadedImageUrls.length === 0"
+                class="text-gray-500 mb-4 text-center"
+              >
+                You haven't uploaded any images yet.
+              </div>
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4"
+              >
+                <div
+                  *ngFor="let image of uploadedImageUrls; let i = index"
+                  class="relative bg-white rounded-lg overflow-hidden shadow-lg"
+                >
+                  <img
+                    [src]="image.url"
+                    class="h-52 w-full object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+                    alt="Uploaded Image"
+                  />
+                  <button
+                    type="button"
+                    (click)="deleteImage(i)"
+                    class="absolute top-2 right-2 !bg-red-600 text-white p-2 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #callAPIDialog>
+          <div class="fixed inset-0 flex items-center justify-center">
+            <div
+              class="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-lg"
+            >
+              <div
+                class="flex justify-between items-center p-4 border-b border-gray-300 dark:border-gray-700"
+              >
+                <h5
+                  class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+                >
+                  Confirm Changes
+                </h5>
+                <button
+                  mat-dialog-close
+                  type="button"
+                  class="w-8 h-8 rounded-full bg-black text-white hover:bg-gray-700 ring-2 ring-gray-500 flex items-center justify-center"
+                  aria-label="Close"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4 fill-current"
+                  >
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59 15L12 13.41l-4.59 4.59L6 15.41 10.59 11 6 6.41 7.41 5 12 9.59 16.59 5 18 6.41 13.41 11 18 15.41z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div class="p-4">
+                <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()">
+                  <div class="mb-4">
+                    <label
+                      for="password"
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                      >Password</label
+                    >
+                    <div class="flex">
+                      <input
+                        type="password"
+                        formControlName="password"
+                        [type]="show ? 'text' : 'password'"
+                        placeholder="Enter your password"
+                        id="new-password"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:text-gray-200 bg-white text-black"
+                      />
+                      <button
+                        type="button"
+                        class="mx-3"
+                        class="mx-2"
+                        (click)="togglePasswordVisibility()"
+                      >
+                        <i class="fas fa-eye" *ngIf="!show"></i>
+                        <i class="fas fa-eye-slash" *ngIf="show"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="flex justify-end">
+                    <button
+                      type="button"
+                      mat-dialog-close
+                      class="bg-white hover:bg-gray-600 text-black px-4 py-2 rounded-md shadow-md mr-2"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      class="btn btn-sm bg-black hover:bg-blue-900 text-white px-4 py-2 rounded-md shadow-md"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </form>
+    </div>
+  </div>
+</div>
