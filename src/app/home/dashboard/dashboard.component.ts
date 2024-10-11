@@ -79,6 +79,7 @@ export class DashboardComponent implements OnInit {
   dashboardData: DashboardResponse | any;
   totalJobs!: number;
   totalTransactions!: number;
+  totalInvitations!: number;
   jobsByMonth!: any;
   trendingJobs!: any;
   public chartOptions: any;
@@ -403,6 +404,7 @@ export class DashboardComponent implements OnInit {
         this.totalResumeDownloads = this.dashboardData?.totalResumeDownloads;
         this.totalJobs = this.dashboardData?.totalJobs;
         this.totalTransactions = this.dashboardData?.totalTransactions;
+        this.totalInvitations = this.dashboardData?.invitedJobs;
         this.jobsByMonth = this.dashboardData?.jobsByMonth;
         this.trendingJobs = this.dashboardData?.trendingJobs;
         this.renderChart();
