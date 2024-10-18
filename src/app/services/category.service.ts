@@ -15,8 +15,11 @@ const httpOptions = {
 export class CategoryService {
   constructor(private http: HttpClient) {}
 
-  list(status: string): Observable<CategoryResponse[]> {
-    return this.http.get<CategoryResponse[]>(`${URL.CATEGORY}`, httpOptions);
+  list(keyword?: string): Observable<CategoryResponse[]> {
+    return this.http.get<CategoryResponse[]>(
+      `${URL.CATEGORY}?keyword=${keyword}`,
+      httpOptions
+    );
   }
 
   listBasedOnSearch(keyword: string): Observable<CategoryResponse[]> {

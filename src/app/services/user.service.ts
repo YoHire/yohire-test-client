@@ -142,6 +142,12 @@ export class UserService {
       httpOptions
     );
   }
+  listCountries(keyword?: string): Observable<any> {
+    return this.http.get<any>(
+      `${URL.RECRUITER}/countries?keyword=${keyword}`,
+      httpOptions
+    );
+  }
 
   uploadImage(image: any): Observable<ApiResponse<UserResponse>> {
     const formData = new FormData();

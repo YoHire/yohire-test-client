@@ -15,7 +15,6 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { JobRequestAnswer } from 'src/app/models/job_request_answer';
 import { JobService } from 'src/app/services/job.service';
 import { PaytmService } from 'src/app/services/paytm.service';
-import { TransactionService } from 'src/app/services/transaction.service';
 import { Transactions } from 'src/app/models/transactions';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentsService } from 'src/app/services/payments.service';
@@ -40,7 +39,6 @@ export class JobsRequestsListComponent implements OnInit {
     new BehaviorSubject<any>('');
   public currentUser: Observable<any> = this.currentUserSubject.asObservable();
   constructor(
-    private sanitizer: DomSanitizer,
     public dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
@@ -49,7 +47,6 @@ export class JobsRequestsListComponent implements OnInit {
     private generalService: GeneralService,
     public pageLocation: Location,
     private jobService: JobService,
-    private paytmService: PaytmService,
     private paymentsService: PaymentsService,
     private winRef: WindowRefService,
     private formBuilder: FormBuilder,
@@ -68,8 +65,8 @@ export class JobsRequestsListComponent implements OnInit {
   imageUrl: string = URL.IMAGE;
   jobRequests: any;
   jobId: any;
-  itemsFiltered: any;
-  downloadedItemsFiltered: any;
+  itemsFiltered: any[] = [];
+  downloadedItemsFiltered: any[] = [];
   selectedCandidates: string[] = [];
   transactions: Transactions | undefined;
 
@@ -94,7 +91,7 @@ export class JobsRequestsListComponent implements OnInit {
 
   questions: JobRequestAnswer[] = [];
 
-  job: any;
+  job: any = {};
   selectAll: boolean = false;
   isApplicationsDownload: boolean = false;
   isDownloadedDownload: boolean = false;
@@ -259,16 +256,109 @@ export class JobsRequestsListComponent implements OnInit {
         userSkill.name.toLowerCase() === jobSkill.name.toLowerCase()
     );
   }
-  checkCategoryMatches(jobCategory: any, userCategories: any[]): boolean {
-    if (!Array.isArray(userCategories)) {
-      return false;
+
+  checkCategoryMatches(
+    jobCategory: any,
+    userWorkExperience: any[]
+  ): {
+    designationMatch: boolean;
+    countryMatch: boolean;
+    experienceMatch: boolean;
+    allMatch: boolean;
+  } {
+    const jobCategoryName = jobCategory?.category?.name.toLowerCase();
+    const jobCountry = jobCategory.country
+      ? cleanCountry(jobCategory.country)
+      : null;
+    const requiredYearsOfExp = jobCategory.yearOfExp;
+
+    for (let exp of userWorkExperience) {
+      const designationMatches =
+        exp.designation && exp.designation.toLowerCase() === jobCategoryName;
+      const countryMatches =
+        jobCountry && exp.country && cleanCountry(exp.country) === jobCountry;
+
+      const experienceYears = calculateExperienceYears(
+        exp.startDate,
+        exp.endDate
+      );
+
+      if (designationMatches) {
+        return {
+          designationMatch: true,
+          countryMatch: countryMatches,
+          experienceMatch: experienceYears >= requiredYearsOfExp,
+          allMatch:
+            designationMatches &&
+            countryMatches &&
+            experienceYears >= requiredYearsOfExp,
+        };
+      }
+    }
+    function cleanCountry(country: string): string {
+      return country
+        .replace(/[^a-zA-Z ]/g, '')
+        .toLowerCase()
+        .trim();
+    }
+    function calculateExperienceYears(
+      startDate: string,
+      endDate: string
+    ): number {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      const actualEndDate = isNaN(end.getTime()) ? new Date() : end;
+
+      const yearsDiff = actualEndDate.getFullYear() - start.getFullYear();
+      const monthsDiff = actualEndDate.getMonth() - start.getMonth();
+
+      return monthsDiff < 0 ? yearsDiff - 1 : yearsDiff;
     }
 
-    const jobCategoryName = jobCategory.name.toLowerCase();
-    return userCategories.some(
-      (userCat) => userCat.name.toLowerCase() === jobCategoryName
-    );
+    return {
+      designationMatch: false,
+      countryMatch: false,
+      experienceMatch: false,
+      allMatch: false,
+    };
   }
+  getProgressBarColor(jobCategories: any[], userWorkExperience: any[]): string {
+    let allMatch = jobCategories.some((category) => {
+      return userWorkExperience.some((exp) => {
+        const matchResult = this.checkCategoryMatches(
+          category,
+          userWorkExperience
+        );
+        return (
+          matchResult.designationMatch &&
+          matchResult.countryMatch &&
+          matchResult.experienceMatch
+        );
+      });
+    });
+
+    return allMatch ? 'green' : 'gray';
+  }
+
+  getProgressBarValue(jobCategories: any[], userWorkExperience: any[]): number {
+    let allMatch = jobCategories.some((category) => {
+      return userWorkExperience.some((exp) => {
+        const matchResult = this.checkCategoryMatches(
+          category,
+          userWorkExperience
+        );
+        return (
+          matchResult.designationMatch &&
+          matchResult.countryMatch &&
+          matchResult.experienceMatch
+        );
+      });
+    });
+
+    return allMatch ? 100 : 0;
+  }
+
 
   isLanguageMatching(jobLanguage: any, userLanguages: any[]): boolean {
     return userLanguages.some(
@@ -276,13 +366,17 @@ export class JobsRequestsListComponent implements OnInit {
     );
   }
   checkCatgoryMatches(userJobs: any[], jobCategories: any[]): number {
-    const userJobNames = userJobs.map((job) => job.name.toLowerCase());
-    const jobCategoryNames = jobCategories.map((category) =>
-      category.name.toLowerCase()
+    const userJobNames = (userJobs || []).map((job) =>
+      job?.name?.toLowerCase()
     );
+    const jobCategoryNames = (jobCategories || []).map((category) =>
+      category?.category?.name?.toLowerCase()
+    );
+
     const matches = jobCategoryNames.filter((name) =>
       userJobNames.includes(name)
     ).length;
+
     const totalCategories = jobCategoryNames.length;
     let score = 0;
 
@@ -493,11 +587,8 @@ export class JobsRequestsListComponent implements OnInit {
           }
         }
       }
-      if (selectedItemsCount > this.coinBalance && this.freecoinBalance <= 0) {
-        const dialogRef = this.dialog.open(this.callAPIDialog);
-        dialogRef.afterClosed().subscribe(() => {});
-        return;
-      } else if (this.freecoinBalance && this.freecoinBalance > 0) {
+
+      if (this.freecoinBalance && this.freecoinBalance > 0) {
         this.userService
           .updateFreeCoinBalance(
             this.jobId,
@@ -612,22 +703,22 @@ export class JobsRequestsListComponent implements OnInit {
   }
 
   async downloadPDF(job: any, type: string) {
-    if (
-      this.coinBalance <= 0 &&
-      !job.resumeDownloaded &&
-      this.freecoinBalance <= 0
-    ) {
-      const dialogRef = this.dialog.open(this.callAPIDialog);
-      dialogRef.afterClosed().subscribe(() => {});
-      return;
-    }
+    // if (
+    //   this.coinBalance <= 0 &&
+    //   !job.resumeDownloaded &&
+    //   this.freecoinBalance <= 0
+    // ) {
+    //   const dialogRef = this.dialog.open(this.callAPIDialog);
+    //   dialogRef.afterClosed().subscribe(() => {});
+    //   return;
+    // }
 
     const doc = new jsPDF({
       format: 'A4',
     });
 
     const logo = new Image();
-    logo.crossOrigin = environment.gCloudOrigin as string;
+    logo.crossOrigin = environment.gCloudOrigin;
     logo.src = job.profileImage
       ? job.profileImage
       : 'assets/img/yohirelogo-1.png';
@@ -1226,10 +1317,93 @@ export class JobsRequestsListComponent implements OnInit {
       }
     };
   }
+  checkQualificationMatches(
+    jobQualification: any = {},
+    userQualifications: any[] = []
+  ) {
+    const categories = [
+      'BELOW 10th',
+      'SSLC',
+      'HIGHER SECONDARY',
+      'UG',
+      'PG',
+      'ITI',
+      'Diploma',
+      'PHD',
+    ];
 
+    let result = {
+      categoryMatch: false,
+      subCategoryMatch: false,
+      courseMatch: false,
+    };
+
+    if (!Object.keys(jobQualification).length || !userQualifications?.length) {
+      return result;
+    }
+
+    const jobCategoryName = jobQualification.category?.toLowerCase();
+    const jobSubCategoryName = jobQualification.subCategory?.toLowerCase();
+    const jobCourseName = jobQualification.course?.toLowerCase();
+
+    const jobCategoryIndex = categories.findIndex(
+      (category) => category.toLowerCase() === jobCategoryName
+    );
+
+    for (let user of userQualifications) {
+      if (!user.qualifications?.length) {
+        continue;
+      }
+
+      for (let userQualification of user.qualifications) {
+        const userCategoryName = userQualification.category?.toLowerCase();
+        const userSubCategoryName =
+          userQualification.subCategory?.toLowerCase();
+        const userCourseName = userQualification.course?.toLowerCase();
+
+        const userCategoryIndex = categories.findIndex(
+          (category) => category.toLowerCase() === userCategoryName
+        );
+
+        // Check if user's category is equal to or higher than the job's category
+        if (
+          jobCategoryIndex >= 0 &&
+          userCategoryIndex >= jobCategoryIndex // user has equal or higher qualification
+        ) {
+          result.categoryMatch = true;
+        }
+
+        if (
+          jobSubCategoryName &&
+          userSubCategoryName &&
+          userSubCategoryName === jobSubCategoryName
+        ) {
+          result.subCategoryMatch = true;
+        }
+
+        if (
+          jobCourseName &&
+          userCourseName &&
+          userCourseName === jobCourseName
+        ) {
+          result.courseMatch = true;
+        }
+
+        if (
+          result.categoryMatch &&
+          result.subCategoryMatch &&
+          result.courseMatch
+        ) {
+          return result;
+        }
+      }
+    }
+
+    return result;
+  }
   async downloadPDFMultiple(job: any, doc: any, p0: number) {
     const logo = new Image();
-    logo.crossOrigin = environment.gCloudOrigin as string;
+    logo.crossOrigin = environment.gCloudOrigin;
     logo.src = job.profileImage
       ? job.profileImage
       : 'assets/img/yohirelogo-1.png';

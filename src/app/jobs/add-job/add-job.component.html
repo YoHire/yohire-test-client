@@ -850,6 +850,131 @@
                                         </div>
                                       </div>
                                     </div>
+                                    <div class="col-12">
+                                      <label class="form-check-label block mb-2"
+                                        >Job Roles</label
+                                      >
+                                      <div formArrayName="jobRoles">
+                                        <div
+                                          *ngFor="
+                                            let role of jobRole.controls;
+                                            let i = index
+                                          "
+                                          [formGroupName]="i"
+                                          class="flex flex-wrap gap-4 mb-4 items-center"
+                                        >
+                                          <div class="w-full sm:w-auto">
+                                            <p-dropdown
+                                              [options]="jobRoles[i] || []"
+                                              [filter]="true"
+                                              optionLabel="name"
+                                              [showClear]="true"
+                                              placeholder="Select a job role"
+                                              formControlName="selectedJobRole"
+                                              [style]="{ width: '165px' }"
+                                              (input)="
+                                                onJobRoleChange(
+                                                  $event.target,
+                                                  i
+                                                )
+                                              "
+                                              class="block border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                            ></p-dropdown>
+                                            <div
+                                              *ngIf="
+                                                role.get('selectedJobRole')
+                                                  ?.invalid &&
+                                                (role.get('selectedJobRole')
+                                                  ?.touched ||
+                                                  completeFormSubmitted)
+                                              "
+                                              class="text-red-500"
+                                            >
+                                              <small
+                                                >Job role is required.</small
+                                              >
+                                            </div>
+                                          </div>
+
+                                          <div
+                                            *ngIf="
+                                              role.get('selectedJobRole')?.value
+                                            "
+                                            class="w-full sm:w-auto"
+                                          >
+                                            <p-dropdown
+                                              [options]="countries[i] || []"
+                                              [filter]="true"
+                                              formControlName="selectedCountry"
+                                              optionLabel="name"
+                                              [showClear]="true"
+                                              [style]="{ width: '165px' }"
+                                              (input)="
+                                                onCountriesChange(
+                                                  $event.target,
+                                                  i
+                                                )
+                                              "
+                                              placeholder="Select a Country"
+                                              class="block border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                            ></p-dropdown>
+                                          </div>
+
+                                          <div
+                                            *ngIf="
+                                              role.get('selectedJobRole')?.value
+                                            "
+                                            class="w-full sm:w-auto"
+                                          >
+                                            <p-dropdown
+                                              [options]="years"
+                                              formControlName="selectedYear"
+                                              optionLabel="name"
+                                              [showClear]="true"
+                                              [style]="{ width: '165px' }"
+                                              placeholder="Select a Year"
+                                              class="block border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                            ></p-dropdown>
+                                          </div>
+
+                                          <button
+                                            type="button"
+                                            (click)="removeJobRole(i)"
+                                            class="text-red-500"
+                                          >
+                                            Remove
+                                          </button>
+                                        </div>
+                                      </div>
+                                      <div
+                                        *ngIf="
+                                          jobForm.get('jobRoles')?.value
+                                            .length < 1 && completeFormSubmitted
+                                        "
+                                        class="text-danger"
+                                      >
+                                        <small
+                                          *ngIf="
+                                            jobForm.get('jobRoles')?.value
+                                              .length < 1 &&
+                                            completeFormSubmitted
+                                          "
+                                        >
+                                          Select atleast one job role.
+                                        </small>
+                                      </div>
+                                      <button
+                                        *ngIf="
+                                          (jobForm.get('jobRoles')?.value
+                                            .length || 0) < 5
+                                        "
+                                        type="button"
+                                        (click)="addJobRole()"
+                                        class="mt-2 mb-2 px-4 py-2 bg-black text-white rounded-md shadow hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
+                                      >
+                                        Add Job Role
+                                      </button>
+                                    </div>
 
                                     <div class="col-12">
                                       <div class="form-group">
@@ -1098,7 +1223,7 @@
                                       <button
                                         *ngIf="
                                           (jobForm.get('qualifications')?.value
-                                            .length || 0) < 5
+                                            .length || 0) < 1
                                         "
                                         type="button"
                                         (click)="addQualification()"
@@ -1342,100 +1467,6 @@
                             <div class="row">
                               <div class="col-12">
                                 <div>
-                                  <div class="col-12">
-                                    <div class="form-group">
-                                      <div class="ng-autocomplete">
-                                        <mat-form-field
-                                          class="example-chip-list"
-                                        >
-                                          <mat-chip-grid
-                                            #categGrid
-                                            aria-label="category selection"
-                                          >
-                                            <ng-container
-                                              *ngFor="
-                                                let categ of selectedCategories;
-                                                let i = index;
-                                                trackBy: trackByItemId
-                                              "
-                                            >
-                                              <mat-chip-row
-                                                class="bg-white"
-                                                (removed)="
-                                                  removeCategory(categ)
-                                                "
-                                              >
-                                                <span class="truncate">
-                                                  {{
-                                                    categ.name.length > 30
-                                                      ? categ.name.slice(
-                                                          0,
-                                                          30
-                                                        ) + "..."
-                                                      : categ.name
-                                                  }}
-                                                </span>
-                                                <button
-                                                  matChipRemove
-                                                  [attr.aria-label]="
-                                                    'remove ' + categ.name
-                                                  "
-                                                >
-                                                  <mat-icon>cancel</mat-icon>
-                                                </button>
-                                              </mat-chip-row>
-                                            </ng-container>
-                                          </mat-chip-grid>
-                                          <input
-                                            name="currentCategory"
-                                            placeholder="{{
-                                              selectedCategories.size >= 5
-                                                ? ''
-                                                : 'Job Roles *'
-                                            }}"
-                                            #categInput
-                                            [matChipInputFor]="categGrid"
-                                            [matAutocomplete]="autoCateg"
-                                            (input)="onSearchChange($event)"
-                                            [disabled]="
-                                              selectedCategories.size >= 5
-                                            "
-                                          />
-
-                                          <mat-autocomplete
-                                            #autoCateg="matAutocomplete"
-                                            (optionSelected)="selected($event)"
-                                          >
-                                            <mat-option
-                                              *ngFor="
-                                                let categ of categories;
-                                                trackBy: trackByItemId
-                                              "
-                                              [value]="categ"
-                                            >
-                                              {{ categ.name }}
-                                            </mat-option>
-                                          </mat-autocomplete>
-                                        </mat-form-field>
-                                        <div
-                                          *ngIf="
-                                            selectedCategories.size < 1 &&
-                                            completeFormSubmitted
-                                          "
-                                          class="text-danger"
-                                        >
-                                          <small
-                                            *ngIf="
-                                              selectedCategories.size < 1 &&
-                                              completeFormSubmitted
-                                            "
-                                          >
-                                            Select atleast one job role.
-                                          </small>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
                                   <div class="col-12">
                                     <div class="form-group">
                                       <mat-form-field class="example-chip-list">
@@ -1819,8 +1850,6 @@
                                 tabindex="-1"
                                 class="fixed z-50 flex flex-col justify-center items-center 0-2 -translate-x-1/2 bg-gray-50 border border-gray-100 rounded-lg shadow-sm lg:max-w-7xl left-1/2 bottom-2 dark:bg-gray-700 dark:border-gray-600"
                               >
-                             
-
                                 <div class="flex items-center flex-shrink-0">
                                   <button
                                     type="submit"

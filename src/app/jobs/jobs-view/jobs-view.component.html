@@ -196,7 +196,7 @@
                   style="font-size: 16px"
                   *ngFor="let categ of job.category; trackBy: trackByItemId"
                 >
-                  {{ categ.name }}
+                  {{ categ.category.name }}
                 </div>
               </div>
             </div>
@@ -445,9 +445,9 @@
                       trackBy: trackByItemId
                     "
                   >
-                  <span *ngIf="bi > 0">, &nbsp;&nbsp;</span>
-                  {{ formatQualification(qual) }}
-                </span>
+                    <span *ngIf="bi > 0">, &nbsp;&nbsp;</span>
+                    {{ formatQualification(qual) }}
+                  </span>
                 </div>
               </div>
             </div>

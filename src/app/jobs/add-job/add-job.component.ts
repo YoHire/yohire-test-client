@@ -2,7 +2,6 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import {
   Component,
   ElementRef,
-  HostListener,
   NgZone,
   ViewChild,
   inject,
@@ -20,17 +19,9 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent, MatChipEditedEvent } from '@angular/material/chips';
 import { IAngularMyDpOptions, IMyDateModel } from 'angular-mydatepicker-ivy';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { formatDate, Location, ViewportScroller } from '@angular/common';
-import {
-  Observable,
-  Subject,
-  debounceTime,
-  distinctUntilChanged,
-  min,
-  switchMap,
-} from 'rxjs';
+import { formatDate, Location } from '@angular/common';
+import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { CategoryResponse } from 'src/app/models/categoryResponse';
-import { Skill } from 'src/app/models/skill';
 import { CategoryService } from 'src/app/services/category.service';
 import { GeneralService } from 'src/app/services/general.service';
 import { SkillService } from 'src/app/services/skill.service';
@@ -44,6 +35,7 @@ import { trackByItemId } from 'src/app/utils/track-by.utils';
 import { EducationService } from 'src/app/services/education.service';
 import { RoleName } from 'src/app/models/roleName';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-add-job',
@@ -66,7 +58,10 @@ export class AddJobComponent {
   filteredOptions: any;
   selectedIndex: any;
   subCat: any;
-
+  jobRoles: any;
+  years: any[] | undefined;
+  selectedJobRole: string | undefined;
+  selectedYear: string | undefined;
   jobId: number = 0;
   job: any | undefined;
   isEdit: boolean = false;
@@ -77,7 +72,6 @@ export class AddJobComponent {
   currentLanguagesReadWrite: string = '';
   currentLanguagesSpeak: string = '';
   previousJobs: CategoryResponse[] = [];
-  selectedCategories: Set<{ id: number; name: string }> = new Set();
   selectedLanguagesReadWrite: Set<{ id: number; name: string }> = new Set();
   selectedLanguagesSpeak: Set<{ id: number; name: string }> = new Set();
   generalLanguagesReadWrite: Set<{ id: number; name: string }> = new Set();
@@ -95,6 +89,7 @@ export class AddJobComponent {
   selectedSubCategory: any;
   selectedCourse: any;
   courses: any;
+  countries: any;
   dropdownSettings: IDropdownSettings = {
     singleSelection: false,
     idField: 'id',
@@ -167,7 +162,8 @@ export class AddJobComponent {
     private router: Router,
     private jobSkillService: JobSkillService,
     private educationService: EducationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) {
     window.angularComponentRef = {
       component: this,
@@ -211,6 +207,13 @@ export class AddJobComponent {
           courses: [[]],
         }),
       ]),
+      jobRoles: this.fb.array([
+        this.fb.group({
+          selectedJobRole: [''],
+          selectedCountry: [''],
+          selectedYear: [''],
+        }),
+      ]),
     });
     this.activatedRoute.params.subscribe((params) => {
       this.jobId = params['id'];
@@ -226,6 +229,26 @@ export class AddJobComponent {
   }
   get qualifications(): FormArray {
     return this.jobForm.get('qualifications') as FormArray;
+  }
+  addJobRole() {
+    const index = this.jobRole.value.length;
+    this.jobRoles[index] = [];
+    this.countries[index] = [];
+    const jobRoleFormGroup = this.fb.group({
+      selectedJobRole: ['', Validators.required],
+      selectedCountry: [''],
+      selectedYear: [''],
+    });
+    this.jobRole.push(jobRoleFormGroup);
+  }
+
+  removeJobRole(index: number) {
+    this.jobRole.removeAt(index);
+    this.jobRoles.splice(index, 1);
+    this.countries.splice(index, 1);
+  }
+  get jobRole(): FormArray {
+    return this.jobForm.get('jobRoles') as FormArray;
   }
 
   addQualification() {
@@ -366,7 +389,6 @@ export class AddJobComponent {
     this.jobService.getJob(this.jobId).subscribe({
       next: (items: any) => {
         this.job = items.data;
-        this.selectedCategories = new Set(this.job.category);
         this.edit(this.job);
         this.generalService.loaded();
       },
@@ -410,9 +432,6 @@ export class AddJobComponent {
         ),
       },
     };
-    if (job?.category.length > 0) {
-      this.selectedCategories = new Set(job.category);
-    }
     this.company = job?.company;
     this.companyForm = this.fb.group({
       company: [job?.company, Validators.required],
@@ -436,6 +455,7 @@ export class AddJobComponent {
         expiryDate: [expiryDate, Validators.required],
         requirementCount: [job?.requirementCount],
         qualifications: this.fb.array([]),
+        jobRoles: this.fb.array([]),
       },
       {
         validator: this.currencyValidator,
@@ -447,6 +467,11 @@ export class AddJobComponent {
 
     for (const [index, qual] of (job.qualification || []).entries()) {
       await this.processQualification(qual, index);
+    }
+    const jobRolesArray = this.jobForm.get('jobRoles') as FormArray;
+    jobRolesArray.clear();
+    for (const [index, jobRole] of (job.category || []).entries()) {
+      await this.processJobRoles(jobRole, index);
     }
   }
   private async processQualification(qual: any, index: number) {
@@ -471,7 +496,23 @@ export class AddJobComponent {
 
     await this.onLevelChange({ value: level }, index);
   }
-
+  private async processJobRoles(jobRole: any, index: number) {
+    this.onJobRoleChange({ value: jobRole?.category?.name }, index);
+    this.onCountriesChange({ value: jobRole?.country }, index);
+    const jobRoleGroup = this.fb.group({
+      selectedJobRole: [{ name: jobRole.category?.name || '' }],
+      selectedCountry: [
+        { name: jobRole.country !== null ? jobRole.country : '' },
+      ],
+      selectedYear: [
+        {
+          name: jobRole.yearOfExp !== null ? jobRole.yearOfExp.toString() : '',
+        },
+      ],
+    });
+    const jobRolesArray = this.jobForm.get('jobRoles') as FormArray;
+    jobRolesArray.push(jobRoleGroup);
+  }
   currencyValidator(control: AbstractControl) {
     const salary = control.get('salary')?.value;
     const currency = control.get('currency')?.value;
@@ -505,6 +546,20 @@ export class AddJobComponent {
     )
       this.loginUser = '-admin';
     this.loadGoogleMapsScript();
+    this.loadJobRoles();
+    this.loadCountries();
+    this.years = [
+      { name: '1' },
+      { name: '2' },
+      { name: '3' },
+      { name: '4' },
+      { name: '5' },
+      { name: '6' },
+      { name: '7' },
+      { name: '8' },
+      { name: '9' },
+      { name: '10' },
+    ];
   }
   initMap() {
     const input = document.getElementById('pac-input') as HTMLInputElement;
@@ -543,7 +598,7 @@ export class AddJobComponent {
 
     input.addEventListener('blur', () => {
       if (!isPlaceSelected) {
-        input.value = ''; 
+        input.value = '';
         this.companyForm.patchValue({ location: '' });
       }
     });
@@ -573,6 +628,15 @@ export class AddJobComponent {
     });
   }
 
+  loadCountries() {
+    this.generalService.startLoading();
+    this.userService.listCountries().subscribe({
+      next: (items: any) => {
+        this.countries = items.data;
+        this.generalService.loaded();
+      },
+    });
+  }
 
   constructFormattedAddress(place: any): string {
     let formattedAddress = '';
@@ -597,6 +661,16 @@ export class AddJobComponent {
     return formattedAddress;
   }
 
+  loadJobRoles() {
+    this.generalService.startLoading();
+    this.categoryService.list().subscribe({
+      next: (items: any) => {
+        this.jobRoles = items.data;
+        this.generalService.loaded();
+      },
+    });
+  }
+
   scrollToTop() {
     const element = document.getElementById('scrollToTop');
     element?.scrollIntoView({
@@ -608,7 +682,7 @@ export class AddJobComponent {
 
   loadGoogleMapsScript() {
     const script = document.createElement('script');
-    script.src = environment.googleMapsApi as string;
+    script.src = environment.googleMapsApi;
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
@@ -678,6 +752,7 @@ export class AddJobComponent {
         selectedSubCategory: [],
         selectedCourse: [],
         qualifications: this.fb.array([]),
+        jobRoles: this.fb.array([]),
       },
       {
         validator: this.currencyValidator,
@@ -707,7 +782,7 @@ export class AddJobComponent {
 
   addJob() {
     this.completeFormSubmitted = true;
-    if (this.jobForm.invalid || this.selectedCategories.size < 1) {
+    if (this.jobForm.invalid || this.jobRole.value.length < 1) {
       this.notificationService.showError(
         'Please fill all mandatory field',
         'Failed'
@@ -771,7 +846,7 @@ export class AddJobComponent {
       highlightTags: this.highlightTags ?? [],
       languagesReadWrite: [...this.selectedLanguagesReadWrite],
       languagesSpeak: [...this.selectedLanguagesSpeak],
-      categories: [...this.selectedCategories],
+      categories: [...this.jobRole.value],
       skills: [...this.selectedSkills],
       currency: value.currency === 'Select Currency' ? null : value.currency,
       qualifications: value.qualifications,
@@ -940,7 +1015,7 @@ export class AddJobComponent {
     this.completeFormSubmitted = true;
     if (
       this.jobForm.invalid ||
-      this.selectedCategories.size < 1 ||
+      this.jobRole.value.length < 1 ||
       this.companyForm.invalid
     ) {
       this.notificationService.showError(
@@ -984,9 +1059,9 @@ export class AddJobComponent {
       highlightTags: this.highlightTags ?? [],
       languagesReadWrite: [...this.selectedLanguagesReadWrite],
       languagesSpeak: [...this.selectedLanguagesSpeak],
-      categories: [...this.selectedCategories],
       skills: [...this.selectedSkills],
       qualifications: this.jobForm.value.qualifications,
+      jobRoles: this.jobForm.value.jobRoles,
     };
 
     job.company = this.companyForm.value.company;
@@ -1059,7 +1134,6 @@ export class AddJobComponent {
       maxAge,
       minHeight,
       maxHeight,
-      categories = [],
       skills = [],
       highlightTags = [],
       languagesSpeak = [],
@@ -1071,6 +1145,7 @@ export class AddJobComponent {
       currency,
       requirementCount,
       qualifications,
+      jobRoles,
     } = job;
     let interviewDateModel: IMyDateModel = {
       isRange: false,
@@ -1107,6 +1182,17 @@ export class AddJobComponent {
         })
       );
     });
+    const jobRolesArray = this.jobForm.get('jobRoles') as FormArray;
+    jobRolesArray.clear();
+    jobRoles.forEach((qual: any) => {
+      jobRolesArray.push(
+        this.fb.group({
+          selectedJobRole: [qual.selectedJobRole || ''],
+          selectedCountry: [qual.selectedCountry || ''],
+          selectedYear: [qual.selectedYear || ''],
+        })
+      );
+    });
 
     this.jobForm.patchValue({
       title,
@@ -1124,7 +1210,6 @@ export class AddJobComponent {
       interviewDate: interviewDateModel,
       expiryDate: expiryDateModel,
     });
-    this.selectedCategories = new Set(categories);
     this.selectedSkills = new Set(skills);
     this.highlightTags = [...highlightTags];
     this.selectedLanguagesSpeak = new Set(languagesSpeak);
@@ -1148,7 +1233,6 @@ export class AddJobComponent {
     this.completeFormSubmitted = false;
     this.selectedJob = null;
     this.isEditing = false;
-    this.selectedCategories.clear();
     this.selectedSkills.clear();
     this.highlightTags = [];
     this.selectedLanguagesReadWrite = structuredClone(
@@ -1156,6 +1240,8 @@ export class AddJobComponent {
     );
     const qualificationsArray = this.jobForm.get('qualifications') as FormArray;
     qualificationsArray.clear();
+    const jobRolesArray = this.jobForm.get('jobRoles') as FormArray;
+    jobRolesArray.clear();
     this.selectedLanguagesSpeak = structuredClone(this.generalLanguagesSpeak);
     this.jobForm.reset();
     this.jobForm.patchValue({
@@ -1179,10 +1265,6 @@ export class AddJobComponent {
     if (!event.option.value) return;
     const selectedCategory = event.option.value;
 
-    this.selectedCategories.add({
-      id: selectedCategory.id,
-      name: selectedCategory.name,
-    });
     if (this.categInput) {
       this.categInput.nativeElement.value = '';
     }
@@ -1253,11 +1335,7 @@ export class AddJobComponent {
           next: (item: any) => {
             const filteredCategories = item.data.filter((category: any) => {
               let categoryFound = false;
-              this.selectedCategories.forEach((selected) => {
-                if (selected.name === category.name) {
-                  categoryFound = true;
-                }
-              });
+
               return !categoryFound;
             });
 
@@ -1364,20 +1442,6 @@ export class AddJobComponent {
             this.generalService.loaded();
           },
         });
-    }
-  }
-
-  removeCategory(categ: { id: number; name: string }): void {
-    let foundCategory: { id: number; name: string } | undefined;
-    this.selectedCategories.forEach((category) => {
-      if (category.id === categ.id || category.name === categ.name) {
-        foundCategory = category;
-      }
-    });
-
-    if (foundCategory) {
-      this.selectedCategories.delete(foundCategory);
-      this.announcer.announce(`Removed ${foundCategory.name}`);
     }
   }
 
@@ -1490,5 +1554,22 @@ export class AddJobComponent {
 
   onMaxAgeChange(event: any) {
     this.maxAge = event.value;
+  }
+
+  onJobRoleChange(event: any, index: number) {
+    this.categoryService.list(event.value).subscribe({
+      next: (items: any) => {
+        this.jobRoles[index] = items.data || [];
+        this.generalService.loaded();
+      },
+    });
+  }
+  onCountriesChange(event: any, index: number) {
+    this.userService.listCountries(event.value).subscribe({
+      next: (items: any) => {
+        this.countries[index] = items.data;
+        this.generalService.loaded();
+      },
+    });
   }
 }

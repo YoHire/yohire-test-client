@@ -80,7 +80,7 @@
               aria-selected="true"
             >
               Applications
-              <p-badge [value]="itemsFiltered.length" severity="danger" />
+              <p-badge [value]="itemsFiltered.length || 0" severity="danger" />
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -96,7 +96,7 @@
             >
               Downloaded Resumes
               <p-badge
-                [value]="downloadedItemsFiltered.length"
+                [value]="downloadedItemsFiltered.length || 0"
                 severity="success"
               />
             </button>
@@ -151,7 +151,7 @@
                   class="table table-sm table-hover table-nowrap card-table"
                 >
                   <thead>
-                    <tr>
+                    <tr class="text-center">
                       <th>
                         <input
                           type="checkbox"
@@ -173,7 +173,14 @@
                           >Name</a
                         >
                       </th>
-                      <th>Job Role</th>
+                      <th>
+                        Experience <br />
+                        <span>(JR - COE - YOE)</span>
+                      </th>
+                      <th>
+                        Education <br />
+                        <span>(Categ - Spcl - Course )</span>
+                      </th>
                       <th>Skills</th>
                       <th>Age</th>
                       <th>Height</th>
@@ -183,7 +190,7 @@
                       <th>Languages Speak</th>
                     </tr>
                   </thead>
-                  <tbody class="list fs-base">
+                  <tbody class="list fs-base text-center">
                     <tr
                       *ngFor="
                         let item of itemsFiltered
@@ -240,24 +247,69 @@
                           [pTooltip]="categoryTooltipContent"
                           severity="secondary"
                           tooltipPosition="bottom"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [color]="
-                            getColor(
-                              checkCatgoryMatches(item.category, job.category)
+                            getProgressBarColor(
+                              job.category,
+                              item.workExperience
                             )
                           "
                           [showValue]="false"
                           [value]="
-                            checkCatgoryMatches(item.category, job.category)
+                            getProgressBarValue(
+                              job.category,
+                              item.workExperience
+                            )
                           "
-                        />
+                        ></p-progressBar>
+                      </td>
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="qualificationTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [style]="{ height: '10px', width: '100px' }"
+                          [color]="
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).categoryMatch &&
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).subCategoryMatch &&
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).courseMatch
+                              ? 'green'
+                              : 'red'
+                          "
+                          [showValue]="false"
+                          [value]="
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).categoryMatch &&
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).subCategoryMatch &&
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).courseMatch
+                              ? 100
+                              : 0
+                          "
+                        ></p-progressBar>
                       </td>
                       <td>
                         <p-progressBar
                           [pTooltip]="skillTooltipContent"
                           severity="secondary"
                           tooltipPosition="bottom"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [color]="
                             getColor(checkMatches(item.skill, job.skills))
                           "
@@ -272,7 +324,7 @@
                           tooltipPosition="bottom"
                           [showValue]="false"
                           [color]="getColor(checkMatchAge(item.dateOfBirth))"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="checkMatchAge(item.dateOfBirth)"
                         />
                       </td>
@@ -283,7 +335,7 @@
                           tooltipPosition="bottom"
                           [showValue]="false"
                           [color]="getColor(checkHeightMatch(item.height))"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="checkHeightMatch(item.height)"
                         />
                       </td>
@@ -294,48 +346,190 @@
                           tooltipPosition="bottom"
                           [showValue]="false"
                           [color]="getColor(checkWeightMatch(item.weight))"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="checkWeightMatch(item.weight)"
                         />
                         <ng-template #categoryTooltipContent>
                           <div class="bg-white rounded-lg shadow-lg p-4">
                             <div class="flex items-center justify-between">
                               <span class="text-lg font-bold text-gray-800"
-                                >Job Roles</span
+                                >Experience</span
                               >
                             </div>
                             <div class="mt-2 border-t border-gray-200 pt-2">
                               <ul class="list-disc list-inside space-y-1">
                                 <ng-container
                                   *ngIf="
-                                    job.category && job.category.length > 0;
+                                    job?.category?.length > 0;
                                     else noCategories
                                   "
                                 >
                                   <li
                                     *ngFor="
-                                      let categ of job.category;
+                                      let categ of job?.category;
                                       trackBy: trackByItemId
                                     "
-                                    [ngClass]="{
-                                      'text-green-500': checkCategoryMatches(
-                                        categ,
-                                        item.category
-                                      ),
-                                      'text-gray-700': !checkCategoryMatches(
-                                        categ,
-                                        item.category
-                                      )
-                                    }"
                                   >
-                                    {{ categ.name }}
+                                    <span>
+                                      <span
+                                        [ngClass]="{
+                                          'text-green-500':
+                                            checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).designationMatch,
+                                          'text-gray-700':
+                                            !checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).designationMatch
+                                        }"
+                                      >
+                                        {{ categ.category?.name }}
+                                      </span>
+
+                                      <span
+                                        *ngIf="
+                                          categ.category?.name && categ.country
+                                        "
+                                        [ngClass]="{
+                                          'text-green-500':
+                                            checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).countryMatch,
+                                          'text-gray-700':
+                                            !checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).countryMatch
+                                        }"
+                                      >
+                                        - {{ categ.country }}
+                                      </span>
+
+                                      <span
+                                        *ngIf="categ.yearOfExp"
+                                        [ngClass]="{
+                                          'text-green-500':
+                                            checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).experienceMatch,
+                                          'text-gray-700':
+                                            !checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).experienceMatch
+                                        }"
+                                      >
+                                        - {{ categ.yearOfExp }}
+                                      </span>
+                                    </span>
                                   </li>
                                 </ng-container>
 
                                 <ng-template #noCategories>
-                                  <li class="text-gray-700">
-                                    Categories were not selected
-                                  </li>
+                                  <p
+                                    class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                                  >
+                                    Oops, job has no categories selected
+                                  </p>
+                                </ng-template>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #qualificationTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Qualification</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job?.qualification?.length > 0;
+                                    else noQualifications
+                                  "
+                                >
+                                  <ul class="list-disc list-inside space-y-1">
+                                    <li
+                                      *ngFor="
+                                        let qual of job?.qualification;
+                                        trackBy: trackByItemId
+                                      "
+                                      class="flex items-center"
+                                    >
+                                      <span
+                                        *ngIf="qual.category"
+                                        class="ml-2"
+                                        [ngClass]="{
+                                          'text-green-500':
+                                            checkQualificationMatches(
+                                              qual,
+                                              item?.education
+                                            ).categoryMatch,
+                                          'text-gray-700':
+                                            !checkQualificationMatches(
+                                              qual,
+                                              item?.education
+                                            ).categoryMatch
+                                        }"
+                                      >
+                                        {{ qual.category }}
+                                      </span>
+
+                                      <ng-container
+                                        *ngIf="qual.subCategory || qual.course"
+                                      >
+                                        <span
+                                          *ngIf="qual.subCategory"
+                                          [ngClass]="{
+                                            'text-green-500':
+                                              checkQualificationMatches(
+                                                qual,
+                                                item?.education
+                                              ).subCategoryMatch,
+                                            'text-gray-700':
+                                              !checkQualificationMatches(
+                                                qual,
+                                                item?.education
+                                              ).subCategoryMatch
+                                          }"
+                                        >
+                                          - {{ qual.subCategory }}
+                                        </span>
+                                        <span
+                                          *ngIf="qual.course"
+                                          [ngClass]="{
+                                            'text-green-500':
+                                              checkQualificationMatches(
+                                                qual,
+                                                item?.education
+                                              ).courseMatch,
+                                            'text-gray-700':
+                                              !checkQualificationMatches(
+                                                qual,
+                                                item?.education
+                                              ).courseMatch
+                                          }"
+                                        >
+                                          - {{ qual.course }}
+                                        </span>
+                                      </ng-container>
+                                    </li>
+                                  </ul>
+                                </ng-container>
+
+                                <ng-template #noQualifications>
+                                  <p
+                                    class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                                  >
+                                    Oops, job has no qualifications selected
+                                  </p>
                                 </ng-template>
                               </ul>
                             </div>
@@ -599,7 +793,7 @@
                           tooltipPosition="bottom"
                           [showValue]="false"
                           [color]="getColor(isAddressMatch(item.address))"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="isAddressMatch(item.address)"
                         />
                       </td>
@@ -612,7 +806,7 @@
                               languagesReadAndWriteMatch(item.languagesWrite)
                             )
                           "
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="
                             languagesReadAndWriteMatch(item.languagesWrite)
                           "
@@ -623,7 +817,7 @@
                           [showValue]="false"
                           [pTooltip]="langSpeakTooltipContent"
                           [color]="getColor(languagesSpeak(item.languagesRead))"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="languagesSpeak(item.languagesRead)"
                         ></p-progressBar>
                       </td>
@@ -662,7 +856,7 @@
                   <li
                     *ngFor="
                       let item of [].constructor(pageCount);
-                      let i = index;
+                      let i = index
                     "
                     [ngClass]="{ active: page == i }"
                   >
@@ -748,7 +942,7 @@
                   class="table table-sm table-hover table-nowrap card-table text-center"
                 >
                   <thead>
-                    <tr>
+                    <tr class="text-center">
                       <th>
                         <input
                           type="checkbox"
@@ -765,7 +959,14 @@
                       <th>Name</th>
                       <th>Phone</th>
                       <th>Email</th>
-                      <th>Job Role</th>
+                      <th>
+                        Experience <br />
+                        <span>(JR - COE - YOE)</span>
+                      </th>
+                      <th>
+                        Education <br />
+                        <span>(Categ - Spcl - Course )</span>
+                      </th>
                       <th>Skills</th>
                       <th>Age</th>
                       <th>Height</th>
@@ -819,29 +1020,76 @@
                       <td>{{ item?.username }}</td>
                       <td>{{ item?.mobile }}</td>
                       <td>{{ item.email }}</td>
+
                       <td>
                         <p-progressBar
                           [pTooltip]="categoryTooltipContent"
                           severity="secondary"
                           tooltipPosition="bottom"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [color]="
-                            getColor(
-                              checkCatgoryMatches(item.category, job.category)
+                            getProgressBarColor(
+                              job.category,
+                              item.workExperience
                             )
                           "
                           [showValue]="false"
                           [value]="
-                            checkCatgoryMatches(item.category, job.category)
+                            getProgressBarValue(
+                              job.category,
+                              item.workExperience
+                            )
                           "
-                        />
+                        ></p-progressBar>
+                      </td>
+
+                      <td>
+                        <p-progressBar
+                          [pTooltip]="qualificationTooltipContent"
+                          severity="secondary"
+                          tooltipPosition="bottom"
+                          [style]="{ height: '10px', width: '100px' }"
+                          [color]="
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).categoryMatch &&
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).subCategoryMatch &&
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).courseMatch
+                              ? 'green'
+                              : 'red'
+                          "
+                          [showValue]="false"
+                          [value]="
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).categoryMatch &&
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).subCategoryMatch &&
+                            checkQualificationMatches(
+                              job.qualification,
+                              item.education
+                            ).courseMatch
+                              ? 100
+                              : 0
+                          "
+                        ></p-progressBar>
                       </td>
                       <td>
                         <p-progressBar
                           [pTooltip]="skillTooltipContent"
                           severity="secondary"
                           tooltipPosition="bottom"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [color]="
                             getColor(checkMatches(item.skill, job.skills))
                           "
@@ -856,7 +1104,7 @@
                           tooltipPosition="bottom"
                           [showValue]="false"
                           [color]="getColor(checkMatchAge(item.dateOfBirth))"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="checkMatchAge(item.dateOfBirth)"
                         />
                       </td>
@@ -867,7 +1115,7 @@
                           tooltipPosition="bottom"
                           [showValue]="false"
                           [color]="getColor(checkHeightMatch(item.height))"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="checkHeightMatch(item.height)"
                         />
                       </td>
@@ -878,41 +1126,86 @@
                           tooltipPosition="bottom"
                           [showValue]="false"
                           [color]="getColor(checkWeightMatch(item.weight))"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="checkWeightMatch(item.weight)"
                         />
                         <ng-template #categoryTooltipContent>
                           <div class="bg-white rounded-lg shadow-lg p-4">
                             <div class="flex items-center justify-between">
                               <span class="text-lg font-bold text-gray-800"
-                                >Job Roles</span
+                                >Experience</span
                               >
                             </div>
                             <div class="mt-2 border-t border-gray-200 pt-2">
                               <ul class="list-disc list-inside space-y-1">
                                 <ng-container
                                   *ngIf="
-                                    job.category && job.category.length > 0;
+                                    job?.category?.length > 0;
                                     else noCategories
                                   "
                                 >
                                   <li
                                     *ngFor="
-                                      let categ of job.category;
+                                      let categ of job?.category;
                                       trackBy: trackByItemId
                                     "
-                                    [ngClass]="{
-                                      'text-green-500': checkCategoryMatches(
-                                        categ,
-                                        item.category
-                                      ),
-                                      'text-gray-700': !checkCategoryMatches(
-                                        categ,
-                                        item.category
-                                      )
-                                    }"
                                   >
-                                    {{ categ.name }}
+                                    <span>
+                                      <span
+                                        [ngClass]="{
+                                          'text-green-500':
+                                            checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).designationMatch,
+                                          'text-gray-700':
+                                            !checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).designationMatch
+                                        }"
+                                      >
+                                        {{ categ.category?.name }}
+                                      </span>
+
+                                      <span
+                                        *ngIf="
+                                          categ.category?.name && categ.country
+                                        "
+                                        [ngClass]="{
+                                          'text-green-500':
+                                            checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).countryMatch,
+                                          'text-gray-700':
+                                            !checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).countryMatch
+                                        }"
+                                      >
+                                        - {{ categ.country }}
+                                      </span>
+
+                                      <span
+                                        *ngIf="categ.yearOfExp"
+                                        [ngClass]="{
+                                          'text-green-500':
+                                            checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).experienceMatch,
+                                          'text-gray-700':
+                                            !checkCategoryMatches(
+                                              categ,
+                                              item?.workExperience
+                                            ).experienceMatch
+                                        }"
+                                      >
+                                        - {{ categ.yearOfExp }}
+                                      </span>
+                                    </span>
                                   </li>
                                 </ng-container>
 
@@ -921,6 +1214,101 @@
                                     class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
                                   >
                                     Oops, job has no categories selected
+                                  </p>
+                                </ng-template>
+                              </ul>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <ng-template #qualificationTooltipContent>
+                          <div class="bg-white rounded-lg shadow-lg p-4">
+                            <div class="flex items-center justify-between">
+                              <span class="text-lg font-bold text-gray-800"
+                                >Qualification</span
+                              >
+                            </div>
+                            <div class="mt-2 border-t border-gray-200 pt-2">
+                              <ul class="list-disc list-inside space-y-1">
+                                <ng-container
+                                  *ngIf="
+                                    job?.qualification?.length > 0;
+                                    else noQualifications
+                                  "
+                                >
+                                  <ul class="list-disc list-inside space-y-1">
+                                    <li
+                                      *ngFor="
+                                        let qual of job?.qualification;
+                                        trackBy: trackByItemId
+                                      "
+                                      class="flex items-center"
+                                    >
+                                      <span
+                                        *ngIf="qual.category"
+                                        class="ml-2"
+                                        [ngClass]="{
+                                          'text-green-500':
+                                            checkQualificationMatches(
+                                              qual,
+                                              item?.education
+                                            ).categoryMatch,
+                                          'text-gray-700':
+                                            !checkQualificationMatches(
+                                              qual,
+                                              item?.education
+                                            ).categoryMatch
+                                        }"
+                                      >
+                                        {{ qual.category }}
+                                      </span>
+
+                                      <ng-container
+                                        *ngIf="qual.subCategory || qual.course"
+                                      >
+                                        <span
+                                          *ngIf="qual.subCategory"
+                                          [ngClass]="{
+                                            'text-green-500':
+                                              checkQualificationMatches(
+                                                qual,
+                                                item?.education
+                                              ).subCategoryMatch,
+                                            'text-gray-700':
+                                              !checkQualificationMatches(
+                                                qual,
+                                                item?.education
+                                              ).subCategoryMatch
+                                          }"
+                                        >
+                                          - {{ qual.subCategory }}
+                                        </span>
+                                        <span
+                                          *ngIf="qual.course"
+                                          [ngClass]="{
+                                            'text-green-500':
+                                              checkQualificationMatches(
+                                                qual,
+                                                item?.education
+                                              ).courseMatch,
+                                            'text-gray-700':
+                                              !checkQualificationMatches(
+                                                qual,
+                                                item?.education
+                                              ).courseMatch
+                                          }"
+                                        >
+                                          - {{ qual.course }}
+                                        </span>
+                                      </ng-container>
+                                    </li>
+                                  </ul>
+                                </ng-container>
+
+                                <ng-template #noQualifications>
+                                  <p
+                                    class="text-sm text-gray-600 italic py-2 px-4 bg-white rounded-md"
+                                  >
+                                    Oops, job has no qualifications selected
                                   </p>
                                 </ng-template>
                               </ul>
@@ -1178,7 +1566,7 @@
                           tooltipPosition="bottom"
                           [showValue]="false"
                           [color]="getColor(isAddressMatch(item.address))"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="isAddressMatch(item.address)"
                         />
                       </td>
@@ -1191,7 +1579,7 @@
                               languagesReadAndWriteMatch(item.languagesWrite)
                             )
                           "
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="
                             languagesReadAndWriteMatch(item.languagesWrite)
                           "
@@ -1202,7 +1590,7 @@
                           [showValue]="false"
                           [pTooltip]="langSpeakTooltipContent"
                           [color]="getColor(languagesSpeak(item.languagesRead))"
-                          [style]="{ height: '10px', width: '70px' }"
+                          [style]="{ height: '10px', width: '100px' }"
                           [value]="languagesSpeak(item.languagesRead)"
                         ></p-progressBar>
                       </td>
@@ -1254,7 +1642,7 @@
                   <li
                     *ngFor="
                       let item of [].constructor(pageCount);
-                      let i = index;
+                      let i = index
                     "
                     [ngClass]="{ active: page == i }"
                   >
